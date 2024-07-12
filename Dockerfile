@@ -1,7 +1,7 @@
 #
 # Build stage
 #
-FROM maven:3.9.0-jdk-17 AS build
+FROM maven:3.9.8-amazoncorretto-17-al2023 AS build
 COPY . .
 RUN mvn clean package -DskipTests
 
