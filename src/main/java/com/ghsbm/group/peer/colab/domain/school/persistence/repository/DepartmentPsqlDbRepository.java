@@ -1,13 +1,12 @@
 package com.ghsbm.group.peer.colab.domain.school.persistence.repository;
 
+import com.ghsbm.group.peer.colab.domain.school.persistence.model.DepartmentEntity;
 import com.ghsbm.group.peer.colab.domain.school.persistence.model.FacultyEntity;
 import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.stereotype.Repository;
 
 import java.util.List;
 
-@Repository
-public interface FacultyPsqlDbRepository extends JpaRepository<FacultyEntity, Long> {
+public interface DepartmentPsqlDbRepository extends JpaRepository<DepartmentEntity, Long> {
 
-    List<FacultyEntity> findByUniversityId(Long universityId);
+    List<DepartmentEntity> findByFacultyId(Long facultyId);
 }

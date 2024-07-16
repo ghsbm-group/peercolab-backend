@@ -1,10 +1,7 @@
 package com.ghsbm.group.peer.colab.domain.school.core.ports.incoming;
 
 
-import com.ghsbm.group.peer.colab.domain.school.core.model.City;
-import com.ghsbm.group.peer.colab.domain.school.core.model.Country;
-import com.ghsbm.group.peer.colab.domain.school.core.model.Faculty;
-import com.ghsbm.group.peer.colab.domain.school.core.model.University;
+import com.ghsbm.group.peer.colab.domain.school.core.model.*;
 import com.ghsbm.group.peer.colab.domain.school.core.ports.outgoing.SchoolRepository;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,6 +24,21 @@ public class SchoolManagementFacade implements SchoolManagementService {
   }
 
   @Override
+  public List<University> retrieveUniversityByCityId(Long cityId) {
+    return universityRepository.findUniversitiesByCity(cityId);
+  }
+
+  @Override
+  public List<Faculty> retrieveFacultyByUniversityId(Long universityId) {
+    return universityRepository.findFacultiesByUniversity(universityId);
+  }
+
+  @Override
+  public List<Department> retrieveDepartmentByFacultyId(Long facultyId) {
+    return universityRepository.findDepartmentsByFaculty(facultyId);
+  }
+
+  @Override
   public University createUniversity(University university) {
     return universityRepository.create(university);
   }
@@ -35,4 +47,11 @@ public class SchoolManagementFacade implements SchoolManagementService {
   public Faculty createFaculty(Faculty faculty) {
     return universityRepository.create(faculty);
   }
+
+  @Override
+  public Department createDepartment(Department department) {
+    return universityRepository.create(department);
+  }
+
+
 }

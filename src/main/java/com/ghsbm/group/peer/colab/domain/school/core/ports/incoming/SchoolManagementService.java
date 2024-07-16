@@ -1,10 +1,8 @@
 package com.ghsbm.group.peer.colab.domain.school.core.ports.incoming;
 
 
-import com.ghsbm.group.peer.colab.domain.school.core.model.City;
-import com.ghsbm.group.peer.colab.domain.school.core.model.Country;
-import com.ghsbm.group.peer.colab.domain.school.core.model.Faculty;
-import com.ghsbm.group.peer.colab.domain.school.core.model.University;
+import com.ghsbm.group.peer.colab.domain.school.core.model.*;
+
 import java.util.List;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -14,9 +12,18 @@ public interface SchoolManagementService {
 
   List<City> retrieveCityByCountryId(Long countryId);
 
+  List<University> retrieveUniversityByCityId(Long cityId);
+
+  List<Faculty> retrieveFacultyByUniversityId(Long universityId);
+
+  List<Department> retrieveDepartmentByFacultyId(Long facultyId);
+
   @Transactional
   University createUniversity(University university);
 
   @Transactional
   Faculty createFaculty(Faculty faculty);
+
+  @Transactional
+  Department createDepartment(Department department);
 }
