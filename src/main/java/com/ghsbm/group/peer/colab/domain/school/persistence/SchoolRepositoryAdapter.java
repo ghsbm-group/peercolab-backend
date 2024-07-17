@@ -1,12 +1,12 @@
 package com.ghsbm.group.peer.colab.domain.school.persistence;
 
 import com.ghsbm.group.peer.colab.domain.school.core.model.*;
+import com.ghsbm.group.peer.colab.domain.school.core.model.Class;
 import com.ghsbm.group.peer.colab.domain.school.core.ports.outgoing.SchoolRepository;
-import com.ghsbm.group.peer.colab.domain.school.persistence.model.DepartmentEntity;
-import com.ghsbm.group.peer.colab.domain.school.persistence.model.FacultyEntity;
-import com.ghsbm.group.peer.colab.domain.school.persistence.model.UniversityEntitiesMapper;
-import com.ghsbm.group.peer.colab.domain.school.persistence.model.UniversityEntity;
+import com.ghsbm.group.peer.colab.domain.school.persistence.model.*;
 import com.ghsbm.group.peer.colab.domain.school.persistence.repository.*;
+
+import java.time.Year;
 import java.util.List;
 import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;
@@ -20,23 +20,19 @@ import org.springframework.stereotype.Component;
 @Setter
 public class SchoolRepositoryAdapter implements SchoolRepository {
 
-  @Autowired
-  private CountryPsqlDbRepository countryPsqlDbRepository;
+  @Autowired private CountryPsqlDbRepository countryPsqlDbRepository;
 
-  @Autowired
-  private CityPsqlDbRepository cityPsqlDbRepository;
+  @Autowired private CityPsqlDbRepository cityPsqlDbRepository;
 
-  @Autowired
-  private UniversityPsqlDbRepository universityPsqlDbRepository;
+  @Autowired private UniversityPsqlDbRepository universityPsqlDbRepository;
 
-  @Autowired
-  private FacultyPsqlDbRepository facultyPsqlDbRepository;
+  @Autowired private FacultyPsqlDbRepository facultyPsqlDbRepository;
 
-  @Autowired
-  private DepartmentPsqlDbRepository departmentPsqlDbRepository;
+  @Autowired private DepartmentPsqlDbRepository departmentPsqlDbRepository;
 
-  @Autowired
-  private UniversityEntitiesMapper universityEntitiesMapper;
+  @Autowired ClassPsqlDbRepository classPsqlDbRepository;
+
+  @Autowired private UniversityEntitiesMapper universityEntitiesMapper;
 
   @Override
   public List<City> findCitiesByCountry(Long countryId) {
@@ -47,53 +43,65 @@ public class SchoolRepositoryAdapter implements SchoolRepository {
   @Override
   public List<University> findUniversitiesByCity(Long cityId) {
     return universityEntitiesMapper.fromUniversityEntities(
-            universityPsqlDbRepository.findByCityId(cityId));
+        universityPsqlDbRepository.findByCityId(cityId));
   }
 
   @Override
   public List<Faculty> findFacultiesByUniversity(Long universityId) {
     return universityEntitiesMapper.fromFacultyEntities(
-            facultyPsqlDbRepository.findByUniversityId(universityId));
+        facultyPsqlDbRepository.findByUniversityId(universityId));
   }
 
   @Override
   public List<Department> findDepartmentsByFaculty(Long facultyId) {
     return universityEntitiesMapper.fromDepartmentEntities(
-            departmentPsqlDbRepository.findByFacultyId(facultyId));
+        departmentPsqlDbRepository.findByFacultyId(facultyId));
   }
 
   @Override
   public University create(final University university) {
     final var cityEntity = cityPsqlDbRepository.getReferenceById(university.getCityId());
-    final var universityEntity = UniversityEntity.builder()
-        .name(university.getName())
-        .city(cityEntity)
-        .build();
+    final var universityEntity =
+        UniversityEntity.builder().name(university.getName()).city(cityEntity).build();
     final var saved = universityPsqlDbRepository.save(universityEntity);
     return universityEntitiesMapper.fromUniversityEntity(saved);
   }
 
   @Override
   public Faculty create(final Faculty faculty) {
-    final var universityEntity = universityPsqlDbRepository.getReferenceById(
-        faculty.getUniversityId());
+    final var universityEntity =
+        universityPsqlDbRepository.getReferenceById(faculty.getUniversityId());
 
-    final var savedFaculty = facultyPsqlDbRepository.save(FacultyEntity.builder()
-        .name(faculty.getName())
-        .university(universityEntity)
-        .build());
+    final var savedFaculty =
+        facultyPsqlDbRepository.save(
+            FacultyEntity.builder().name(faculty.getName()).university(universityEntity).build());
 
     return universityEntitiesMapper.facultyFromEntity(savedFaculty);
   }
 
   @Override
-  public Department create( final Department department) {
+  public Department create(final Department department) {
     final var facultyEntity = facultyPsqlDbRepository.getReferenceById(department.getFacultyId());
-    final var savedDepartment = departmentPsqlDbRepository.save(DepartmentEntity.builder()
-            .name(department.getName())
-            .faculty(facultyEntity)
-            .build());
+    final var savedDepartment =
+        departmentPsqlDbRepository.save(
+            DepartmentEntity.builder().name(department.getName()).faculty(facultyEntity).build());
     return universityEntitiesMapper.departmentFromEntity(savedDepartment);
+  }
+
+  @Override
+  public Class create(Class classInfo) {
+    final var departmentEntity =
+        departmentPsqlDbRepository.getReferenceById(classInfo.getDepartmentId());
+    final var savedClass =
+        classPsqlDbRepository.save(
+            ClassEntity.builder()
+                .name(classInfo.getName())
+                .startYear(classInfo.getStartYear())
+                .noOfStudyYears(classInfo.getNoOfStudyYears())
+                .noOfSemestersPerYear(classInfo.getNoOfSemestersPerYear())
+                .department(departmentEntity)
+                .build());
+    return universityEntitiesMapper.classFromEntity(savedClass);
   }
 
   @Override

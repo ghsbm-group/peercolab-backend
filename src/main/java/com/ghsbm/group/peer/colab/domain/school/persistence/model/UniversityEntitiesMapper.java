@@ -2,6 +2,8 @@ package com.ghsbm.group.peer.colab.domain.school.persistence.model;
 
 import com.ghsbm.group.peer.colab.domain.school.core.model.*;
 import java.util.List;
+
+import com.ghsbm.group.peer.colab.domain.school.core.model.Class;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 
@@ -14,7 +16,7 @@ public abstract class UniversityEntitiesMapper {
 
   public abstract List<University> fromUniversityEntities(List<UniversityEntity> universities);
 
-  public abstract List<Faculty>  fromFacultyEntities(List<FacultyEntity> faculties);
+  public abstract List<Faculty> fromFacultyEntities(List<FacultyEntity> faculties);
 
   public abstract List<Department> fromDepartmentEntities(List<DepartmentEntity> departments);
 
@@ -24,6 +26,9 @@ public abstract class UniversityEntitiesMapper {
   @Mapping(target = "universityId", source = "university.id")
   public abstract Faculty facultyFromEntity(FacultyEntity savedFaculty);
 
-  @Mapping(target="facultyId", source= "faculty.id")
+  @Mapping(target = "facultyId", source = "faculty.id")
   public abstract Department departmentFromEntity(DepartmentEntity savedDepartment);
+
+  @Mapping(target = "departmentId", source = "department.id")
+  public abstract Class classFromEntity(ClassEntity savedClass);
 }
