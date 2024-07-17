@@ -7,9 +7,7 @@ import org.springframework.test.context.ActiveProfiles;
 @SpringBootTest
 @ActiveProfiles("dev")
 class AppTests {
-
 	@Test
-	void contextLoads() {
+	void testRetrieveDepartmentsByFacultyId() {
 	}
-
 }

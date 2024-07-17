@@ -1,23 +1,16 @@
 package com.ghsbm.group.peer.colab.domain.school.controller;
 
-import com.ghsbm.group.peer.colab.domain.school.controller.model.CityDTO;
-import com.ghsbm.group.peer.colab.domain.school.controller.model.CountryDTO;
-import com.ghsbm.group.peer.colab.domain.school.controller.model.CreateFacultyRequest;
-import com.ghsbm.group.peer.colab.domain.school.controller.model.CreateFacultyResponse;
-import com.ghsbm.group.peer.colab.domain.school.controller.model.CreateUniversityRequest;
-import com.ghsbm.group.peer.colab.domain.school.controller.model.CreateUniversityResponse;
-import com.ghsbm.group.peer.colab.domain.school.controller.model.UniversityMapper;
+import com.ghsbm.group.peer.colab.domain.school.controller.model.*;
 import com.ghsbm.group.peer.colab.domain.school.core.ports.incoming.SchoolManagementService;
 import java.util.List;
 import java.util.Objects;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController("/schools")
+@RequestMapping("/schools")
+@CrossOrigin(origins= "*")
 public class SchoolManagementController {
 
   @Autowired
@@ -70,10 +63,50 @@ public class SchoolManagementController {
   }
 
   //todo create department
+  @PostMapping("/department")
+  public ResponseEntity<CreateDepartmentResponse> createDepartment(
+          @RequestBody final CreateDepartmentRequest createDepartmentRequest){
+    Objects.requireNonNull(createDepartmentRequest);
+    Objects.requireNonNull(createDepartmentRequest.getFacultyId());
+    Objects.requireNonNull(createDepartmentRequest.getName());
+
+    final var department = schoolManagementService.createDepartment(
+            universityMapper.fromCreateDepartmentRequest(createDepartmentRequest));
+
+    return ResponseEntity.ok(CreateDepartmentResponse.builder().id(department.getId()).build());
+  }
+
   //todo get universities by city id
+  @GetMapping("/universities")
+  public ResponseEntity<List<UniversityDTO>> retrieveUniversitiesByCityId(
+          final Long cityId) {
+    Objects.requireNonNull(cityId);
+
+    return ResponseEntity.ok(
+            universityMapper.universitiesDTOFrom(
+                    schoolManagementService.retrieveUniversityByCityId(cityId)));
+  }
+
   //todo get faculties by university id
+  @GetMapping("/faculties")
+  public ResponseEntity<List<FacultyDTO>> retrieveFacultiesByUniversityId(
+          final Long universityId) {
+    Objects.requireNonNull(universityId);
+
+    return ResponseEntity.ok(
+            universityMapper.facultiesDTOFrom(
+                    schoolManagementService.retrieveFacultyByUniversityId(universityId)));
+  }
+
   //todo get departments by faculty id
+  @GetMapping("/departments")
+  public ResponseEntity<List<DepartmentDTO>> retrieveDepartmentsByFacultyId(
+          final Long facultyId) {
+     Objects.requireNonNull(facultyId);
 
-
+     return ResponseEntity.ok(
+             universityMapper.departmentsDTOFrom(
+                     schoolManagementService.retrieveDepartmentByFacultyId(facultyId)));
+  }
   //todo otpional: write unit/integration tests
 }
