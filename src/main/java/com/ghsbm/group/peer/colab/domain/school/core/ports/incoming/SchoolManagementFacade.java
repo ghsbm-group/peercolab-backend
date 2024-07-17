@@ -9,8 +9,7 @@ import org.springframework.stereotype.Service;
 @Service
 public class SchoolManagementFacade implements SchoolManagementService {
 
-  @Autowired
-  private SchoolRepository universityRepository;
+  @Autowired private SchoolRepository universityRepository;
 
   @Override
   public List<Country> retrieveAllCountries() {

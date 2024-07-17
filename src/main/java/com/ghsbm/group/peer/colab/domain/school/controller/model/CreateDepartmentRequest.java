@@ -1,6 +1,5 @@
 package com.ghsbm.group.peer.colab.domain.school.controller.model;
 
-
 import lombok.Builder;
 import lombok.Data;
 
@@ -8,6 +7,6 @@ import lombok.Data;
 @Builder
 public class CreateDepartmentRequest {
 
-    private Long facultyId;
-    private String name;
+  private Long facultyId;
+  private String name;
 }

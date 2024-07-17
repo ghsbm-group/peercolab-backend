@@ -8,5 +8,5 @@ import java.util.List;
 
 public interface DepartmentPsqlDbRepository extends JpaRepository<DepartmentEntity, Long> {
 
-    List<DepartmentEntity> findByFacultyId(Long facultyId);
+  List<DepartmentEntity> findByFacultyId(Long facultyId);
 }

@@ -1,13 +1,12 @@
 package com.ghsbm.group.peer.colab.domain.school.persistence;
 
 import com.ghsbm.group.peer.colab.domain.school.core.model.*;
+import com.ghsbm.group.peer.colab.domain.school.core.ports.outgoing.SchoolRepository;
 import com.ghsbm.group.peer.colab.domain.school.persistence.model.DepartmentEntity;
 import com.ghsbm.group.peer.colab.domain.school.persistence.model.FacultyEntity;
-import com.ghsbm.group.peer.colab.domain.school.persistence.repository.*;
-import com.ghsbm.group.peer.colab.domain.school.core.ports.outgoing.SchoolRepository;
 import com.ghsbm.group.peer.colab.domain.school.persistence.model.UniversityEntitiesMapper;
 import com.ghsbm.group.peer.colab.domain.school.persistence.model.UniversityEntity;
-
+import com.ghsbm.group.peer.colab.domain.school.persistence.repository.*;
 import java.util.List;
 import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;

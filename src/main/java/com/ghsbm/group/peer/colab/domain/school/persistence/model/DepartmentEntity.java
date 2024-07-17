@@ -1,6 +1,5 @@
 package com.ghsbm.group.peer.colab.domain.school.persistence.model;
 
-import com.ghsbm.group.peer.colab.domain.school.core.model.Faculty;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;

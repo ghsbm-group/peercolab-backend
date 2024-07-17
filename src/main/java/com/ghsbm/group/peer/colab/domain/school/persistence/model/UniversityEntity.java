@@ -22,8 +22,9 @@ import lombok.NoArgsConstructor;
 public class UniversityEntity {
 
   @Id
-  @GeneratedValue(strategy= GenerationType.IDENTITY)
+  @GeneratedValue(strategy = GenerationType.IDENTITY)
   private Long id;
+
   private String name;
 
   @ManyToOne(fetch = FetchType.LAZY)

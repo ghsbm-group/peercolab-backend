@@ -11,6 +11,6 @@ import java.util.List;
 public interface UniversityPsqlDbRepository extends JpaRepository<UniversityEntity, Long> {
 
   UniversityEntity findByNameAndCity(String name, CityEntity cityEntity);
-  List<UniversityEntity> findByCityId(Long cityId);
 
+  List<UniversityEntity> findByCityId(Long cityId);
 }
