@@ -22,10 +22,8 @@ public abstract class UniversityEntitiesMapper {
   @Mapping(target = "cityId", source = "city.id")
   public abstract University fromUniversityEntity(UniversityEntity university);
 
-
   @Mapping(target = "universityId", source = "university.id")
   public abstract Faculty facultyFromEntity(FacultyEntity savedFaculty);
-
 
   @Mapping(target="facultyId", source= "faculty.id")
   public abstract Department departmentFromEntity(DepartmentEntity savedDepartment);

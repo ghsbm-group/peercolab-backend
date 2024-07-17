@@ -36,7 +36,6 @@ public class SchoolManagementController {
             schoolManagementService.retrieveCityByCountryId(countryId)));
   }
 
-
   @PostMapping("/university")
   public ResponseEntity<CreateUniversityResponse> createUniversity(
       @RequestBody final CreateUniversityRequest createUniversityRequest) {
@@ -91,8 +90,8 @@ public class SchoolManagementController {
                     schoolManagementService.retrieveUniversityByCityId(cityId)));
 
   }
-  //todo get faculties by university id
 
+  //todo get faculties by university id
   @GetMapping("/faculties")
   public ResponseEntity<List<FacultyDTO>> retrieveFacultiesByUniversityId(
           final Long universityId)
@@ -104,9 +103,7 @@ public class SchoolManagementController {
                     schoolManagementService.retrieveFacultyByUniversityId(universityId)));
   }
 
-
   //todo get departments by faculty id
-
   @GetMapping("/departments")
   public ResponseEntity<List<DepartmentDTO>> retrieveDepartmentsByFacultyId(
           final Long facultyId)
@@ -117,9 +114,5 @@ public class SchoolManagementController {
              universityMapper.departmentsDTOFrom(
                      schoolManagementService.retrieveDepartmentByFacultyId(facultyId)));
   }
-
-
   //todo otpional: write unit/integration tests
-
-
 }

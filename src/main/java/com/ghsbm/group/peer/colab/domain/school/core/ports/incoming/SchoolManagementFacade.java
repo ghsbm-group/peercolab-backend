@@ -1,6 +1,5 @@
 package com.ghsbm.group.peer.colab.domain.school.core.ports.incoming;
 
-
 import com.ghsbm.group.peer.colab.domain.school.core.model.*;
 import com.ghsbm.group.peer.colab.domain.school.core.ports.outgoing.SchoolRepository;
 import java.util.List;
@@ -52,6 +51,4 @@ public class SchoolManagementFacade implements SchoolManagementService {
   public Department createDepartment(Department department) {
     return universityRepository.create(department);
   }
-
-
 }

@@ -7,6 +7,4 @@ public class UniversityDTO {
 
     public Long id;
     public String name;
-
-
 }

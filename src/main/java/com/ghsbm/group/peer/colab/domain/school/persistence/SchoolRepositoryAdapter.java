@@ -39,8 +39,6 @@ public class SchoolRepositoryAdapter implements SchoolRepository {
   @Autowired
   private UniversityEntitiesMapper universityEntitiesMapper;
 
-
-
   @Override
   public List<City> findCitiesByCountry(Long countryId) {
     return universityEntitiesMapper.fromCityEntities(
@@ -98,7 +96,6 @@ public class SchoolRepositoryAdapter implements SchoolRepository {
             .build());
     return universityEntitiesMapper.departmentFromEntity(savedDepartment);
   }
-
 
   @Override
   public List<Country> findAllCountries() {

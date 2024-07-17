@@ -23,6 +23,4 @@ public interface UniversityMapper {
   Faculty fromCreateFacultyRequest(CreateFacultyRequest facultyDTO);
 
   Department fromCreateDepartmentRequest(CreateDepartmentRequest departmentDTO);
-
-
 }
