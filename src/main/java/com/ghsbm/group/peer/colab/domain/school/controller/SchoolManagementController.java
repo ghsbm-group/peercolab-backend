@@ -66,7 +66,6 @@ public class SchoolManagementController {
   @PostMapping("/department")
   public ResponseEntity<CreateDepartmentResponse> createDepartment(
           @RequestBody final CreateDepartmentRequest createDepartmentRequest){
-
     Objects.requireNonNull(createDepartmentRequest);
     Objects.requireNonNull(createDepartmentRequest.getFacultyId());
     Objects.requireNonNull(createDepartmentRequest.getName());
@@ -80,22 +79,18 @@ public class SchoolManagementController {
   //todo get universities by city id
   @GetMapping("/universities")
   public ResponseEntity<List<UniversityDTO>> retrieveUniversitiesByCityId(
-          final Long cityId)
-  {
-
+          final Long cityId) {
     Objects.requireNonNull(cityId);
 
     return ResponseEntity.ok(
             universityMapper.universitiesDTOFrom(
                     schoolManagementService.retrieveUniversityByCityId(cityId)));
-
   }
 
   //todo get faculties by university id
   @GetMapping("/faculties")
   public ResponseEntity<List<FacultyDTO>> retrieveFacultiesByUniversityId(
-          final Long universityId)
-  {
+          final Long universityId) {
     Objects.requireNonNull(universityId);
 
     return ResponseEntity.ok(
@@ -106,8 +101,7 @@ public class SchoolManagementController {
   //todo get departments by faculty id
   @GetMapping("/departments")
   public ResponseEntity<List<DepartmentDTO>> retrieveDepartmentsByFacultyId(
-          final Long facultyId)
-  {
+          final Long facultyId) {
      Objects.requireNonNull(facultyId);
 
      return ResponseEntity.ok(
