@@ -73,6 +73,23 @@ public class SchoolManagementController {
     return ResponseEntity.ok(CreateDepartmentResponse.builder().id(department.getId()).build());
   }
 
+  @PostMapping("/class")
+  public ResponseEntity<CreateClassResponse> createClass(
+      @RequestBody final CreateClassRequest createClassRequest) {
+    Objects.requireNonNull(createClassRequest);
+    Objects.requireNonNull(createClassRequest.getDepartmentId());
+    Objects.requireNonNull(createClassRequest.getName());
+    Objects.requireNonNull(createClassRequest.getStartYear());
+    Objects.requireNonNull(createClassRequest.getNoOfStudyYears());
+    Objects.requireNonNull(createClassRequest.getNoOfSemestersPerYear());
+
+    final var classInfo =
+        schoolManagementService.createClass(
+            universityMapper.fromCreateClassRequest(createClassRequest));
+
+    return ResponseEntity.ok(CreateClassResponse.builder().classConfigurationId(classInfo.getId()).build());
+  }
+
   @GetMapping("/universities")
   public ResponseEntity<List<UniversityDTO>> retrieveUniversitiesByCityId(final Long cityId) {
     Objects.requireNonNull(cityId);

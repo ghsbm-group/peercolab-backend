@@ -1,6 +1,7 @@
 package com.ghsbm.group.peer.colab.domain.school.core.ports.incoming;
 
 import com.ghsbm.group.peer.colab.domain.school.core.model.*;
+import com.ghsbm.group.peer.colab.domain.school.core.model.ClassConfiguration;
 import com.ghsbm.group.peer.colab.domain.school.core.ports.outgoing.SchoolRepository;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -49,5 +50,10 @@ public class SchoolManagementFacade implements SchoolManagementService {
   @Override
   public Department createDepartment(Department department) {
     return universityRepository.create(department);
+  }
+
+  @Override
+  public ClassConfiguration createClass(ClassConfiguration classConfigurationInfo) {
+    return universityRepository.create(classConfigurationInfo);
   }
 }
