@@ -3,7 +3,7 @@ package com.ghsbm.group.peer.colab.domain.school.controller.model;
 import com.ghsbm.group.peer.colab.domain.school.core.model.*;
 import java.util.List;
 
-import com.ghsbm.group.peer.colab.domain.school.core.model.Class;
+import com.ghsbm.group.peer.colab.domain.school.core.model.ClassConfiguration;
 import org.mapstruct.Mapper;
 
 @Mapper(componentModel = "spring")
@@ -25,5 +25,5 @@ public interface UniversityMapper {
 
   Department fromCreateDepartmentRequest(CreateDepartmentRequest departmentDTO);
 
-  Class fromCreateClassRequest(CreateClassRequest classDTO);
+  ClassConfiguration fromCreateClassRequest(CreateClassRequest classDTO);
 }

@@ -39,7 +39,7 @@ values ('CS en', 4),
        ('Animal Biology', 8),
        ('Law en', 10),
        ('Law fr', 10);
-insert into "class"(name, department_id, start_year ,no_of_study_years,no_of_semesters_per_year)
+insert into class_configuration(name, department_id, start_year ,no_of_study_years,no_of_semesters_per_year)
 values ('30234', 2, 2017, 4, 2),
        ('30231', 2, 2018, 4, 2),
        ('30432', 2, 2019, 4, 2),

@@ -1,12 +1,11 @@
 package com.ghsbm.group.peer.colab.domain.school.persistence;
 
 import com.ghsbm.group.peer.colab.domain.school.core.model.*;
-import com.ghsbm.group.peer.colab.domain.school.core.model.Class;
+import com.ghsbm.group.peer.colab.domain.school.core.model.ClassConfiguration;
 import com.ghsbm.group.peer.colab.domain.school.core.ports.outgoing.SchoolRepository;
 import com.ghsbm.group.peer.colab.domain.school.persistence.model.*;
 import com.ghsbm.group.peer.colab.domain.school.persistence.repository.*;
 
-import java.time.Year;
 import java.util.List;
 import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;
@@ -89,16 +88,16 @@ public class SchoolRepositoryAdapter implements SchoolRepository {
   }
 
   @Override
-  public Class create(Class classInfo) {
+  public ClassConfiguration create(ClassConfiguration classConfigurationInfo) {
     final var departmentEntity =
-        departmentPsqlDbRepository.getReferenceById(classInfo.getDepartmentId());
+        departmentPsqlDbRepository.getReferenceById(classConfigurationInfo.getDepartmentId());
     final var savedClass =
         classPsqlDbRepository.save(
-            ClassEntity.builder()
-                .name(classInfo.getName())
-                .startYear(classInfo.getStartYear())
-                .noOfStudyYears(classInfo.getNoOfStudyYears())
-                .noOfSemestersPerYear(classInfo.getNoOfSemestersPerYear())
+            ClassConfigurationEntity.builder()
+                .name(classConfigurationInfo.getName())
+                .startYear(classConfigurationInfo.getStartYear())
+                .noOfStudyYears(classConfigurationInfo.getNoOfStudyYears())
+                .noOfSemestersPerYear(classConfigurationInfo.getNoOfSemestersPerYear())
                 .department(departmentEntity)
                 .build());
     return universityEntitiesMapper.classFromEntity(savedClass);

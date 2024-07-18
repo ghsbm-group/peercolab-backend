@@ -6,5 +6,5 @@ import lombok.Data;
 @Data
 @Builder
 public class CreateClassResponse {
-    private Long id;
+    private Long classConfigurationId;
 }

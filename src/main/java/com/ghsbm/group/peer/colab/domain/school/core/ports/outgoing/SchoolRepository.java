@@ -1,7 +1,7 @@
 package com.ghsbm.group.peer.colab.domain.school.core.ports.outgoing;
 
 import com.ghsbm.group.peer.colab.domain.school.core.model.*;
-import com.ghsbm.group.peer.colab.domain.school.core.model.Class;
+import com.ghsbm.group.peer.colab.domain.school.core.model.ClassConfiguration;
 
 import java.util.List;
 
@@ -23,5 +23,5 @@ public interface SchoolRepository {
 
   Department create(Department department);
 
-  Class create(Class classInfo);
+  ClassConfiguration create(ClassConfiguration classConfigurationInfo);
 }

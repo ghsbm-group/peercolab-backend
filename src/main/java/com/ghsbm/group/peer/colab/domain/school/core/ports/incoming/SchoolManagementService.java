@@ -3,7 +3,7 @@ package com.ghsbm.group.peer.colab.domain.school.core.ports.incoming;
 import com.ghsbm.group.peer.colab.domain.school.core.model.*;
 import java.util.List;
 
-import com.ghsbm.group.peer.colab.domain.school.core.model.Class;
+import com.ghsbm.group.peer.colab.domain.school.core.model.ClassConfiguration;
 import org.springframework.transaction.annotation.Transactional;
 
 public interface SchoolManagementService {
@@ -28,5 +28,5 @@ public interface SchoolManagementService {
   Department createDepartment(Department department);
 
   @Transactional
-  Class createClass(Class classInfo);
+  ClassConfiguration createClass(ClassConfiguration classConfigurationInfo);
 }

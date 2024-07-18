@@ -5,7 +5,7 @@ import lombok.Data;
 
 @Data
 @Builder
-public class Class {
+public class ClassConfiguration {
 
   private Long id;
   private String name;

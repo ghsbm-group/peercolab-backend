@@ -87,7 +87,7 @@ public class SchoolManagementController {
         schoolManagementService.createClass(
             universityMapper.fromCreateClassRequest(createClassRequest));
 
-    return ResponseEntity.ok(CreateClassResponse.builder().id(classInfo.getId()).build());
+    return ResponseEntity.ok(CreateClassResponse.builder().classConfigurationId(classInfo.getId()).build());
   }
 
   @GetMapping("/universities")

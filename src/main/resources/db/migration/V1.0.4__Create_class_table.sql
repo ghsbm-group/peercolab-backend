@@ -1,4 +1,4 @@
-create TABLE "class"
+create TABLE class_configuration
 (
     id         SERIAL PRIMARY KEY,
     name       VARCHAR(100) NOT NULL,
@@ -10,8 +10,8 @@ create TABLE "class"
 );
 
 -- Create an index on the department_id column in the table for better query performance
-create index idx_class_department_id on  "class" (department_id);
+create index idx_class_configuration_department_id on  class_configuration (department_id);
 
 -- Add a unique constraint to prevent duplicate classes names within the same department
-alter table "class"
-    add CONSTRAINT unique_class_per_department UNIQUE (name,start_year, no_of_study_years, department_id);
+alter table class_configuration
+    add CONSTRAINT unique_class_configuration_per_department UNIQUE (name,start_year, no_of_study_years, department_id);

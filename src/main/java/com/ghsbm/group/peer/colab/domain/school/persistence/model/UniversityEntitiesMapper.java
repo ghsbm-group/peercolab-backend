@@ -3,7 +3,7 @@ package com.ghsbm.group.peer.colab.domain.school.persistence.model;
 import com.ghsbm.group.peer.colab.domain.school.core.model.*;
 import java.util.List;
 
-import com.ghsbm.group.peer.colab.domain.school.core.model.Class;
+import com.ghsbm.group.peer.colab.domain.school.core.model.ClassConfiguration;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 
@@ -30,5 +30,5 @@ public abstract class UniversityEntitiesMapper {
   public abstract Department departmentFromEntity(DepartmentEntity savedDepartment);
 
   @Mapping(target = "departmentId", source = "department.id")
-  public abstract Class classFromEntity(ClassEntity savedClass);
+  public abstract ClassConfiguration classFromEntity(ClassConfigurationEntity savedClass);
 }
