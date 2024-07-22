@@ -5,7 +5,7 @@ import lombok.Data;
 
 /** Encapsulates class configuration data. */
 @Data
-@Builder
+@Builder(toBuilder = true)
 public class ClassConfiguration {
   private Long id;
   private String name;

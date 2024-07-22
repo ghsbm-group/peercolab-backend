@@ -7,6 +7,7 @@ import com.ghsbm.group.peer.colab.domain.classes.core.model.Folder;
 import com.ghsbm.group.peer.colab.domain.classes.core.ports.outgoing.ClassRepository;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import org.springframework.stereotype.Service;
 
 /**
@@ -77,6 +78,10 @@ class ClassManagementFacade implements ClassManagementService {
    */
   @Override
   public Folder createFolder(Folder folder) {
+    Objects.requireNonNull(folder);
+    Objects.requireNonNull(folder.getName());
+    Objects.requireNonNull(folder.getClassConfigurationId());
+
     return classRepository.create(folder);
   }
 }
