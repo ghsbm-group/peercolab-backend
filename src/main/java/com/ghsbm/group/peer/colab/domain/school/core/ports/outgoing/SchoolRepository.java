@@ -1,7 +1,6 @@
 package com.ghsbm.group.peer.colab.domain.school.core.ports.outgoing;
 
 import com.ghsbm.group.peer.colab.domain.school.core.model.*;
-
 import java.util.List;
 
 public interface SchoolRepository {

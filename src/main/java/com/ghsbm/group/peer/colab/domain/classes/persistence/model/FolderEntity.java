@@ -6,9 +6,7 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-/**
- * Entity class for the folder table.
- */
+/** Entity class for the folder table. */
 @Data
 @Builder
 @NoArgsConstructor

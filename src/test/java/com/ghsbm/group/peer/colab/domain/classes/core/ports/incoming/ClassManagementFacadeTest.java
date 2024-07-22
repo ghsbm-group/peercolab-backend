@@ -31,6 +31,24 @@ class ClassManagementFacadeTest {
 
   @Mock private ClassRepository classRepository;
 
+  private static ClassConfiguration buildValidClassConfiguration() {
+    return ClassConfiguration.builder()
+        .departmentId(DEPARTMENT_ID)
+        .noOfStudyYears(NO_OF_STUDY_YEARS)
+        .noOfSemestersPerYear(NO_OF_SEMESTERS_PER_YEAR)
+        .name(CLASS_NAME)
+        .startYear(START_YEAR)
+        .build();
+  }
+
+  private static Folder buildFolderWithNullName() {
+    return Folder.builder().classConfigurationId(CLASS_CONFIGURATION_ID).build();
+  }
+
+  private static Folder buildValidFolder() {
+    return Folder.builder().classConfigurationId(CLASS_CONFIGURATION_ID).name(FOLDER_NAME).build();
+  }
+
   @BeforeEach
   void setUp() {
     MockitoAnnotations.openMocks(this);
@@ -84,10 +102,18 @@ class ClassManagementFacadeTest {
   void createClassShouldThrowExceptionForInvalidClassConfiguration() {
     var classConfigurationBuilder = buildValidClassConfiguration().toBuilder();
 
-    assertThrows(NullPointerException.class, () -> victim.createClass(classConfigurationBuilder.departmentId(null).build()));
-    assertThrows(NullPointerException.class, () -> victim.createClass(classConfigurationBuilder.noOfSemestersPerYear(null).build()));
-    assertThrows(NullPointerException.class, () -> victim.createClass(classConfigurationBuilder.noOfStudyYears(null).build()));
-    assertThrows(NullPointerException.class, () -> victim.createClass(classConfigurationBuilder.startYear(null).build()));
+    assertThrows(
+        NullPointerException.class,
+        () -> victim.createClass(classConfigurationBuilder.departmentId(null).build()));
+    assertThrows(
+        NullPointerException.class,
+        () -> victim.createClass(classConfigurationBuilder.noOfSemestersPerYear(null).build()));
+    assertThrows(
+        NullPointerException.class,
+        () -> victim.createClass(classConfigurationBuilder.noOfStudyYears(null).build()));
+    assertThrows(
+        NullPointerException.class,
+        () -> victim.createClass(classConfigurationBuilder.startYear(null).build()));
   }
 
   @Test
@@ -95,27 +121,8 @@ class ClassManagementFacadeTest {
     List<ClassConfiguration> expectedReturnValue = List.of(buildValidClassConfiguration());
     when(classRepository.findClassesByDepartment(DEPARTMENT_ID)).thenReturn(expectedReturnValue);
 
-    List<ClassConfiguration> response = victim.retrieveClassByDepartmentId(
-        DEPARTMENT_ID);
+    List<ClassConfiguration> response = victim.retrieveClassByDepartmentId(DEPARTMENT_ID);
 
     assertEquals(expectedReturnValue, response);
-  }
-
-  private static ClassConfiguration buildValidClassConfiguration() {
-    return ClassConfiguration.builder()
-        .departmentId(DEPARTMENT_ID)
-        .noOfStudyYears(NO_OF_STUDY_YEARS)
-        .noOfSemestersPerYear(NO_OF_SEMESTERS_PER_YEAR)
-        .name(CLASS_NAME)
-        .startYear(START_YEAR)
-        .build();
-  }
-
-  private static Folder buildFolderWithNullName() {
-    return Folder.builder().classConfigurationId(CLASS_CONFIGURATION_ID).build();
-  }
-
-  private static Folder buildValidFolder() {
-    return Folder.builder().classConfigurationId(CLASS_CONFIGURATION_ID).name(FOLDER_NAME).build();
   }
 }

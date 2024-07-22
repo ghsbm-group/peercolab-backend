@@ -10,9 +10,7 @@ import java.util.List;
 import java.util.Objects;
 import org.springframework.stereotype.Service;
 
-/**
- * Service that contains the core business logic.
- */
+/** Service that contains the core business logic. */
 @Service
 class ClassManagementFacade implements ClassManagementService {
 
@@ -58,7 +56,7 @@ class ClassManagementFacade implements ClassManagementService {
           j <= classConfigurationInfo.getNoOfSemestersPerYear();
           j++) { // for creating semesters folders
         final Folder semesterFolder =
-             Folder.builder()
+            Folder.builder()
                 .name("Semester " + j)
                 .parentId(persistedCurrentYearFolder.getId())
                 .classConfigurationId(classConfiguration.getId())

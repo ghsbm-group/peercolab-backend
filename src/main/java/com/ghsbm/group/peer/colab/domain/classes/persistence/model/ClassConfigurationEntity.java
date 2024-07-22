@@ -6,9 +6,7 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-/**
- * Entity class for the class_configuration table.
- */
+/** Entity class for the class_configuration table. */
 @Data
 @Builder
 @NoArgsConstructor

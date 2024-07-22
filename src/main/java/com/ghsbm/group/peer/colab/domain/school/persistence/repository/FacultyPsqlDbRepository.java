@@ -8,5 +8,5 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface FacultyPsqlDbRepository extends JpaRepository<FacultyEntity, Long> {
 
-    List<FacultyEntity> findByUniversityId(Long universityId);
+  List<FacultyEntity> findByUniversityId(Long universityId);
 }

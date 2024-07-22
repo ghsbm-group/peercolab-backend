@@ -24,6 +24,7 @@ public class ClassRepositoryAdapter implements ClassRepository {
   private ClassPsqlDbRepository classPsqlDbRepository;
   private FolderPsqlDbRespository folderPsqlDbRespository;
   private ClassEntitiesMapper classEntitiesMapper;
+
   @Autowired
   public ClassRepositoryAdapter(
       ClassPsqlDbRepository classPsqlDbRepository,

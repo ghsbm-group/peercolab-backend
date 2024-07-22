@@ -10,7 +10,7 @@ import org.mapstruct.Mappings;
 /**
  * {@link Mapper}
  *
- * Abstract class containing helper methods for mapping between core and entity objects.
+ * <p>Abstract class containing helper methods for mapping between core and entity objects.
  */
 @Mapper(componentModel = "spring")
 public abstract class ClassEntitiesMapper {

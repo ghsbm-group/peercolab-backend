@@ -2,7 +2,6 @@ package com.ghsbm.group.peer.colab.domain.school.core.ports.incoming;
 
 import com.ghsbm.group.peer.colab.domain.school.core.model.*;
 import java.util.List;
-
 import org.springframework.transaction.annotation.Transactional;
 
 public interface SchoolManagementService {
