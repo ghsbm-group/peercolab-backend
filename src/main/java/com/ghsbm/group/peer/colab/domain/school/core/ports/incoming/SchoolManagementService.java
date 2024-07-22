@@ -18,6 +18,8 @@ public interface SchoolManagementService {
 
   List<Department> retrieveDepartmentByFacultyId(Long facultyId);
 
+  List<ClassConfiguration> retrieveClassByDepartmentId(Long classId);
+
   @Transactional
   University createUniversity(University university);
 
@@ -28,5 +30,8 @@ public interface SchoolManagementService {
   Department createDepartment(Department department);
 
   @Transactional
-  ClassConfiguration createClass(ClassConfiguration classConfigurationInfo);
+  ClassDetails createClass(ClassConfiguration classConfigurationInfo);
+
+  @Transactional
+  Folder createFolder(Folder folder);
 }

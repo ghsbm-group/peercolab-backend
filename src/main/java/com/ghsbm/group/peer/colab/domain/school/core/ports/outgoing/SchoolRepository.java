@@ -17,6 +17,8 @@ public interface SchoolRepository {
 
   List<Department> findDepartmentsByFaculty(Long facultyId);
 
+  List<ClassConfiguration> findClassesByDepartment(Long departmentId);
+
   University create(University university);
 
   Faculty create(Faculty faculty);
@@ -24,4 +26,8 @@ public interface SchoolRepository {
   Department create(Department department);
 
   ClassConfiguration create(ClassConfiguration classConfigurationInfo);
+
+  Folder create(Folder folder);
+
+
 }

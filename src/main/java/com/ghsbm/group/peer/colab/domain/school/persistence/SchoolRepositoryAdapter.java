@@ -7,6 +7,8 @@ import com.ghsbm.group.peer.colab.domain.school.persistence.model.*;
 import com.ghsbm.group.peer.colab.domain.school.persistence.repository.*;
 
 import java.util.List;
+import java.util.Optional;
+
 import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -29,7 +31,9 @@ public class SchoolRepositoryAdapter implements SchoolRepository {
 
   @Autowired private DepartmentPsqlDbRepository departmentPsqlDbRepository;
 
-  @Autowired ClassPsqlDbRepository classPsqlDbRepository;
+  @Autowired private ClassPsqlDbRepository classPsqlDbRepository;
+
+  @Autowired private FolderPsqlDbRespository folderPsqlDbRespository;
 
   @Autowired private UniversityEntitiesMapper universityEntitiesMapper;
 
@@ -55,6 +59,12 @@ public class SchoolRepositoryAdapter implements SchoolRepository {
   public List<Department> findDepartmentsByFaculty(Long facultyId) {
     return universityEntitiesMapper.fromDepartmentEntities(
         departmentPsqlDbRepository.findByFacultyId(facultyId));
+  }
+
+  @Override
+  public List<ClassConfiguration> findClassesByDepartment(Long departmentId) {
+    return universityEntitiesMapper.fromClassEntities(
+        classPsqlDbRepository.findByDepartmentId(departmentId));
   }
 
   @Override
@@ -101,6 +111,25 @@ public class SchoolRepositoryAdapter implements SchoolRepository {
                 .department(departmentEntity)
                 .build());
     return universityEntitiesMapper.classFromEntity(savedClass);
+  }
+
+  @Override
+  public Folder create(Folder folder) {
+    final var classEntity =
+        classPsqlDbRepository.getReferenceById(folder.getClassConfigurationId());
+    var folderEntity = Optional.<FolderEntity>empty();
+    if (folder.getParentId() != null) {
+      folderEntity = folderPsqlDbRespository.findById(folder.getParentId());
+    }
+    final var savedFolder =
+        folderPsqlDbRespository.save(
+            FolderEntity.builder()
+                .name(folder.getName())
+                .classConfiguration(classEntity)
+                .parent(folderEntity.orElse(null))
+                .build());
+
+    return universityEntitiesMapper.folderFromEntity(savedFolder);
   }
 
   @Override
