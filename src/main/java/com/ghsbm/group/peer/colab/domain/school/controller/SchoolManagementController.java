@@ -11,7 +11,6 @@ import org.springframework.web.bind.annotation.*;
 
 @RestController("/schools")
 @RequestMapping("/schools")
-@CrossOrigin(origins = "*")
 public class SchoolManagementController {
 
   @Autowired private SchoolManagementService schoolManagementService;
