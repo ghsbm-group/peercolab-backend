@@ -1,6 +1,7 @@
 package com.ghsbm.group.peer.colab.domain.school.controller;
 
 import com.ghsbm.group.peer.colab.domain.school.controller.model.*;
+import com.ghsbm.group.peer.colab.domain.school.core.model.ClassConfiguration;
 import com.ghsbm.group.peer.colab.domain.school.core.ports.incoming.SchoolManagementService;
 import java.util.List;
 import java.util.Objects;
@@ -87,7 +88,13 @@ public class SchoolManagementController {
         schoolManagementService.createClass(
             universityMapper.fromCreateClassRequest(createClassRequest));
 
-    return ResponseEntity.ok(CreateClassResponse.builder().classConfigurationId(classInfo.getId()).build());
+    return ResponseEntity.ok(
+        CreateClassResponse.builder()
+            .classConfigurationId(classInfo.getClassConfiguration().getId()) // returns the class id
+            .folders(
+                universityMapper.foldersDTOFrom(
+                    classInfo.getClassStructure().getFolders())) // a list containing FolderDTO
+            .build());
   }
 
   @GetMapping("/universities")
@@ -115,5 +122,15 @@ public class SchoolManagementController {
     return ResponseEntity.ok(
         universityMapper.departmentsDTOFrom(
             schoolManagementService.retrieveDepartmentByFacultyId(facultyId)));
+  }
+
+  @GetMapping("/classes")
+  public ResponseEntity<List<ClassDTO>> retrieveClassesByDepartmentId(final Long departmentId) {
+
+    Objects.requireNonNull(departmentId);
+
+    return ResponseEntity.ok(
+        universityMapper.classesDTOFrom(
+            schoolManagementService.retrieveClassByDepartmentId(departmentId)));
   }
 }

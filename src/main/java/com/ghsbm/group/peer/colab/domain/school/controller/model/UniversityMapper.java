@@ -19,6 +19,10 @@ public interface UniversityMapper {
 
   List<DepartmentDTO> departmentsDTOFrom(List<Department> departments);
 
+  List<ClassDTO> classesDTOFrom(List<ClassConfiguration> classes);
+
+  List<FolderDTO> foldersDTOFrom(List<Folder> folders);
+
   University fromCreateUniversityRequest(CreateUniversityRequest createUniversityRequest);
 
   Faculty fromCreateFacultyRequest(CreateFacultyRequest facultyDTO);
@@ -26,4 +30,8 @@ public interface UniversityMapper {
   Department fromCreateDepartmentRequest(CreateDepartmentRequest departmentDTO);
 
   ClassConfiguration fromCreateClassRequest(CreateClassRequest classDTO);
+
+
+
+
 }

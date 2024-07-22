@@ -6,6 +6,7 @@ import java.util.List;
 import com.ghsbm.group.peer.colab.domain.school.core.model.ClassConfiguration;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
+import org.mapstruct.Mappings;
 
 @Mapper(componentModel = "spring")
 public abstract class UniversityEntitiesMapper {
@@ -20,6 +21,9 @@ public abstract class UniversityEntitiesMapper {
 
   public abstract List<Department> fromDepartmentEntities(List<DepartmentEntity> departments);
 
+  public abstract List<ClassConfiguration> fromClassEntities(
+      List<ClassConfigurationEntity> classes);
+
   @Mapping(target = "cityId", source = "city.id")
   public abstract University fromUniversityEntity(UniversityEntity university);
 
@@ -31,4 +35,10 @@ public abstract class UniversityEntitiesMapper {
 
   @Mapping(target = "departmentId", source = "department.id")
   public abstract ClassConfiguration classFromEntity(ClassConfigurationEntity savedClass);
+
+  @Mappings({
+    @Mapping(target = "classConfigurationId", source = "classConfiguration.id"),
+    @Mapping(target = "parentId", source = "parent.id")
+  })
+  public abstract Folder folderFromEntity(FolderEntity savedFolder);
 }

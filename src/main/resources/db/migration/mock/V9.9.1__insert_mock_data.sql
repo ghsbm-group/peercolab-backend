@@ -31,19 +31,11 @@ values ('Civil society', 3),--4
         ('Earth science', 7),--12
         ('Mathematics', 7);--13
 insert into department(name, faculty_id)
-values ('CS en', 4),
-       ('CS de', 4),
+values ('CS', 4),
        ('Civil Architecture', 6),
-       ('Human Biology', 8),
-       ('Plant Biology', 8),
-       ('Animal Biology', 8),
-       ('Law en', 10),
-       ('Law fr', 10);
-insert into class_configuration(name, department_id, start_year ,no_of_study_years,no_of_semesters_per_year)
-values ('30234', 2, 2017, 4, 2),
-       ('30231', 2, 2018, 4, 2),
-       ('30432', 2, 2019, 4, 2),
-       ('30411', 1, 2020, 4, 2);
+       ('Biology', 8),
+       ('Law', 10);
+
 
 
 
