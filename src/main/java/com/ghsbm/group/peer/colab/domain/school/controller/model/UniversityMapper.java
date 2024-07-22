@@ -2,8 +2,6 @@ package com.ghsbm.group.peer.colab.domain.school.controller.model;
 
 import com.ghsbm.group.peer.colab.domain.school.core.model.*;
 import java.util.List;
-
-import com.ghsbm.group.peer.colab.domain.school.core.model.ClassConfiguration;
 import org.mapstruct.Mapper;
 
 @Mapper(componentModel = "spring")
@@ -19,19 +17,9 @@ public interface UniversityMapper {
 
   List<DepartmentDTO> departmentsDTOFrom(List<Department> departments);
 
-  List<ClassDTO> classesDTOFrom(List<ClassConfiguration> classes);
-
-  List<FolderDTO> foldersDTOFrom(List<Folder> folders);
-
   University fromCreateUniversityRequest(CreateUniversityRequest createUniversityRequest);
 
   Faculty fromCreateFacultyRequest(CreateFacultyRequest facultyDTO);
 
   Department fromCreateDepartmentRequest(CreateDepartmentRequest departmentDTO);
-
-  ClassConfiguration fromCreateClassRequest(CreateClassRequest classDTO);
-
-
-
-
 }

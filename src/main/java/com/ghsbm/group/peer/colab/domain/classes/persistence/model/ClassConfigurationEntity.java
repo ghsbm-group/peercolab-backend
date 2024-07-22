@@ -1,4 +1,4 @@
-package com.ghsbm.group.peer.colab.domain.school.persistence.model;
+package com.ghsbm.group.peer.colab.domain.classes.persistence.model;
 
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -6,6 +6,9 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+/**
+ * Entity class for the class_configuration table.
+ */
 @Data
 @Builder
 @NoArgsConstructor
@@ -28,7 +31,6 @@ public class ClassConfigurationEntity {
   @Column(name = "no_of_semesters_per_year")
   private Integer noOfSemestersPerYear;
 
-  @ManyToOne(fetch = FetchType.LAZY)
-  @JoinColumn(name = "department_id")
-  private DepartmentEntity department;
+  @Column(name = "department_id")
+  private Long departmentId;
 }

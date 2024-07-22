@@ -1,7 +1,6 @@
 package com.ghsbm.group.peer.colab.domain.school.controller;
 
 import com.ghsbm.group.peer.colab.domain.school.controller.model.*;
-import com.ghsbm.group.peer.colab.domain.school.core.model.ClassConfiguration;
 import com.ghsbm.group.peer.colab.domain.school.core.ports.incoming.SchoolManagementService;
 import java.util.List;
 import java.util.Objects;
@@ -9,7 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-@RestController("/schools")
+@RestController
 @RequestMapping("/schools")
 public class SchoolManagementController {
 
@@ -73,29 +72,6 @@ public class SchoolManagementController {
     return ResponseEntity.ok(CreateDepartmentResponse.builder().id(department.getId()).build());
   }
 
-  @PostMapping("/class")
-  public ResponseEntity<CreateClassResponse> createClass(
-      @RequestBody final CreateClassRequest createClassRequest) {
-    Objects.requireNonNull(createClassRequest);
-    Objects.requireNonNull(createClassRequest.getDepartmentId());
-    Objects.requireNonNull(createClassRequest.getName());
-    Objects.requireNonNull(createClassRequest.getStartYear());
-    Objects.requireNonNull(createClassRequest.getNoOfStudyYears());
-    Objects.requireNonNull(createClassRequest.getNoOfSemestersPerYear());
-
-    final var classInfo =
-        schoolManagementService.createClass(
-            universityMapper.fromCreateClassRequest(createClassRequest));
-
-    return ResponseEntity.ok(
-        CreateClassResponse.builder()
-            .classConfigurationId(classInfo.getClassConfiguration().getId()) // returns the class id
-            .folders(
-                universityMapper.foldersDTOFrom(
-                    classInfo.getClassStructure().getFolders())) // a list containing FolderDTO
-            .build());
-  }
-
   @GetMapping("/universities")
   public ResponseEntity<List<UniversityDTO>> retrieveUniversitiesByCityId(final Long cityId) {
     Objects.requireNonNull(cityId);
@@ -121,15 +97,5 @@ public class SchoolManagementController {
     return ResponseEntity.ok(
         universityMapper.departmentsDTOFrom(
             schoolManagementService.retrieveDepartmentByFacultyId(facultyId)));
-  }
-
-  @GetMapping("/classes")
-  public ResponseEntity<List<ClassDTO>> retrieveClassesByDepartmentId(final Long departmentId) {
-
-    Objects.requireNonNull(departmentId);
-
-    return ResponseEntity.ok(
-        universityMapper.classesDTOFrom(
-            schoolManagementService.retrieveClassByDepartmentId(departmentId)));
   }
 }

@@ -1,0 +1,84 @@
+package com.ghsbm.group.peer.colab.domain.classes.persistence;
+
+import com.ghsbm.group.peer.colab.domain.classes.core.model.ClassConfiguration;
+import com.ghsbm.group.peer.colab.domain.classes.core.model.Folder;
+import com.ghsbm.group.peer.colab.domain.classes.core.ports.outgoing.ClassRepository;
+import com.ghsbm.group.peer.colab.domain.classes.persistence.model.ClassConfigurationEntity;
+import com.ghsbm.group.peer.colab.domain.classes.persistence.model.ClassEntitiesMapper;
+import com.ghsbm.group.peer.colab.domain.classes.persistence.model.FolderEntity;
+import com.ghsbm.group.peer.colab.domain.classes.persistence.repository.ClassPsqlDbRepository;
+import com.ghsbm.group.peer.colab.domain.classes.persistence.repository.FolderPsqlDbRespository;
+import java.util.List;
+import java.util.Optional;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
+
+/** Implementation of the class repository interface. Reads and persists data into a db. */
+@Component
+@NoArgsConstructor
+@Setter
+public class ClassRepositoryAdapter implements ClassRepository {
+
+  private ClassPsqlDbRepository classPsqlDbRepository;
+  private FolderPsqlDbRespository folderPsqlDbRespository;
+  private ClassEntitiesMapper classEntitiesMapper;
+  @Autowired
+  public ClassRepositoryAdapter(
+      ClassPsqlDbRepository classPsqlDbRepository,
+      FolderPsqlDbRespository folderPsqlDbRespository,
+      ClassEntitiesMapper classEntitiesMapper) {
+    this.classPsqlDbRepository = classPsqlDbRepository;
+    this.folderPsqlDbRespository = folderPsqlDbRespository;
+    this.classEntitiesMapper = classEntitiesMapper;
+  }
+
+  /**
+   * @inheritDoc
+   */
+  @Override
+  public List<ClassConfiguration> findClassesByDepartment(Long departmentId) {
+    return classEntitiesMapper.fromClassEntities(
+        classPsqlDbRepository.findByDepartmentId(departmentId));
+  }
+
+  /**
+   * @inheritDoc
+   */
+  @Override
+  public ClassConfiguration create(ClassConfiguration classConfigurationInfo) {
+    final var savedClass =
+        classPsqlDbRepository.save(
+            ClassConfigurationEntity.builder()
+                .name(classConfigurationInfo.getName())
+                .startYear(classConfigurationInfo.getStartYear())
+                .noOfStudyYears(classConfigurationInfo.getNoOfStudyYears())
+                .noOfSemestersPerYear(classConfigurationInfo.getNoOfSemestersPerYear())
+                .departmentId(classConfigurationInfo.getDepartmentId())
+                .build());
+    return classEntitiesMapper.classFromEntity(savedClass);
+  }
+
+  /**
+   * @inheritDoc
+   */
+  @Override
+  public Folder create(Folder folder) {
+    final var classEntity =
+        classPsqlDbRepository.getReferenceById(folder.getClassConfigurationId());
+    var folderEntity = Optional.<FolderEntity>empty();
+    if (folder.getParentId() != null) {
+      folderEntity = folderPsqlDbRespository.findById(folder.getParentId());
+    }
+    final var savedFolder =
+        folderPsqlDbRespository.save(
+            FolderEntity.builder()
+                .name(folder.getName())
+                .classConfiguration(classEntity)
+                .parent(folderEntity.orElse(null))
+                .build());
+
+    return classEntitiesMapper.folderFromEntity(savedFolder);
+  }
+}

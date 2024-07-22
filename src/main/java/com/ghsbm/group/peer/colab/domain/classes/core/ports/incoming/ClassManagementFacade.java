@@ -1,0 +1,82 @@
+package com.ghsbm.group.peer.colab.domain.classes.core.ports.incoming;
+
+import com.ghsbm.group.peer.colab.domain.classes.core.model.ClassConfiguration;
+import com.ghsbm.group.peer.colab.domain.classes.core.model.ClassDetails;
+import com.ghsbm.group.peer.colab.domain.classes.core.model.ClassStructure;
+import com.ghsbm.group.peer.colab.domain.classes.core.model.Folder;
+import com.ghsbm.group.peer.colab.domain.classes.core.ports.outgoing.ClassRepository;
+import java.util.ArrayList;
+import java.util.List;
+import org.springframework.stereotype.Service;
+
+/**
+ * Service that contains the core business logic.
+ */
+@Service
+class ClassManagementFacade implements ClassManagementService {
+
+  private final ClassRepository classRepository;
+
+  public ClassManagementFacade(ClassRepository classRepository) {
+    this.classRepository = classRepository;
+  }
+
+  /**
+   * @inheritDoc
+   */
+  @Override
+  public List<ClassConfiguration> retrieveClassByDepartmentId(final Long departmentId) {
+    return classRepository.findClassesByDepartment(departmentId);
+  }
+
+  /**
+   * @inheritDoc
+   */
+  @Override
+  public ClassDetails createClass(final ClassConfiguration classConfigurationInfo) {
+    final ClassConfiguration classConfiguration = classRepository.create(classConfigurationInfo);
+
+    // method returns ClassDetails type that contains ClassStructure and ClassDetails
+    final ClassDetails classDetails = new ClassDetails();
+    final ClassStructure classStructure = new ClassStructure();
+    final List<Folder> folders = new ArrayList<>();
+
+    for (int i = 1;
+        i <= classConfigurationInfo.getNoOfStudyYears();
+        i++) { // for creating years folders
+      final Folder yearFolder =
+          Folder.builder()
+              .name("Year " + i)
+              .classConfigurationId(classConfiguration.getId())
+              .build();
+
+      final Folder persistedCurrentYearFolder = classRepository.create(yearFolder);
+      folders.add(persistedCurrentYearFolder);
+
+      for (int j = 1;
+          j <= classConfigurationInfo.getNoOfSemestersPerYear();
+          j++) { // for creating semesters folders
+        final Folder semesterFolder =
+             Folder.builder()
+                .name("Semester " + j)
+                .parentId(persistedCurrentYearFolder.getId())
+                .classConfigurationId(classConfiguration.getId())
+                .build();
+        classRepository.create(semesterFolder);
+      }
+    }
+    classStructure.setFolders(folders);
+    classDetails.setClassStructure(classStructure);
+    classDetails.setClassConfiguration(classConfiguration);
+
+    return classDetails;
+  }
+
+  /**
+   * @inheritDoc
+   */
+  @Override
+  public Folder createFolder(Folder folder) {
+    return classRepository.create(folder);
+  }
+}

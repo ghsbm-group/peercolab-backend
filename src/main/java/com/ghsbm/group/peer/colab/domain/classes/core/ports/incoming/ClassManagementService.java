@@ -1,0 +1,46 @@
+package com.ghsbm.group.peer.colab.domain.classes.core.ports.incoming;
+
+import com.ghsbm.group.peer.colab.domain.classes.core.model.ClassConfiguration;
+import com.ghsbm.group.peer.colab.domain.classes.core.model.ClassDetails;
+import com.ghsbm.group.peer.colab.domain.classes.core.model.Folder;
+import java.util.List;
+import org.springframework.transaction.annotation.Transactional;
+
+/**
+ * Interface contract between the API and the core business logic.
+ *
+ * <p>Contains methods used for the management of classes.
+ */
+public interface ClassManagementService {
+
+  /**
+   * Retrieves the class configurations associated with a department.
+   *
+   * @param departmentId the department id for which the class configurations are retrieved.
+   * @return a list of {@link ClassConfiguration} associated with the provided department id.
+   */
+  List<ClassConfiguration> retrieveClassByDepartmentId(Long departmentId);
+
+  /**
+   * Creates a class configuration and an initial folder structure for that class based on the
+   * number of years and number of semesters parameters configured.
+   *
+   * <p>Ex: noOfYears = 2, noOfSemesters =2, the following structure will be created: {@code {
+   * ['Year ',['Semester 1', 'Semester 2'], 'Year 2, ['Semester 1', 'Semester 2'] ] } }
+   *
+   * @param classConfigurationInfo the class configuration based on which the class and class
+   *     structure is created.
+   * @return a {@link ClassDetails} object.
+   */
+  @Transactional
+  ClassDetails createClass(ClassConfiguration classConfigurationInfo);
+
+  /**
+   * Persists the folder.
+   *
+   * @param folder encapsulates folder data.
+   * @return a {@link Folder} object with the id attribute set.
+   */
+  @Transactional
+  Folder createFolder(Folder folder);
+}
