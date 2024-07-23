@@ -1,9 +1,9 @@
 package com.ghsbm.group.peer.colab.domain.school.core.ports.incoming;
 
-import com.ghsbm.group.peer.colab.domain.classes.core.model.ClassConfiguration;
 import com.ghsbm.group.peer.colab.domain.school.core.model.*;
 import java.util.List;
 import org.springframework.transaction.annotation.Transactional;
+
 /**
  * Interface contract between the API and the core business logic.
  *

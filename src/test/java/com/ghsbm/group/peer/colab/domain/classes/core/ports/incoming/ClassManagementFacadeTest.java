@@ -98,10 +98,10 @@ class ClassManagementFacadeTest {
                 .build());
     Folder createdSubfolder = victim.createFolder(toBeCreated);
 
-    assertEquals(createdSubfolder.getName(), toBeCreated.getName());
-    assertEquals(createdSubfolder.getClassConfigurationId(), toBeCreated.getClassConfigurationId());
-    assertEquals(createdSubfolder.getId(), SUBFOLDER_ID);
-    assertEquals(createdSubfolder.getParentId(), toBeCreated.getParentId());
+    assertEquals(toBeCreated.getName(), createdSubfolder.getName());
+    assertEquals(toBeCreated.getClassConfigurationId(), createdSubfolder.getClassConfigurationId());
+    assertEquals(SUBFOLDER_ID, createdSubfolder.getId());
+    assertEquals(toBeCreated.getParentId(), createdSubfolder.getParentId());
   }
 
   @Test

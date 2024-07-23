@@ -1,8 +1,8 @@
 package com.ghsbm.group.peer.colab.domain.school.core.ports.outgoing;
 
-import com.ghsbm.group.peer.colab.domain.classes.core.model.ClassConfiguration;
 import com.ghsbm.group.peer.colab.domain.school.core.model.*;
 import java.util.List;
+
 /**
  * Interface contract between core business logic and the persistence layer.
  *
