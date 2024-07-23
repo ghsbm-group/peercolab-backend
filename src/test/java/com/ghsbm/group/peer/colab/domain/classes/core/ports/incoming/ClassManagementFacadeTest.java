@@ -20,8 +20,10 @@ import org.mockito.MockitoAnnotations;
 class ClassManagementFacadeTest {
 
   public static final long CLASS_CONFIGURATION_ID = 1L;
+  public static final String SUBFOLDER_NAME = "SubfolderName";
   public static final String FOLDER_NAME = "FolderName";
   public static final long FOLDER_ID = 1L;
+  public static final long SUBFOLDER_ID = 2L;
   public static final long DEPARTMENT_ID = 1L;
   public static final String CLASS_NAME = "ClassName";
   public static final int START_YEAR = 2009;
@@ -49,6 +51,14 @@ class ClassManagementFacadeTest {
     return Folder.builder().classConfigurationId(CLASS_CONFIGURATION_ID).name(FOLDER_NAME).build();
   }
 
+  private static Folder buildValidSubfolder() {
+    return Folder.builder()
+        .classConfigurationId((CLASS_CONFIGURATION_ID))
+        .name(SUBFOLDER_NAME)
+        .parentId(FOLDER_ID)
+        .build();
+  }
+
   @BeforeEach
   void setUp() {
     MockitoAnnotations.openMocks(this);
@@ -73,6 +83,25 @@ class ClassManagementFacadeTest {
     assertEquals(createdFolder.getName(), toBeCreated.getName());
     assertEquals(createdFolder.getClassConfigurationId(), toBeCreated.getClassConfigurationId());
     assertEquals(createdFolder.getId(), FOLDER_ID);
+  }
+
+  @Test
+  void createdSubfolderShouldHaveTheIdSet() {
+    Folder toBeCreated = buildValidSubfolder();
+    when(classRepository.create(toBeCreated))
+        .thenReturn(
+            Folder.builder()
+                .id(SUBFOLDER_ID)
+                .name(SUBFOLDER_NAME)
+                .classConfigurationId(CLASS_CONFIGURATION_ID)
+                .parentId(FOLDER_ID)
+                .build());
+    Folder createdSubfolder = victim.createFolder(toBeCreated);
+
+    assertEquals(createdSubfolder.getName(), toBeCreated.getName());
+    assertEquals(createdSubfolder.getClassConfigurationId(), toBeCreated.getClassConfigurationId());
+    assertEquals(createdSubfolder.getId(), SUBFOLDER_ID);
+    assertEquals(createdSubfolder.getParentId(), toBeCreated.getParentId());
   }
 
   @Test
