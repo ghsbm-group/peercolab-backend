@@ -1,9 +1,6 @@
 package com.ghsbm.group.peer.colab.domain.classes.controller;
 
-import com.ghsbm.group.peer.colab.domain.classes.controller.model.ClassDTO;
-import com.ghsbm.group.peer.colab.domain.classes.controller.model.ClassMapper;
-import com.ghsbm.group.peer.colab.domain.classes.controller.model.CreateClassRequest;
-import com.ghsbm.group.peer.colab.domain.classes.controller.model.CreateClassResponse;
+import com.ghsbm.group.peer.colab.domain.classes.controller.model.*;
 import com.ghsbm.group.peer.colab.domain.classes.core.ports.incoming.ClassManagementService;
 import java.util.List;
 import java.util.Objects;
@@ -62,6 +59,30 @@ public class ClassManagementController {
             .classConfigurationId(classInfo.getClassConfiguration().getId())
             .folders(classMapper.foldersDTOFrom(classInfo.getClassStructure().getFolders()))
             .build());
+  }
+
+  /**
+   * Endpoint for creating a new Folder.
+   *
+   * <p>Calling this api will create a new folder or a subfolder depending on the existence of the
+   * parentId parameter
+   *
+   * @param createFolderRequest {@link CreateFolderRequest} encapsulates the folder configuration
+   *     parameters.
+   * @return a {@link CreateFolderResponse} containing the configuration identifiers for the created
+   *     folder.
+   */
+  @PostMapping("/create-folder")
+  public ResponseEntity<CreateFolderResponse> createFolder(
+      @RequestBody final CreateFolderRequest createFolderRequest) {
+    Objects.requireNonNull(createFolderRequest);
+    Objects.requireNonNull(createFolderRequest.getName());
+    Objects.requireNonNull(createFolderRequest.getClassConfigurationId());
+    final var folder =
+        classManagementService.createFolder(
+            classMapper.fromCreateFolderRequest(createFolderRequest));
+    return ResponseEntity.ok(
+        CreateFolderResponse.builder().id(folder.getId()).name(folder.getName()).build());
   }
 
   /**

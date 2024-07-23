@@ -4,8 +4,18 @@ import com.ghsbm.group.peer.colab.domain.school.core.model.*;
 import java.util.List;
 import org.springframework.transaction.annotation.Transactional;
 
+/**
+ * Interface contract between the API and the core business logic.
+ *
+ * <p>Contains methods used for the management of school.
+ */
 public interface SchoolManagementService {
 
+  /**
+   * Retrieves all countries.
+   *
+   * @return a list of {@link Country}
+   */
   List<Country> retrieveAllCountries();
 
   List<City> retrieveCityByCountryId(Long countryId);

@@ -11,6 +11,7 @@ import lombok.Setter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+/** Implementation of the school repository interface. Reads and persists data into a db. */
 @Component
 @NoArgsConstructor
 @AllArgsConstructor
@@ -82,7 +83,9 @@ public class SchoolRepositoryAdapter implements SchoolRepository {
             DepartmentEntity.builder().name(department.getName()).faculty(facultyEntity).build());
     return universityEntitiesMapper.departmentFromEntity(savedDepartment);
   }
-
+  /**
+   * @inheritDoc
+   */
   @Override
   public List<Country> findAllCountries() {
     return universityEntitiesMapper.fromCountryEntity(countryPsqlDbRepository.findAll());

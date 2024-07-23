@@ -37,4 +37,12 @@ public interface ClassMapper {
    * @return a {@link ClassConfiguration} object build based on the request parameter.
    */
   ClassConfiguration fromCreateClassRequest(CreateClassRequest createClassRequest);
+
+  /**
+   * Builds a {@link Folder} core domain object based on a {@link CreateFolderRequest} instance.
+   *
+   * @param createFolderRequest encapsulates the requests parameters.
+   * @return a {@link Folder} object build based on the request parameter.
+   */
+  Folder fromCreateFolderRequest(CreateFolderRequest createFolderRequest);
 }

@@ -1,5 +1,6 @@
 package com.ghsbm.group.peer.colab.domain.school.controller;
 
+import com.ghsbm.group.peer.colab.domain.classes.controller.model.ClassDTO;
 import com.ghsbm.group.peer.colab.domain.school.controller.model.*;
 import com.ghsbm.group.peer.colab.domain.school.core.ports.incoming.SchoolManagementService;
 import java.util.List;
@@ -16,6 +17,11 @@ public class SchoolManagementController {
 
   @Autowired private UniversityMapper universityMapper;
 
+  /**
+   * Returns information about all countries
+   *
+   * @return A list of {@link CityDTO} encapsulating data about countries.
+   */
   @GetMapping("/countries")
   public ResponseEntity<List<CountryDTO>> retrieveAllCountryNames() {
     return ResponseEntity.ok(
