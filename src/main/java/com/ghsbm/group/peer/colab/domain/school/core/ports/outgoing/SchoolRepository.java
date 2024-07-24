@@ -16,6 +16,12 @@ public interface SchoolRepository {
    */
   List<Country> findAllCountries();
 
+  /**
+   * Retrieves all cities belonging to this country.
+   *
+   * @param countryId The country id for which the cities are returned.
+   * @return a list of {@link City} entities.
+   */
   List<City> findCitiesByCountry(Long countryId);
 
   List<University> findUniversitiesByCity(Long cityId);

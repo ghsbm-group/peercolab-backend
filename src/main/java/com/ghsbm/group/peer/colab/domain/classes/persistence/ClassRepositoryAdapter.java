@@ -48,6 +48,23 @@ public class ClassRepositoryAdapter implements ClassRepository {
    * @inheritDoc
    */
   @Override
+  public List<Folder> findRootFoldersByClassConfiguration(Long classConfigurationId) {
+    return classEntitiesMapper.fromFolderEntities(
+        folderPsqlDbRespository.findByClassConfigurationIdAndParentIdNull(classConfigurationId));
+  }
+
+  /**
+   * @inheritDoc
+   */
+  @Override
+  public List<Folder> findFoldersByParentId(Long parentId) {
+    return classEntitiesMapper.fromFolderEntities(folderPsqlDbRespository.findByParentId(parentId));
+  }
+
+  /**
+   * @inheritDoc
+   */
+  @Override
   public ClassConfiguration create(ClassConfiguration classConfigurationInfo) {
     final var savedClass =
         classPsqlDbRepository.save(

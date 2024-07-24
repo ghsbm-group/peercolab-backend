@@ -18,6 +18,11 @@ public interface SchoolManagementService {
    */
   List<Country> retrieveAllCountries();
 
+  /**
+   * Retrieves all cities associated with a country.
+   *
+   * @return a list of {@link City}
+   */
   List<City> retrieveCityByCountryId(Long countryId);
 
   List<University> retrieveUniversityByCityId(Long cityId);

@@ -11,11 +11,17 @@ public class SchoolManagementFacade implements SchoolManagementService {
 
   @Autowired private SchoolRepository universityRepository;
 
+  /**
+   * @inheritDoc
+   */
   @Override
   public List<Country> retrieveAllCountries() {
     return universityRepository.findAllCountries();
   }
 
+  /**
+   * @inheritDoc
+   */
   @Override
   public List<City> retrieveCityByCountryId(Long countryId) {
     return universityRepository.findCitiesByCountry(countryId);

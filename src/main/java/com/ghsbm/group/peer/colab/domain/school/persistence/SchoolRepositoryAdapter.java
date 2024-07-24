@@ -30,6 +30,9 @@ public class SchoolRepositoryAdapter implements SchoolRepository {
 
   @Autowired private UniversityEntitiesMapper universityEntitiesMapper;
 
+  /**
+   * @inheritDoc
+   */
   @Override
   public List<City> findCitiesByCountry(Long countryId) {
     return universityEntitiesMapper.fromCityEntities(
@@ -83,6 +86,7 @@ public class SchoolRepositoryAdapter implements SchoolRepository {
             DepartmentEntity.builder().name(department.getName()).faculty(facultyEntity).build());
     return universityEntitiesMapper.departmentFromEntity(savedDepartment);
   }
+
   /**
    * @inheritDoc
    */

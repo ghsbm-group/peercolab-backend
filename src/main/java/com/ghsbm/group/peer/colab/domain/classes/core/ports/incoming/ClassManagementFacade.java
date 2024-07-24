@@ -32,6 +32,22 @@ class ClassManagementFacade implements ClassManagementService {
    * @inheritDoc
    */
   @Override
+  public List<Folder> retrieveRootFolderByClassConfigurationId(Long classConfigurationId) {
+    return classRepository.findRootFoldersByClassConfiguration(classConfigurationId);
+  }
+
+  /**
+   * @inheritDoc
+   */
+  @Override
+  public List<Folder> retrieveFolderByParentId(Long parentId) {
+    return classRepository.findFoldersByParentId(parentId);
+  }
+
+  /**
+   * @inheritDoc
+   */
+  @Override
   public ClassDetails createClass(final ClassConfiguration classConfigurationInfo) {
     final ClassConfiguration classConfiguration = classRepository.create(classConfigurationInfo);
 
