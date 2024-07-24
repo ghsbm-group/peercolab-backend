@@ -28,6 +28,12 @@ public class SchoolManagementController {
         universityMapper.countryDTOFrom(schoolManagementService.retrieveAllCountries()));
   }
 
+  /**
+   * Returns information about cities that are part of a specific country.
+   *
+   * @param countryId The country identifier for which the list of cities will be returned.
+   * @return A list of {@link CityDTO} encapsulating data about cities.
+   */
   @GetMapping("/cities")
   public ResponseEntity<List<CityDTO>> retrieveCitiesByCountryId(final Long countryId) {
     Objects.requireNonNull(countryId);

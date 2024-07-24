@@ -101,19 +101,20 @@ public class ClassManagementController {
   }
 
   /**
-   * Returns information about folders that are part of a specific class.
+   * Returns information about folders that are part of a certain class and that are of type root,
+   * i.e. parentId is set to null
    *
    * @param classConfigurationId The class identifier for which the list of folders will be
    *     returned.
    * @return A list of {@link FolderDTO} encapsulating data about folders.
    */
-  @GetMapping("/folders")
-  public ResponseEntity<List<FolderDTO>> retrieveFoldersByClassConfigurationId(
+  @GetMapping("/root-folders")
+  public ResponseEntity<List<FolderDTO>> retrieveRootFoldersByClassConfigurationId(
       final Long classConfigurationId) {
     Objects.requireNonNull(classConfigurationId);
     return ResponseEntity.ok(
         classMapper.foldersDTOFrom(
-            classManagementService.retrieveFolderByClassConfigurationId(classConfigurationId)));
+            classManagementService.retrieveRootFolderByClassConfigurationId(classConfigurationId)));
   }
 
   @GetMapping("/subfolders")

@@ -1,5 +1,6 @@
 package com.ghsbm.group.peer.colab.domain.school.core.ports.incoming;
 
+import com.ghsbm.group.peer.colab.domain.school.core.model.City;
 import com.ghsbm.group.peer.colab.domain.school.core.model.Country;
 import com.ghsbm.group.peer.colab.domain.school.core.ports.outgoing.SchoolRepository;
 import org.junit.jupiter.api.BeforeEach;

@@ -156,12 +156,12 @@ class ClassManagementFacadeTest {
   }
 
   @Test
-  void retrieveFoldersByClassConfigurationIdShouldReturnValidList() {
+  void retrieveRootFoldersByClassConfigurationIdShouldReturnValidList() {
     List<Folder> expectedReturnValue = List.of(buildValidFolder());
-    when(classRepository.findFoldersByClassConfiguration(CLASS_CONFIGURATION_ID))
+    when(classRepository.findRootFoldersByClassConfiguration(CLASS_CONFIGURATION_ID))
         .thenReturn(expectedReturnValue);
 
-    List<Folder> response = victim.retrieveFolderByClassConfigurationId(CLASS_CONFIGURATION_ID);
+    List<Folder> response = victim.retrieveRootFolderByClassConfigurationId(CLASS_CONFIGURATION_ID);
 
     assertEquals(expectedReturnValue, response);
   }

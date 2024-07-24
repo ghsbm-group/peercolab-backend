@@ -12,12 +12,13 @@ import java.util.List;
 @Repository
 public interface FolderPsqlDbRespository extends JpaRepository<FolderEntity, Long> {
   /**
-   * retrieves a list of {@link FolderEntity} belonging to a class configuration.
+   * retrieves a list of {@link FolderEntity} belonging to a class configuration and parent id set
+   * to null.
    *
    * @param classConfigurationId the class configuration id for which the folders are retrieved.
    * @return a list of {@link FolderEntity} based on the classConfigurationId.
    */
-  List<FolderEntity> findByClassConfigurationId(Long classConfigurationId);
+  List<FolderEntity> findByClassConfigurationIdAndParentIdNull(Long classConfigurationId);
 
   /**
    * retrieves a list of {@link FolderEntity} belonging to a folder or subfolder.

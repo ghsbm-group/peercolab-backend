@@ -1,6 +1,5 @@
 package com.ghsbm.group.peer.colab.domain.classes.core.ports.incoming;
 
-import com.ghsbm.group.peer.colab.domain.classes.controller.model.ClassDTO;
 import com.ghsbm.group.peer.colab.domain.classes.core.model.ClassConfiguration;
 import com.ghsbm.group.peer.colab.domain.classes.core.model.ClassDetails;
 import com.ghsbm.group.peer.colab.domain.classes.core.model.ClassStructure;
@@ -33,15 +32,8 @@ class ClassManagementFacade implements ClassManagementService {
    * @inheritDoc
    */
   @Override
-  public List<Folder> retrieveFolderByClassConfigurationId(Long classConfigurationId) {
-    List<Folder> folders = classRepository.findFoldersByClassConfiguration(classConfigurationId);
-    List<Folder> list = new ArrayList<>();
-    for (Folder folder : folders) {
-      if (folder.getParentId() == null) {
-        list.add(folder);
-      }
-    }
-    return list;
+  public List<Folder> retrieveRootFolderByClassConfigurationId(Long classConfigurationId) {
+    return classRepository.findRootFoldersByClassConfiguration(classConfigurationId);
   }
 
   /**
