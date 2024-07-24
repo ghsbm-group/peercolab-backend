@@ -20,6 +20,22 @@ public interface ClassRepository {
   List<ClassConfiguration> findClassesByDepartment(Long departmentId);
 
   /**
+   * Retrieves all folders belonging to this class configuration.
+   *
+   * @param classConfigurationId The class configuration id for which the folders are returned.
+   * @return a list of {@link Folder} entities.
+   */
+  List<Folder> findFoldersByClassConfiguration(Long classConfigurationId);
+
+  /**
+   * Retrieves all folders belonging to this folder.
+   *
+   * @param parentId The folder id for which the folders are returned.
+   * @return a list of {@link Folder} entities.
+   */
+  List<Folder> findFoldersByParentId(Long parentId);
+
+  /**
    * Persists a class configuration.
    *
    * @param classConfigurationInfo the class configuration to be persisted.

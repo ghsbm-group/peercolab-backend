@@ -18,6 +18,9 @@ public abstract class ClassEntitiesMapper {
   public abstract List<ClassConfiguration> fromClassEntities(
       List<ClassConfigurationEntity> classes);
 
+  public abstract List<Folder> fromFolderEntities(
+          List<FolderEntity> folders);
+
   public abstract ClassConfiguration classFromEntity(ClassConfigurationEntity savedClass);
 
   @Mappings({

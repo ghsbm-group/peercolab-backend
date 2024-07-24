@@ -20,7 +20,7 @@ public class SchoolManagementController {
   /**
    * Returns information about all countries
    *
-   * @return A list of {@link CityDTO} encapsulating data about countries.
+   * @return A list of {@link CountryDTO} encapsulating data about countries.
    */
   @GetMapping("/countries")
   public ResponseEntity<List<CountryDTO>> retrieveAllCountryNames() {

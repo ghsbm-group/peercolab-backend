@@ -22,6 +22,23 @@ public interface ClassManagementService {
   List<ClassConfiguration> retrieveClassByDepartmentId(Long departmentId);
 
   /**
+   * Retrieves the folders associated with a class configuration and which are not subfolders, i.e.
+   * parentId is null
+   *
+   * @param classConfigurationId the class configuration id for which the folders are retrieved.
+   * @return a list of {@link Folder} associated with the provided class configuration id.
+   */
+  List<Folder> retrieveFolderByClassConfigurationId(Long classConfigurationId);
+
+  /**
+   * Retrieves the subfolders associated with a folder or subfolder
+   *
+   * @param parentId the folder id for which the folders are retrieved.
+   * @return a list of {@link Folder} associated with the provided folder id.
+   */
+  List<Folder> retrieveFolderByParentId(Long parentId);
+
+  /**
    * Creates a class configuration and an initial folder structure for that class based on the
    * number of years and number of semesters parameters configured.
    *

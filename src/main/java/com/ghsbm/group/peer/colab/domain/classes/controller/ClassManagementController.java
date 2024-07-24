@@ -99,4 +99,27 @@ public class ClassManagementController {
         classMapper.classesDTOFrom(
             classManagementService.retrieveClassByDepartmentId(departmentId)));
   }
+
+  /**
+   * Returns information about folders that are part of a specific class.
+   *
+   * @param classConfigurationId The class identifier for which the list of folders will be
+   *     returned.
+   * @return A list of {@link FolderDTO} encapsulating data about folders.
+   */
+  @GetMapping("/folders")
+  public ResponseEntity<List<FolderDTO>> retrieveFoldersByClassConfigurationId(
+      final Long classConfigurationId) {
+    Objects.requireNonNull(classConfigurationId);
+    return ResponseEntity.ok(
+        classMapper.foldersDTOFrom(
+            classManagementService.retrieveFolderByClassConfigurationId(classConfigurationId)));
+  }
+
+  @GetMapping("/subfolders")
+  public ResponseEntity<List<FolderDTO>> retrieveFoldersByParentId(final Long parentId) {
+    Objects.requireNonNull(parentId);
+    return ResponseEntity.ok(
+        classMapper.foldersDTOFrom(classManagementService.retrieveFolderByParentId(parentId)));
+  }
 }
