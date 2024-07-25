@@ -2,6 +2,9 @@ package com.ghsbm.group.peer.colab.domain.classes.persistence.repository;
 
 import com.ghsbm.group.peer.colab.domain.classes.persistence.model.FolderEntity;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Modifying;
+import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -25,4 +28,14 @@ public interface FolderPsqlDbRespository extends JpaRepository<FolderEntity, Lon
    * @return a list of {@link FolderEntity} based on the parentId.
    */
   List<FolderEntity> findByParentId(Long parentId);
+
+  /**
+   * receives the id of the folder and the new name that will be set to the folder
+   *
+   * @param id id of the folder that will be update
+   * @param name the new name that will be set to the folder
+   */
+  @Modifying
+  @Query("update FolderEntity f set f.name = :name where f.id = :id")
+  void updateNameFolder(@Param(value = "id") Long id, @Param(value = "name") String name);
 }

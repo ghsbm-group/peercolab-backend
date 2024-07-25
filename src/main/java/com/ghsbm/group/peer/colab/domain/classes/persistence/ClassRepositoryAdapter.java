@@ -99,4 +99,14 @@ public class ClassRepositoryAdapter implements ClassRepository {
 
     return classEntitiesMapper.folderFromEntity(savedFolder);
   }
+
+  /**
+   * @inheritDoc
+   */
+  @Override
+  public Folder renameFolder(Folder folder) {
+    folderPsqlDbRespository.updateNameFolder(folder.getId(), folder.getName());
+    return classEntitiesMapper.folderFromEntity(
+        folderPsqlDbRespository.getReferenceById(folder.getId()));
+  }
 }
