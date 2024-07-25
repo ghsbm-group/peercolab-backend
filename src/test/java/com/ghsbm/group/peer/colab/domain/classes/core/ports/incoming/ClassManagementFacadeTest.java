@@ -22,6 +22,7 @@ class ClassManagementFacadeTest {
   public static final long CLASS_CONFIGURATION_ID = 1L;
   public static final String SUBFOLDER_NAME = "SubfolderName";
   public static final String FOLDER_NAME = "FolderName";
+  public static final String FOLDER_NEW_NAME = "FolderNewName";
   public static final long FOLDER_ID = 1L;
   public static final long SUBFOLDER_ID = 2L;
   public static final long DEPARTMENT_ID = 1L;
@@ -56,6 +57,22 @@ class ClassManagementFacadeTest {
         .classConfigurationId((CLASS_CONFIGURATION_ID))
         .name(SUBFOLDER_NAME)
         .parentId(FOLDER_ID)
+        .build();
+  }
+
+  private Folder buildValidFolderWithIdSet() {
+    return Folder.builder()
+        .id(FOLDER_ID)
+        .classConfigurationId(CLASS_CONFIGURATION_ID)
+        .name(FOLDER_NAME)
+        .build();
+  }
+
+  private Folder buildValidFolderWithNewName() {
+    return Folder.builder()
+        .id(FOLDER_ID)
+        .classConfigurationId(CLASS_CONFIGURATION_ID)
+        .name(FOLDER_NEW_NAME)
         .build();
   }
 
@@ -174,5 +191,17 @@ class ClassManagementFacadeTest {
     List<Folder> response = victim.retrieveFolderByParentId(FOLDER_ID);
 
     assertEquals(expectedReturnValue, response);
+  }
+
+  @Test
+  void renameFolderShouldReturnUpdatedFolder() {
+    Folder expectedReturnValue = buildValidFolderWithIdSet();
+    Folder folderWithNewName = buildValidFolderWithNewName();
+    when(classRepository.renameFolder(folderWithNewName)).thenReturn(expectedReturnValue);
+
+    Folder response = victim.renameFolder(folderWithNewName);
+
+    assertEquals(expectedReturnValue, response);
+    verify(classRepository, times(1)).renameFolder(folderWithNewName);
   }
 }

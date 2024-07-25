@@ -129,7 +129,7 @@ public class ClassManagementController {
         classMapper.foldersDTOFrom(classManagementService.retrieveFolderByParentId(parentId)));
   }
   /**
-   * Endpoint for rename a Folder.
+   * Endpoint for renaming a folder.
    *
    * <p>Calling this api will rename folder or a subfolder
    *
