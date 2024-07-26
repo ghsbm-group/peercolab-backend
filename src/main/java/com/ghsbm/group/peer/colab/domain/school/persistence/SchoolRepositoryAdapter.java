@@ -39,24 +39,36 @@ public class SchoolRepositoryAdapter implements SchoolRepository {
         cityPsqlDbRepository.findByCountryId(countryId));
   }
 
+  /**
+   * @inheritDoc
+   */
   @Override
   public List<University> findUniversitiesByCity(Long cityId) {
     return universityEntitiesMapper.fromUniversityEntities(
         universityPsqlDbRepository.findByCityId(cityId));
   }
 
+  /**
+   * @inheritDoc
+   */
   @Override
   public List<Faculty> findFacultiesByUniversity(Long universityId) {
     return universityEntitiesMapper.fromFacultyEntities(
         facultyPsqlDbRepository.findByUniversityId(universityId));
   }
 
+  /**
+   * @inheritDoc
+   */
   @Override
   public List<Department> findDepartmentsByFaculty(Long facultyId) {
     return universityEntitiesMapper.fromDepartmentEntities(
         departmentPsqlDbRepository.findByFacultyId(facultyId));
   }
 
+  /**
+   * @inheritDoc
+   */
   @Override
   public University create(final University university) {
     final var cityEntity = cityPsqlDbRepository.getReferenceById(university.getCityId());
@@ -66,6 +78,9 @@ public class SchoolRepositoryAdapter implements SchoolRepository {
     return universityEntitiesMapper.fromUniversityEntity(saved);
   }
 
+  /**
+   * @inheritDoc
+   */
   @Override
   public Faculty create(final Faculty faculty) {
     final var universityEntity =
@@ -78,6 +93,9 @@ public class SchoolRepositoryAdapter implements SchoolRepository {
     return universityEntitiesMapper.facultyFromEntity(savedFaculty);
   }
 
+  /**
+   * @inheritDoc
+   */
   @Override
   public Department create(final Department department) {
     final var facultyEntity = facultyPsqlDbRepository.getReferenceById(department.getFacultyId());

@@ -1,6 +1,5 @@
 package com.ghsbm.group.peer.colab.domain.school.controller;
 
-import com.ghsbm.group.peer.colab.domain.classes.controller.model.ClassDTO;
 import com.ghsbm.group.peer.colab.domain.school.controller.model.*;
 import com.ghsbm.group.peer.colab.domain.school.core.ports.incoming.SchoolManagementService;
 import java.util.List;
@@ -42,12 +41,17 @@ public class SchoolManagementController {
         universityMapper.citiesDTOFrom(schoolManagementService.retrieveCityByCountryId(countryId)));
   }
 
+  /**
+   * Endpoint for creating a new university.
+   *
+   * @param createUniversityRequest {@link CreateUniversityRequest} encapsulates the university
+   *     configuration parameters.
+   * @return a {@link CreateUniversityResponse} containing the configuration identifiers for the
+   *     created university.
+   */
   @PostMapping("/university")
   public ResponseEntity<CreateUniversityResponse> createUniversity(
       @RequestBody final CreateUniversityRequest createUniversityRequest) {
-    Objects.requireNonNull(createUniversityRequest);
-    Objects.requireNonNull(createUniversityRequest.getCityId());
-    Objects.requireNonNull(createUniversityRequest.getName());
 
     final var university =
         schoolManagementService.createUniversity(
@@ -56,12 +60,17 @@ public class SchoolManagementController {
         CreateUniversityResponse.builder().universityId(university.getId()).build());
   }
 
+  /**
+   * Endpoint for creating a new faculty.
+   *
+   * @param createFacultyRequest {@link CreateFacultyRequest} encapsulates the faculty configuration
+   *     parameters.
+   * @return a {@link CreateFacultyResponse} containing the configuration identifiers for the
+   *     created faculty.
+   */
   @PostMapping("/faculty")
   public ResponseEntity<CreateFacultyResponse> createFaculty(
       @RequestBody final CreateFacultyRequest createFacultyRequest) {
-    Objects.requireNonNull(createFacultyRequest);
-    Objects.requireNonNull(createFacultyRequest.getUniversityId());
-    Objects.requireNonNull(createFacultyRequest.getName());
 
     final var faculty =
         schoolManagementService.createFaculty(
@@ -70,12 +79,17 @@ public class SchoolManagementController {
     return ResponseEntity.ok(CreateFacultyResponse.builder().id(faculty.getId()).build());
   }
 
+  /**
+   * Endpoint for creating a new department.
+   *
+   * @param createDepartmentRequest {@link CreateDepartmentRequest} encapsulates the department
+   *     configuration parameters.
+   * @return a {@link CreateDepartmentResponse} containing the configuration identifiers for the
+   *     created department.
+   */
   @PostMapping("/department")
   public ResponseEntity<CreateDepartmentResponse> createDepartment(
       @RequestBody final CreateDepartmentRequest createDepartmentRequest) {
-    Objects.requireNonNull(createDepartmentRequest);
-    Objects.requireNonNull(createDepartmentRequest.getFacultyId());
-    Objects.requireNonNull(createDepartmentRequest.getName());
 
     final var department =
         schoolManagementService.createDepartment(
@@ -84,6 +98,12 @@ public class SchoolManagementController {
     return ResponseEntity.ok(CreateDepartmentResponse.builder().id(department.getId()).build());
   }
 
+  /**
+   * Returns information about universities that are part of a specific city.
+   *
+   * @param cityId The city identifier for which the list of universities will be returned.
+   * @return A list of {@link UniversityDTO} encapsulating data about universities.
+   */
   @GetMapping("/universities")
   public ResponseEntity<List<UniversityDTO>> retrieveUniversitiesByCityId(final Long cityId) {
     Objects.requireNonNull(cityId);
@@ -93,6 +113,12 @@ public class SchoolManagementController {
             schoolManagementService.retrieveUniversityByCityId(cityId)));
   }
 
+  /**
+   * Returns information about faculties that are part of a specific university.
+   *
+   * @param universityId The university identifier for which the list of faculties will be returned.
+   * @return A list of {@link FacultyDTO} encapsulating data about faculties.
+   */
   @GetMapping("/faculties")
   public ResponseEntity<List<FacultyDTO>> retrieveFacultiesByUniversityId(final Long universityId) {
     Objects.requireNonNull(universityId);
@@ -102,6 +128,12 @@ public class SchoolManagementController {
             schoolManagementService.retrieveFacultyByUniversityId(universityId)));
   }
 
+  /**
+   * Returns information about departments that are part of a specific faculty.
+   *
+   * @param facultyId The faculty identifier for which the list of departments will be returned.
+   * @return A list of {@link DepartmentDTO} encapsulating data about departments.
+   */
   @GetMapping("/departments")
   public ResponseEntity<List<DepartmentDTO>> retrieveDepartmentsByFacultyId(final Long facultyId) {
     Objects.requireNonNull(facultyId);

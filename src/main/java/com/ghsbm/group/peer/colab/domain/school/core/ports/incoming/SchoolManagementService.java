@@ -25,18 +25,51 @@ public interface SchoolManagementService {
    */
   List<City> retrieveCityByCountryId(Long countryId);
 
+  /**
+   * Retrieves all universities associated with a city.
+   *
+   * @return a list of {@link University}
+   */
   List<University> retrieveUniversityByCityId(Long cityId);
 
+  /**
+   * Retrieves all faculties associated with a university.
+   *
+   * @return a list of {@link Faculty}
+   */
   List<Faculty> retrieveFacultyByUniversityId(Long universityId);
 
+  /**
+   * Retrieves all departments associated with a faculty.
+   *
+   * @return a list of {@link Department}
+   */
   List<Department> retrieveDepartmentByFacultyId(Long facultyId);
 
+  /**
+   * Persists the university.
+   *
+   * @param university encapsulates university data.
+   * @return a {@link University} object with the id attribute set.
+   */
   @Transactional
   University createUniversity(University university);
 
+  /**
+   * Persists the faculty.
+   *
+   * @param faculty encapsulates faculty data.
+   * @return a {@link Faculty} object with the id attribute set.
+   */
   @Transactional
   Faculty createFaculty(Faculty faculty);
 
+  /**
+   * Persists the department.
+   *
+   * @param department encapsulates department data.
+   * @return a {@link Department} object with the id attribute set.
+   */
   @Transactional
   Department createDepartment(Department department);
 }
