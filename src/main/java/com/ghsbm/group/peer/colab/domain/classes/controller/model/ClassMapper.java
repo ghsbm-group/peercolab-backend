@@ -47,6 +47,13 @@ public interface ClassMapper {
    */
   Folder fromCreateFolderRequest(CreateFolderRequest createFolderRequest);
 
+  /**
+   * Builds a {@link Folder} core domain object based on a {@link RenameFolderRequest} instance that
+   * contains the mandatory parameters for renaming a folder.
+   *
+   * @param renameFolderRequest encapsulates the requests paramameters.
+   * @return a {@link Folder} object build on the request parameter.
+   */
   @Mapping(source = "newName", target = "name")
   Folder fromRenameFolderRequest(RenameFolderRequest renameFolderRequest);
 }
