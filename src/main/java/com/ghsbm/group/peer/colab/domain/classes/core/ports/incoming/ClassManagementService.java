@@ -60,4 +60,13 @@ public interface ClassManagementService {
    */
   @Transactional
   Folder createFolder(Folder folder);
+
+  /**
+   * Rename the folder.
+   *
+   * @param folder encapsulates folder data.
+   * @return a {@link Folder} object with  attributes set.
+   */
+  @Transactional
+  Folder renameFolder(Folder folder);
 }

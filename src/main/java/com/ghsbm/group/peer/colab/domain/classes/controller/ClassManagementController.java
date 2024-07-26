@@ -5,11 +5,7 @@ import com.ghsbm.group.peer.colab.domain.classes.core.ports.incoming.ClassManage
 import java.util.List;
 import java.util.Objects;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 /**
  * Class management API.
@@ -82,7 +78,9 @@ public class ClassManagementController {
         classManagementService.createFolder(
             classMapper.fromCreateFolderRequest(createFolderRequest));
     return ResponseEntity.ok(
-        CreateFolderResponse.builder().id(folder.getId()).name(folder.getName()).build());
+        CreateFolderResponse.builder()
+            .folderDTO(new FolderDTO(folder.getId(), folder.getName()))
+            .build());
   }
 
   /**
@@ -117,10 +115,41 @@ public class ClassManagementController {
             classManagementService.retrieveRootFolderByClassConfigurationId(classConfigurationId)));
   }
 
+  /**
+   * Returns information about folders that are part of a certain folder and that are of type
+   * subfolder, i.e. parentId is set
+   *
+   * @param parentId The folder identifier for which the list of folders will be returned.
+   * @return A list of {@link FolderDTO} encapsulating data about folders.
+   */
   @GetMapping("/subfolders")
   public ResponseEntity<List<FolderDTO>> retrieveFoldersByParentId(final Long parentId) {
     Objects.requireNonNull(parentId);
     return ResponseEntity.ok(
         classMapper.foldersDTOFrom(classManagementService.retrieveFolderByParentId(parentId)));
+  }
+  /**
+   * Endpoint for renaming a folder.
+   *
+   * <p>Calling this api will rename folder or a subfolder
+   *
+   * @param renameFolderRequest {@link RenameFolderRequest} encapsulates the parameters needed to update the folder name
+   * @return a {@link RenameFolderResponse} containing the configuration identifiers for the updated
+   *     folder.
+   */
+  @PostMapping("/rename-folder")
+  public ResponseEntity<RenameFolderResponse> renameFolder(
+      @RequestBody final RenameFolderRequest renameFolderRequest) {
+    Objects.requireNonNull(renameFolderRequest);
+    Objects.requireNonNull(renameFolderRequest.getId());
+    Objects.requireNonNull(renameFolderRequest.getNewName());
+
+    final var folder =
+        classManagementService.renameFolder(
+            classMapper.fromRenameFolderRequest(renameFolderRequest));
+    return ResponseEntity.ok(
+        RenameFolderResponse.builder()
+            .folderDTO(new FolderDTO(folder.getId(), folder.getName()))
+            .build());
   }
 }

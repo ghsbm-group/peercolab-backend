@@ -51,4 +51,12 @@ public interface ClassRepository {
    * @return A {@link Folder} objects with its id set.
    */
   Folder create(Folder folder);
+
+  /**
+   * Update the name of the folder in db.
+   *
+   * @param folder the folder to be updated.
+   * @return A {@link Folder} object with the attributes set.
+   */
+  Folder renameFolder(Folder folder);
 }
