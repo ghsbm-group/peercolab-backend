@@ -2,6 +2,8 @@ package com.ghsbm.group.peer.colab.domain.school.core.ports.incoming;
 
 import com.ghsbm.group.peer.colab.domain.school.core.model.*;
 import java.util.List;
+
+import com.ghsbm.group.peer.colab.domain.school.exceptions.ApiExceptionResponse;
 import org.springframework.transaction.annotation.Transactional;
 
 /**
@@ -19,11 +21,13 @@ public interface SchoolManagementService {
   List<Country> retrieveAllCountries();
 
   /**
-   * Retrieves all cities associated with a country.
+   * Retrieves all cities associated with a country. If the countryId is not found, an {@link
+   * ApiExceptionResponse} is thrown.
    *
    * @return a list of {@link City}
+   * @throws ApiExceptionResponse if the countryId is not found
    */
-  List<City> retrieveCityByCountryId(Long countryId);
+  List<City> retrieveCityByCountryId(Long countryId) throws ApiExceptionResponse;
 
   /**
    * Retrieves all universities associated with a city.

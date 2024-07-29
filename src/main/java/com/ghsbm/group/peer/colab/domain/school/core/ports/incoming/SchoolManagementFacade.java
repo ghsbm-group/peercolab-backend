@@ -2,10 +2,14 @@ package com.ghsbm.group.peer.colab.domain.school.core.ports.incoming;
 
 import com.ghsbm.group.peer.colab.domain.school.core.model.*;
 import com.ghsbm.group.peer.colab.domain.school.core.ports.outgoing.SchoolRepository;
+
+import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
 
+import com.ghsbm.group.peer.colab.domain.school.exceptions.ApiExceptionResponse;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
 /** Service that contains the core business logic. */
@@ -26,8 +30,17 @@ public class SchoolManagementFacade implements SchoolManagementService {
    * @inheritDoc
    */
   @Override
-  public List<City> retrieveCityByCountryId(Long countryId) {
-    return universityRepository.findCitiesByCountry(countryId);
+  public List<City> retrieveCityByCountryId(Long countryId) throws ApiExceptionResponse {
+    List<City> cities = universityRepository.findCitiesByCountry(countryId);
+    if(cities.isEmpty())
+    {
+      throw ApiExceptionResponse.builder()
+          .errors(Collections.singletonList("No cities were found for countryId: " + countryId))
+          .message("Entities not found")
+          .status(HttpStatus.BAD_REQUEST)
+          .build();
+    }
+    return cities;
   }
 
   /**

@@ -4,6 +4,8 @@ import com.ghsbm.group.peer.colab.domain.school.controller.model.*;
 import com.ghsbm.group.peer.colab.domain.school.core.ports.incoming.SchoolManagementService;
 import java.util.List;
 import java.util.Objects;
+
+import com.ghsbm.group.peer.colab.domain.school.exceptions.ApiExceptionResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -34,9 +36,8 @@ public class SchoolManagementController {
    * @return A list of {@link CityDTO} encapsulating data about cities.
    */
   @GetMapping("/cities")
-  public ResponseEntity<List<CityDTO>> retrieveCitiesByCountryId(final Long countryId) {
+  public ResponseEntity<List<CityDTO>> retrieveCitiesByCountryId(final Long countryId) throws ApiExceptionResponse {
     Objects.requireNonNull(countryId);
-
     return ResponseEntity.ok(
         universityMapper.citiesDTOFrom(schoolManagementService.retrieveCityByCountryId(countryId)));
   }
