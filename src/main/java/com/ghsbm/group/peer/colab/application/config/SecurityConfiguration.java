@@ -3,6 +3,7 @@ package com.ghsbm.group.peer.colab.application.config;
 import static com.ghsbm.group.peer.colab.infrastructure.AuthoritiesConstants.ADMIN;
 import static com.ghsbm.group.peer.colab.infrastructure.AuthoritiesConstants.STUDENT_ADMIN;
 
+import java.util.Arrays;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
@@ -16,6 +17,9 @@ import org.springframework.security.oauth2.server.resource.web.BearerTokenAuthen
 import org.springframework.security.oauth2.server.resource.web.access.BearerTokenAccessDeniedHandler;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.servlet.util.matcher.MvcRequestMatcher;
+import org.springframework.web.cors.CorsConfiguration;
+import org.springframework.web.cors.CorsConfigurationSource;
+import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 import org.springframework.web.servlet.handler.HandlerMappingIntrospector;
 
 @Configuration
@@ -36,7 +40,7 @@ public class SecurityConfiguration {
   @Bean
   public SecurityFilterChain filterChain(HttpSecurity http, MvcRequestMatcher.Builder mvc)
       throws Exception {
-    http.cors(cors -> cors.disable())
+    http.cors(cors -> corsConfigurationSource())
         .csrf(csrf -> csrf.disable())
         .authorizeHttpRequests(
             authz ->
@@ -94,5 +98,15 @@ public class SecurityConfiguration {
   @Bean
   MvcRequestMatcher.Builder mvc(HandlerMappingIntrospector introspector) {
     return new MvcRequestMatcher.Builder(introspector);
+  }
+
+  @Bean
+  CorsConfigurationSource corsConfigurationSource() {
+    CorsConfiguration configuration = new CorsConfiguration();
+    configuration.setAllowedOrigins(Arrays.asList("*"));
+    configuration.setAllowedMethods(Arrays.asList("*"));
+    UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
+    source.registerCorsConfiguration("/**", configuration);
+    return source;
   }
 }
