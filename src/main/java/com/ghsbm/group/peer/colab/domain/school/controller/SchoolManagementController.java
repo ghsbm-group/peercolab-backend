@@ -4,6 +4,8 @@ import com.ghsbm.group.peer.colab.domain.school.controller.model.*;
 import com.ghsbm.group.peer.colab.domain.school.core.ports.incoming.SchoolManagementService;
 import java.util.List;
 import java.util.Objects;
+
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -51,7 +53,7 @@ public class SchoolManagementController {
    */
   @PostMapping("/university")
   public ResponseEntity<CreateUniversityResponse> createUniversity(
-      @RequestBody final CreateUniversityRequest createUniversityRequest) {
+      @Valid @RequestBody final CreateUniversityRequest createUniversityRequest) {
 
     final var university =
         schoolManagementService.createUniversity(
@@ -70,7 +72,7 @@ public class SchoolManagementController {
    */
   @PostMapping("/faculty")
   public ResponseEntity<CreateFacultyResponse> createFaculty(
-      @RequestBody final CreateFacultyRequest createFacultyRequest) {
+      @Valid @RequestBody final CreateFacultyRequest createFacultyRequest) {
 
     final var faculty =
         schoolManagementService.createFaculty(
@@ -89,7 +91,7 @@ public class SchoolManagementController {
    */
   @PostMapping("/department")
   public ResponseEntity<CreateDepartmentResponse> createDepartment(
-      @RequestBody final CreateDepartmentRequest createDepartmentRequest) {
+      @Valid @RequestBody final CreateDepartmentRequest createDepartmentRequest) {
 
     final var department =
         schoolManagementService.createDepartment(
