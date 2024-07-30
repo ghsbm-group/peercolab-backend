@@ -4,6 +4,8 @@ import com.ghsbm.group.peer.colab.domain.classes.controller.model.*;
 import com.ghsbm.group.peer.colab.domain.classes.core.ports.incoming.ClassManagementService;
 import java.util.List;
 import java.util.Objects;
+
+import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -39,13 +41,7 @@ public class ClassManagementController {
    */
   @PostMapping("/create")
   public ResponseEntity<CreateClassResponse> createClass(
-      @RequestBody final CreateClassRequest createClassRequest) {
-    Objects.requireNonNull(createClassRequest);
-    Objects.requireNonNull(createClassRequest.getDepartmentId());
-    Objects.requireNonNull(createClassRequest.getName());
-    Objects.requireNonNull(createClassRequest.getStartYear());
-    Objects.requireNonNull(createClassRequest.getNoOfStudyYears());
-    Objects.requireNonNull(createClassRequest.getNoOfSemestersPerYear());
+      @Valid @RequestBody final CreateClassRequest createClassRequest) {
 
     final var classInfo =
         classManagementService.createClass(classMapper.fromCreateClassRequest(createClassRequest));
@@ -70,10 +66,7 @@ public class ClassManagementController {
    */
   @PostMapping("/create-folder")
   public ResponseEntity<CreateFolderResponse> createFolder(
-      @RequestBody final CreateFolderRequest createFolderRequest) {
-    Objects.requireNonNull(createFolderRequest);
-    Objects.requireNonNull(createFolderRequest.getName());
-    Objects.requireNonNull(createFolderRequest.getClassConfigurationId());
+      @Valid @RequestBody final CreateFolderRequest createFolderRequest) {
     final var folder =
         classManagementService.createFolder(
             classMapper.fromCreateFolderRequest(createFolderRequest));
@@ -128,21 +121,20 @@ public class ClassManagementController {
     return ResponseEntity.ok(
         classMapper.foldersDTOFrom(classManagementService.retrieveFolderByParentId(parentId)));
   }
+
   /**
    * Endpoint for renaming a folder.
    *
    * <p>Calling this api will rename folder or a subfolder
    *
-   * @param renameFolderRequest {@link RenameFolderRequest} encapsulates the parameters needed to update the folder name
+   * @param renameFolderRequest {@link RenameFolderRequest} encapsulates the parameters needed to
+   *     update the folder name
    * @return a {@link RenameFolderResponse} containing the configuration identifiers for the updated
    *     folder.
    */
   @PostMapping("/rename-folder")
   public ResponseEntity<RenameFolderResponse> renameFolder(
-      @RequestBody final RenameFolderRequest renameFolderRequest) {
-    Objects.requireNonNull(renameFolderRequest);
-    Objects.requireNonNull(renameFolderRequest.getId());
-    Objects.requireNonNull(renameFolderRequest.getNewName());
+      @Valid @RequestBody final RenameFolderRequest renameFolderRequest) {
 
     final var folder =
         classManagementService.renameFolder(
