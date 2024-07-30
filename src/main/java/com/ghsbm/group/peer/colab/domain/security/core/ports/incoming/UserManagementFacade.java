@@ -147,9 +147,9 @@ public class UserManagementFacade implements UserManagementService {
     newUser.setImageUrl(userDTO.getImageUrl());
     newUser.setLangKey(userDTO.getLangKey());
     // new user is not active
-    newUser.setActivated(false);
+    newUser.setActivated(true);
     // new user gets registration key
-    newUser.setActivationKey(RandomUtil.generateActivationKey());
+    // newUser.setActivationKey(RandomUtil.generateActivationKey());
     Set<Authority> authorities = new HashSet<>();
     userManagementRepository.findAuthority(AuthoritiesConstants.USER).ifPresent(authorities::add);
     newUser.setAuthorities(authorities);
@@ -157,7 +157,7 @@ public class UserManagementFacade implements UserManagementService {
     this.clearUserCaches(newUser);
     log.debug("Created Information for User: {}", newUser);
 
-    mailService.sendActivationEmail(newUser);
+    // mailService.sendActivationEmail(newUser);
   }
 
   private boolean removeNonActivatedUser(User existingUser) {
