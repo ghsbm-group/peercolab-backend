@@ -40,7 +40,7 @@ public class SecurityConfiguration {
   @Bean
   public SecurityFilterChain filterChain(HttpSecurity http, MvcRequestMatcher.Builder mvc)
       throws Exception {
-    http.cors(cors -> corsConfigurationSource())
+    http.cors(cors -> Customizer.withDefaults())
         .csrf(csrf -> csrf.disable())
         .authorizeHttpRequests(
             authz ->
@@ -50,9 +50,7 @@ public class SecurityConfiguration {
                     .permitAll()
                     .requestMatchers(mvc.pattern("/swagger-ui"))
                     .permitAll()
-                    .requestMatchers(mvc.pattern(HttpMethod.POST, "/api/authenticate"))
-                    .permitAll()
-                    .requestMatchers(mvc.pattern(HttpMethod.GET, "/api/authenticate"))
+                    .requestMatchers(mvc.pattern("/api/authenticate"))
                     .permitAll()
                     .requestMatchers(mvc.pattern("/api/register"))
                     .permitAll()
@@ -101,10 +99,13 @@ public class SecurityConfiguration {
   }
 
   @Bean
-  CorsConfigurationSource corsConfigurationSource() {
+  public CorsConfigurationSource corsConfigurationSource() {
     CorsConfiguration configuration = new CorsConfiguration();
-    configuration.setAllowedOrigins(Arrays.asList("*"));
+    configuration.setAllowedOrigins(
+        Arrays.asList("http://localhost:5173", "https://peercolab.surge.sh"));
     configuration.setAllowedMethods(Arrays.asList("*"));
+    configuration.setAllowCredentials(true);
+    configuration.setAllowedHeaders(Arrays.asList("*"));
     UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
     source.registerCorsConfiguration("/**", configuration);
     return source;
