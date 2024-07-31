@@ -8,10 +8,11 @@ import lombok.Data;
 @Builder
 @Data
 public class CreateFolderRequest {
-  @NotNull
-  @Size(min = 1, max = 50)
-  private String name;
+    @NotNull
+    @Size(min = 1, max = 50)
+    private String name;
 
-  @NotNull private Long parentId;
-  @NotNull private Long classConfigurationId;
+    private Long parentId;
+    @NotNull
+    private Long classConfigurationId;
 }
