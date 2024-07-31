@@ -69,4 +69,12 @@ public interface ClassManagementService {
    */
   @Transactional
   Folder renameFolder(Folder folder);
+
+  /**
+   * Checks if a class configuration already exists.
+   * @param classConfiguration encapsulates class configuration data
+   * @return
+   */
+  @Transactional
+  boolean classConfigurationAlreadyExists(ClassConfiguration classConfiguration);
 }

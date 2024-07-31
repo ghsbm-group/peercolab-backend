@@ -59,4 +59,11 @@ public interface ClassRepository {
    * @return A {@link Folder} object with the attributes set.
    */
   Folder renameFolder(Folder folder);
+
+  /**
+   * Checks if a class configuration already exists in a certain department.
+   *
+   * @return if the specific class configuration exists
+   */
+  boolean classConfigurationAlreadyExists(ClassConfiguration classConfiguration);
 }

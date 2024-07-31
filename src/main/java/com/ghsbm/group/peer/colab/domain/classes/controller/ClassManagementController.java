@@ -1,6 +1,8 @@
 package com.ghsbm.group.peer.colab.domain.classes.controller;
 
+import com.ghsbm.group.peer.colab.domain.classes.controller.errors.ClassConfigurationAlreadyExistsException;
 import com.ghsbm.group.peer.colab.domain.classes.controller.model.*;
+import com.ghsbm.group.peer.colab.domain.classes.core.model.ClassConfiguration;
 import com.ghsbm.group.peer.colab.domain.classes.core.ports.incoming.ClassManagementService;
 import java.util.List;
 import java.util.Objects;
@@ -38,11 +40,16 @@ public class ClassManagementController {
    *     parameters.
    * @return a {@link CreateClassResponse} containing the configuration identifier and the root
    *     folders for the created class.
+   * @throws {@link ClassConfigurationAlreadyExistsException} if the class configuration already exists
    */
   @PostMapping("/create")
   public ResponseEntity<CreateClassResponse> createClass(
       @Valid @RequestBody final CreateClassRequest createClassRequest) {
 
+    if (classManagementService.classConfigurationAlreadyExists(
+        classMapper.fromCreateClassRequest(createClassRequest))) {
+      throw new ClassConfigurationAlreadyExistsException();
+    }
     final var classInfo =
         classManagementService.createClass(classMapper.fromCreateClassRequest(createClassRequest));
 
@@ -144,4 +151,5 @@ public class ClassManagementController {
             .folderDTO(new FolderDTO(folder.getId(), folder.getName()))
             .build());
   }
+
 }
