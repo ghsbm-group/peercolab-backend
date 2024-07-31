@@ -14,4 +14,16 @@ public interface ClassPsqlDbRepository extends JpaRepository<ClassConfigurationE
    * @return a list of {@link ClassConfigurationEntity} based on the departmentId.
    */
   List<ClassConfigurationEntity> findByDepartmentId(Long departmentId);
+
+  /**
+   * checks if an entity of {@link ClassConfigurationEntity} already exists in a certain department.
+   *
+   * @param name the name of entity
+   * @param startYear beginning year
+   * @param noOfStudyYears number of study years
+   * @param departmentId the department id to which it belongs
+   * @return if the entity exists or not
+   */
+  boolean existsByNameAndStartYearAndNoOfStudyYearsAndDepartmentId(
+      String name, int startYear, int noOfStudyYears, Long departmentId);
 }

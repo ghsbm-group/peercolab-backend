@@ -109,4 +109,16 @@ public class ClassRepositoryAdapter implements ClassRepository {
     return classEntitiesMapper.folderFromEntity(
         folderPsqlDbRespository.getReferenceById(folder.getId()));
   }
+
+  /**
+   * @inheritDoc
+   */
+  @Override
+  public boolean classConfigurationAlreadyExists(ClassConfiguration classConfiguration) {
+    return classPsqlDbRepository.existsByNameAndStartYearAndNoOfStudyYearsAndDepartmentId(
+        classConfiguration.getName(),
+        classConfiguration.getStartYear(),
+        classConfiguration.getNoOfStudyYears(),
+        classConfiguration.getDepartmentId());
+  }
 }

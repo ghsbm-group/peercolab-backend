@@ -98,11 +98,20 @@ class ClassManagementFacade implements ClassManagementService {
 
     return classRepository.create(folder);
   }
+
   /**
    * @inheritDoc
    */
   @Override
   public Folder renameFolder(Folder folder) {
     return classRepository.renameFolder(folder);
+  }
+
+  /**
+   * @inheritDoc
+   */
+  @Override
+  public boolean classConfigurationAlreadyExists(ClassConfiguration classConfiguration) {
+    return classRepository.classConfigurationAlreadyExists(classConfiguration);
   }
 }
