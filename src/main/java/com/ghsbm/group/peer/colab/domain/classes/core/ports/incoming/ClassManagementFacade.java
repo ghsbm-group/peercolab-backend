@@ -5,6 +5,7 @@ import com.ghsbm.group.peer.colab.domain.classes.core.model.ClassDetails;
 import com.ghsbm.group.peer.colab.domain.classes.core.model.ClassStructure;
 import com.ghsbm.group.peer.colab.domain.classes.core.model.Folder;
 import com.ghsbm.group.peer.colab.domain.classes.core.ports.outgoing.ClassRepository;
+import com.ghsbm.group.peer.colab.infrastructure.RandomUtil;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -49,10 +50,13 @@ class ClassManagementFacade implements ClassManagementService {
    */
   @Override
   public ClassDetails createClass(final ClassConfiguration classConfigurationInfo) {
-    final ClassConfiguration classConfiguration = classRepository.create(classConfigurationInfo);
+    String enrolmentKey = RandomUtil.generateClassEnrolmentKey();
+    final ClassConfiguration classConfiguration =
+        classRepository.create(classConfigurationInfo, enrolmentKey);
 
     // method returns ClassDetails type that contains ClassStructure and ClassDetails
     final ClassDetails classDetails = new ClassDetails();
+    classDetails.setEnrolmentKey(enrolmentKey);
     final ClassStructure classStructure = new ClassStructure();
     final List<Folder> folders = new ArrayList<>();
 

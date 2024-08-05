@@ -133,7 +133,7 @@ class ClassManagementFacadeTest {
 
     ClassConfiguration savedClassConfiguration = buildValidClassConfiguration();
     savedClassConfiguration.setId(ClassManagementFacadeTest.CLASS_CONFIGURATION_ID);
-    when(classRepository.create(classConfiguration)).thenReturn(savedClassConfiguration);
+    when(classRepository.create(any(), any())).thenReturn(savedClassConfiguration);
     when(classRepository.create(any(Folder.class))).thenReturn(Folder.builder().build());
 
     ClassDetails classDetails = victim.createClass(classConfiguration);
@@ -142,6 +142,7 @@ class ClassManagementFacadeTest {
         .create(any(Folder.class));
     assertEquals(classDetails.getClassConfiguration(), savedClassConfiguration);
     assertEquals(classDetails.getClassStructure().getFolders().size(), NO_OF_STUDY_YEARS);
+    assertNotNull(classDetails.getEnrolmentKey());
   }
 
   @Test

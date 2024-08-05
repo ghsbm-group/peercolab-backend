@@ -40,9 +40,10 @@ public interface ClassRepository {
    * Persists a class configuration.
    *
    * @param classConfigurationInfo the class configuration to be persisted.
+   * @param enrolmentKey the key used to enrol students in this class.
    * @return A {@link ClassConfiguration} with the id set.
    */
-  ClassConfiguration create(ClassConfiguration classConfigurationInfo);
+  ClassConfiguration create(ClassConfiguration classConfigurationInfo, String enrolmentKey);
 
   /**
    * Persists a folder to the db.

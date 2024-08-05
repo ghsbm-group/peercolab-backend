@@ -1,6 +1,8 @@
 package com.ghsbm.group.peer.colab.domain.classes.persistence.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
+import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -31,4 +33,9 @@ public class ClassConfigurationEntity {
 
   @Column(name = "department_id")
   private Long departmentId;
+
+  @Size(max = 20)
+  @Column(name = "enrolment_key", length = 20)
+  @JsonIgnore
+  private String enrolmentKey;
 }
