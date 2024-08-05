@@ -1,6 +1,5 @@
 package com.ghsbm.group.peer.colab.domain.classes.persistence.repository;
 
-import com.ghsbm.group.peer.colab.domain.classes.core.model.ClassConfiguration;
 import com.ghsbm.group.peer.colab.domain.classes.persistence.model.ClassConfigurationEntity;
 import com.ghsbm.group.peer.colab.domain.classes.persistence.model.FolderEntity;
 import org.springframework.data.jpa.repository.JpaRepository;
