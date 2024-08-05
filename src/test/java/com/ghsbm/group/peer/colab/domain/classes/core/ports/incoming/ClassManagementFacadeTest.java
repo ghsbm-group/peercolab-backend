@@ -6,6 +6,7 @@ import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
+import com.ghsbm.group.peer.colab.domain.classes.core.ports.incoming.exception.FolderAlreadyExistsException;
 import com.ghsbm.group.peer.colab.domain.classes.core.model.ClassConfiguration;
 import com.ghsbm.group.peer.colab.domain.classes.core.model.ClassDetails;
 import com.ghsbm.group.peer.colab.domain.classes.core.model.Folder;
@@ -195,20 +196,28 @@ class ClassManagementFacadeTest {
 
   @Test
   void renameFolderShouldReturnUpdatedFolder() {
-    Folder initialFolder = buildValidFolderWithIdSet();
-    when(classRepository.create(initialFolder)).thenReturn(initialFolder);
-
-    Folder savedFolder = victim.createFolder(initialFolder);
-
-    verify(classRepository, times(1)).create(initialFolder);
-    assertEquals(initialFolder, savedFolder);
 
     Folder folderWithNewName = buildValidFolderWithNewName();
-    when(classRepository.renameFolder(folderWithNewName)).thenReturn(savedFolder);
+    Folder initialFolder= buildValidFolderWithIdSet();
+    when(classRepository.findFolderById(folderWithNewName.getId())).thenReturn(initialFolder);
+    when(classRepository.folderAlreadyExists(folderWithNewName)).thenReturn(false);
+    when(classRepository.renameFolder(folderWithNewName)).thenReturn(folderWithNewName);
 
-    Folder response = victim.renameFolder(folderWithNewName);
+    Folder response= victim.renameFolder(folderWithNewName);
 
-    assertEquals(savedFolder, response);
-    verify(classRepository, times(1)).renameFolder(folderWithNewName);
+    assertEquals(folderWithNewName, response);
+
+  }
+
+  @Test
+  void renameFolderShouldThrowFolderAlreadyExistsException(){
+    Folder folderWithNewName = buildValidFolderWithIdSet();
+    Folder initialFolder= buildValidFolderWithIdSet();
+    when(classRepository.findFolderById(folderWithNewName.getId())).thenReturn(initialFolder);
+    when(classRepository.folderAlreadyExists(folderWithNewName)).thenReturn(true);
+
+    assertThrows(
+            FolderAlreadyExistsException.class,
+            () -> victim.renameFolder(folderWithNewName));
   }
 }
