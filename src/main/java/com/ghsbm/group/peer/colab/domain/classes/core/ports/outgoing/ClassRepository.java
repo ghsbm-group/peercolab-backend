@@ -2,6 +2,7 @@ package com.ghsbm.group.peer.colab.domain.classes.core.ports.outgoing;
 
 import com.ghsbm.group.peer.colab.domain.classes.core.model.ClassConfiguration;
 import com.ghsbm.group.peer.colab.domain.classes.core.model.Folder;
+
 import java.util.List;
 
 /**
@@ -45,9 +46,9 @@ public interface ClassRepository {
   ClassConfiguration create(ClassConfiguration classConfigurationInfo);
 
   /**
-   * Persists a folder to the db.
+   * Persists a folder or a message board to the db.
    *
-   * @param folder the folder to be persisted.
+   * @param folder the folder or messageboard to be persisted.
    * @return A {@link Folder} objects with its id set.
    */
   Folder create(Folder folder);
@@ -63,7 +64,23 @@ public interface ClassRepository {
   /**
    * Checks if a class configuration already exists in a certain department.
    *
+   * @param classConfiguration the class configuration to be checked
    * @return if the specific class configuration exists
    */
   boolean classConfigurationAlreadyExists(ClassConfiguration classConfiguration);
+
+  /**
+   * Checks if a folder/messageboard already exists with the same parmeters
+   * @param folder the folder to be checked
+   * @return if the specific folder exists
+   */
+  boolean folderAlreadyExists(Folder folder);
+
+  /**
+   * Find a folder by its id
+   * @param folderId the folder id
+   * @return A {@link Folder} object
+   */
+  Folder findFolderById(Long folderId);
+
 }

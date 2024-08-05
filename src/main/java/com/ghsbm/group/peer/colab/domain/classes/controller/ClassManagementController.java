@@ -1,13 +1,14 @@
 package com.ghsbm.group.peer.colab.domain.classes.controller;
 
 import com.ghsbm.group.peer.colab.domain.classes.controller.errors.ClassConfigurationAlreadyExistsException;
+import com.ghsbm.group.peer.colab.domain.classes.controller.errors.FolderAlreadyExistsException;
 import com.ghsbm.group.peer.colab.domain.classes.controller.model.*;
-import com.ghsbm.group.peer.colab.domain.classes.core.model.ClassConfiguration;
 import com.ghsbm.group.peer.colab.domain.classes.core.ports.incoming.ClassManagementService;
 import java.util.List;
 import java.util.Objects;
 
 import jakarta.validation.Valid;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -40,16 +41,12 @@ public class ClassManagementController {
    *     parameters.
    * @return a {@link CreateClassResponse} containing the configuration identifier and the root
    *     folders for the created class.
-   * @throws {@link ClassConfigurationAlreadyExistsException} if the class configuration already exists
+   * @throws {@link ClassConfigurationAlreadyExistsException} if the class configuration already
+   *     exists
    */
   @PostMapping("/create")
   public ResponseEntity<CreateClassResponse> createClass(
       @Valid @RequestBody final CreateClassRequest createClassRequest) {
-
-    if (classManagementService.classConfigurationAlreadyExists(
-        classMapper.fromCreateClassRequest(createClassRequest))) {
-      throw new ClassConfigurationAlreadyExistsException();
-    }
     final var classInfo =
         classManagementService.createClass(classMapper.fromCreateClassRequest(createClassRequest));
 
@@ -63,13 +60,14 @@ public class ClassManagementController {
   /**
    * Endpoint for creating a new Folder.
    *
-   * <p>Calling this api will create a new folder or a subfolder depending on the existence of the
-   * parentId parameter
+   * <p>Calling this api will create a new folder, a subfolder(depending on the existence of the
+   * parentId parameter) or a message board (if the parameter isMessageBoard is set)
    *
-   * @param createFolderRequest {@link CreateFolderRequest} encapsulates the folder configuration
-   *     parameters.
+   * @param createFolderRequest {@link CreateFolderRequest} encapsulates the folder/messageboard
+   *     configuration parameters.
    * @return a {@link CreateFolderResponse} containing the configuration identifiers for the created
-   *     folder.
+   *     folder/messageboard.
+   * @throws {@link FolderAlreadyExistsException} if the folder already exists
    */
   @PostMapping("/create-folder")
   public ResponseEntity<CreateFolderResponse> createFolder(
@@ -79,7 +77,7 @@ public class ClassManagementController {
             classMapper.fromCreateFolderRequest(createFolderRequest));
     return ResponseEntity.ok(
         CreateFolderResponse.builder()
-            .folderDTO(new FolderDTO(folder.getId(), folder.getName()))
+            .folderDTO(new FolderDTO(folder.getId(), folder.getName(), folder.getIsMessageBoard()))
             .build());
   }
 
@@ -138,6 +136,7 @@ public class ClassManagementController {
    *     update the folder name
    * @return a {@link RenameFolderResponse} containing the configuration identifiers for the updated
    *     folder.
+   *   @throws {@link FolderAlreadyExistsException} if the folder already exists with the requested name
    */
   @PostMapping("/rename-folder")
   public ResponseEntity<RenameFolderResponse> renameFolder(
@@ -148,8 +147,7 @@ public class ClassManagementController {
             classMapper.fromRenameFolderRequest(renameFolderRequest));
     return ResponseEntity.ok(
         RenameFolderResponse.builder()
-            .folderDTO(new FolderDTO(folder.getId(), folder.getName()))
+            .folderDTO(new FolderDTO(folder.getId(), folder.getName(), folder.getIsMessageBoard()))
             .build());
   }
-
 }

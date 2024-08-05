@@ -20,6 +20,11 @@ public class FolderEntity {
 
   private String name;
 
+  private String description;
+
+  @Column(name = "is_messageboard")
+  private Boolean isMessageBoard;
+
   @ManyToOne(fetch = FetchType.LAZY)
   @JoinColumn(name = "parent_id")
   private FolderEntity parent;

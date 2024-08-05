@@ -70,10 +70,10 @@ class ClassManagementFacadeTest {
 
   private Folder buildValidFolderWithNewName() {
     return Folder.builder()
-        .id(FOLDER_ID)
-        .classConfigurationId(CLASS_CONFIGURATION_ID)
-        .name(FOLDER_NEW_NAME)
-        .build();
+            .id(FOLDER_ID)
+            .classConfigurationId(CLASS_CONFIGURATION_ID)
+            .name(FOLDER_NEW_NAME)
+            .build();
   }
 
   @BeforeEach
@@ -195,13 +195,20 @@ class ClassManagementFacadeTest {
 
   @Test
   void renameFolderShouldReturnUpdatedFolder() {
-    Folder expectedReturnValue = buildValidFolderWithIdSet();
+    Folder initialFolder = buildValidFolderWithIdSet();
+    when(classRepository.create(initialFolder)).thenReturn(initialFolder);
+
+    Folder savedFolder = victim.createFolder(initialFolder);
+
+    verify(classRepository, times(1)).create(initialFolder);
+    assertEquals(initialFolder, savedFolder);
+
     Folder folderWithNewName = buildValidFolderWithNewName();
-    when(classRepository.renameFolder(folderWithNewName)).thenReturn(expectedReturnValue);
+    when(classRepository.renameFolder(folderWithNewName)).thenReturn(savedFolder);
 
     Folder response = victim.renameFolder(folderWithNewName);
 
-    assertEquals(expectedReturnValue, response);
+    assertEquals(savedFolder, response);
     verify(classRepository, times(1)).renameFolder(folderWithNewName);
   }
 }

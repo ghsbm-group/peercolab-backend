@@ -53,7 +53,7 @@ public interface ClassManagementService {
   ClassDetails createClass(ClassConfiguration classConfigurationInfo);
 
   /**
-   * Persists the folder.
+   * Persists the folder/messageboard.
    *
    * @param folder encapsulates folder data.
    * @return a {@link Folder} object with the id attribute set.
@@ -65,16 +65,9 @@ public interface ClassManagementService {
    * Rename the folder.
    *
    * @param folder encapsulates folder data.
-   * @return a {@link Folder} object with  attributes set.
+   * @return a {@link Folder} object with attributes set.
    */
   @Transactional
   Folder renameFolder(Folder folder);
 
-  /**
-   * Checks if a class configuration already exists.
-   * @param classConfiguration encapsulates class configuration data
-   * @return
-   */
-  @Transactional
-  boolean classConfigurationAlreadyExists(ClassConfiguration classConfiguration);
 }
