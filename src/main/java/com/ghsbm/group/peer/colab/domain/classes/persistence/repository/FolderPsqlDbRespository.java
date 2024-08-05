@@ -1,6 +1,5 @@
 package com.ghsbm.group.peer.colab.domain.classes.persistence.repository;
 
-import com.ghsbm.group.peer.colab.domain.classes.persistence.model.ClassConfigurationEntity;
 import com.ghsbm.group.peer.colab.domain.classes.persistence.model.FolderEntity;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
@@ -44,12 +43,18 @@ public interface FolderPsqlDbRespository extends JpaRepository<FolderEntity, Lon
    * checks if an entity of {@link FolderEntity} already exists with the specific parameters.
    *
    * @param name the name of the folder
-   * @param classConfiguration the class it belongs to
-   * @param folder the parent folder if exists
-   * @return if the specific folder exists or not
+   * @param classConfigurationId the class configuration id that belongs to
+   * @param folderId the folder id that belongs to
+   * @return if the {@link FolderEntity} exists or not (true or false)
    */
-  boolean existsByNameAndAndClassConfigurationAndParent(
-      String name, ClassConfigurationEntity classConfiguration, FolderEntity folder);
-
+  @Query(
+      "SELECT CASE WHEN COUNT(f)>0 THEN true ELSE false END "
+          + "FROM FolderEntity f "
+          + "WHERE f.name = :name AND "
+          + "f.classConfiguration.id = :classConfigurationId AND "
+          + "f.parent.id = :parentId")
+  Boolean existsByNameAndAndClassConfigurationIdAndParentId(
+      @Param("name") String name,
+      @Param("classConfigurationId") Long classConfigurationId,
+      @Param("parentId") Long folderId);
 }
-
