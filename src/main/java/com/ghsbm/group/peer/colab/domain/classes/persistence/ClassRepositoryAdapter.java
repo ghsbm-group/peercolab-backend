@@ -10,6 +10,7 @@ import com.ghsbm.group.peer.colab.domain.classes.persistence.repository.ClassPsq
 import com.ghsbm.group.peer.colab.domain.classes.persistence.repository.FolderPsqlDbRespository;
 import java.util.List;
 import java.util.Optional;
+
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -95,6 +96,8 @@ public class ClassRepositoryAdapter implements ClassRepository {
             FolderEntity.builder()
                 .name(folder.getName())
                 .classConfiguration(classEntity)
+                .description(folder.getDescription())
+                .isMessageBoard(folder.getIsMessageBoard())
                 .parent(folderEntity.orElse(null))
                 .build());
 
@@ -116,10 +119,26 @@ public class ClassRepositoryAdapter implements ClassRepository {
    */
   @Override
   public boolean classConfigurationAlreadyExists(ClassConfiguration classConfiguration) {
-    return classPsqlDbRepository.existsByNameAndStartYearAndNoOfStudyYearsAndDepartmentId(
-        classConfiguration.getName(),
-        classConfiguration.getStartYear(),
-        classConfiguration.getNoOfStudyYears(),
-        classConfiguration.getDepartmentId());
+    return classPsqlDbRepository.existsByNameAndStartYear(
+        classConfiguration.getName(), classConfiguration.getStartYear());
+  }
+
+  /**
+   * @inheritDoc
+   */
+  @Override
+  public boolean folderAlreadyExists(Folder folder) {
+    return folderPsqlDbRespository.existsByNameAndAndClassConfigurationAndParent(
+        folder.getName(),
+        classPsqlDbRepository.getReferenceById(folder.getClassConfigurationId()),
+        folderPsqlDbRespository.getReferenceById(folder.getParentId()));
+  }
+
+  /**
+   * @inheritDoc
+   */
+  @Override
+  public Folder findFolderById(Long folderId) {
+    return classEntitiesMapper.folderFromEntity(folderPsqlDbRespository.getReferenceById(folderId));
   }
 }

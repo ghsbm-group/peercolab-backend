@@ -1,5 +1,7 @@
 package com.ghsbm.group.peer.colab.domain.classes.persistence.repository;
 
+import com.ghsbm.group.peer.colab.domain.classes.core.model.ClassConfiguration;
+import com.ghsbm.group.peer.colab.domain.classes.persistence.model.ClassConfigurationEntity;
 import com.ghsbm.group.peer.colab.domain.classes.persistence.model.FolderEntity;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
@@ -38,4 +40,17 @@ public interface FolderPsqlDbRespository extends JpaRepository<FolderEntity, Lon
   @Modifying
   @Query("update FolderEntity f set f.name = :name where f.id = :id")
   void updateFolderName(@Param(value = "id") Long id, @Param(value = "name") String name);
+
+  /**
+   * checks if an entity of {@link FolderEntity} already exists with the specific parameters.
+   *
+   * @param name the name of the folder
+   * @param classConfiguration the class it belongs to
+   * @param folder the parent folder if exists
+   * @return if the specific folder exists or not
+   */
+  boolean existsByNameAndAndClassConfigurationAndParent(
+      String name, ClassConfigurationEntity classConfiguration, FolderEntity folder);
+
 }
+

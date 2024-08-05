@@ -20,10 +20,7 @@ public interface ClassPsqlDbRepository extends JpaRepository<ClassConfigurationE
    *
    * @param name the name of entity
    * @param startYear beginning year
-   * @param noOfStudyYears number of study years
-   * @param departmentId the department id to which it belongs
    * @return if the entity exists or not
    */
-  boolean existsByNameAndStartYearAndNoOfStudyYearsAndDepartmentId(
-      String name, int startYear, int noOfStudyYears, Long departmentId);
+  boolean existsByNameAndStartYear(String name, int startYear);
 }
