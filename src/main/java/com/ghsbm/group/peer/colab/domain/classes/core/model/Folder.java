@@ -1,6 +1,5 @@
 package com.ghsbm.group.peer.colab.domain.classes.core.model;
 
-import jakarta.validation.constraints.NotNull;
 import lombok.Builder;
 import lombok.Data;
 
