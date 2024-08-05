@@ -103,7 +103,6 @@ class ClassManagementFacade implements ClassManagementService {
     Objects.requireNonNull(folder);
     Objects.requireNonNull(folder.getName());
     Objects.requireNonNull(folder.getClassConfigurationId());
-
     if (classRepository.folderAlreadyExists(folder)) {
       throw new FolderAlreadyExistsException();
     }
