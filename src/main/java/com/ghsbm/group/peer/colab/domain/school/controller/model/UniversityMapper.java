@@ -21,6 +21,7 @@ public interface UniversityMapper {
    * @return a list of {@link CityDTO} matching the parameter passed to this method.
    */
   List<CityDTO> citiesDTOFrom(List<City> cities);
+
   /**
    * Transforms a list of {@link University} into a list of {@link UniversityDTO}.
    *
@@ -28,6 +29,7 @@ public interface UniversityMapper {
    * @return a list of {@link UniversityDTO} matching the parameter passed to this method.
    */
   List<UniversityDTO> universitiesDTOFrom(List<University> universities);
+
   /**
    * Transforms a list of {@link Faculty} into a list of {@link FacultyDTO}.
    *
@@ -35,6 +37,7 @@ public interface UniversityMapper {
    * @return a list of {@link FacultyDTO} matching the parameter passed to this method.
    */
   List<FacultyDTO> facultiesDTOFrom(List<Faculty> faculties);
+
   /**
    * Transforms a list of {@link Department} into a list of {@link DepartmentDTO}.
    *
@@ -42,13 +45,16 @@ public interface UniversityMapper {
    * @return a list of {@link DepartmentDTO} matching the parameter passed to this method.
    */
   List<DepartmentDTO> departmentsDTOFrom(List<Department> departments);
+
   /**
-   * Builds a {@link University} core domain object based on a {@link CreateUniversityRequest} instance.
+   * Builds a {@link University} core domain object based on a {@link CreateUniversityRequest}
+   * instance.
    *
    * @param createUniversityRequest encapsulates the requests parameters.
    * @return a {@link University} object build based on the request parameter.
    */
   University fromCreateUniversityRequest(CreateUniversityRequest createUniversityRequest);
+
   /**
    * Builds a {@link Faculty} core domain object based on a {@link CreateFacultyRequest} instance.
    *
@@ -56,8 +62,10 @@ public interface UniversityMapper {
    * @return a {@link Faculty} object build based on the request parameter.
    */
   Faculty fromCreateFacultyRequest(CreateFacultyRequest facultyDTO);
+
   /**
-   * Builds a {@link Department} core domain object based on a {@link CreateDepartmentRequest} instance.
+   * Builds a {@link Department} core domain object based on a {@link CreateDepartmentRequest}
+   * instance.
    *
    * @param departmentDTO encapsulates the requests parameters.
    * @return a {@link Department} object build based on the request parameter.

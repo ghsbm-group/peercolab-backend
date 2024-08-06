@@ -1,6 +1,8 @@
 package com.ghsbm.group.peer.colab.domain.classes.core.ports.incoming;
 
+import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.when;
+
 import com.ghsbm.group.peer.colab.domain.classes.core.model.Folder;
 import com.ghsbm.group.peer.colab.domain.classes.persistence.ClassRepositoryAdapter;
 import com.ghsbm.group.peer.colab.domain.classes.persistence.model.ClassEntitiesMapper;
@@ -11,8 +13,6 @@ import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
-
-import static org.junit.jupiter.api.Assertions.*;
 
 public class ClassRespositoryAdapterTest {
 

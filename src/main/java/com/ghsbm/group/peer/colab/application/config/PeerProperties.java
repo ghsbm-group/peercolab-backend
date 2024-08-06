@@ -40,7 +40,7 @@ public class PeerProperties {
   private final AuditEvents auditEvents = new AuditEvents();
 
   /**
-   * <p>Getter for the field <code>async</code>.</p>
+   * Getter for the field <code>async</code>.
    *
    * @return a {@link PeerProperties.Async} object.
    */
@@ -49,7 +49,7 @@ public class PeerProperties {
   }
 
   /**
-   * <p>Getter for the field <code>http</code>.</p>
+   * Getter for the field <code>http</code>.
    *
    * @return a {@link PeerProperties.Http} object.
    */
@@ -58,7 +58,7 @@ public class PeerProperties {
   }
 
   /**
-   * <p>Getter for the field <code>database</code>.</p>
+   * Getter for the field <code>database</code>.
    *
    * @return a {@link PeerProperties.Database} object.
    */
@@ -67,7 +67,7 @@ public class PeerProperties {
   }
 
   /**
-   * <p>Getter for the field <code>cache</code>.</p>
+   * Getter for the field <code>cache</code>.
    *
    * @return a {@link PeerProperties.Cache} object.
    */
@@ -76,7 +76,7 @@ public class PeerProperties {
   }
 
   /**
-   * <p>Getter for the field <code>mail</code>.</p>
+   * Getter for the field <code>mail</code>.
    *
    * @return a {@link PeerProperties.Mail} object.
    */
@@ -85,7 +85,7 @@ public class PeerProperties {
   }
 
   /**
-   * <p>Getter for the field <code>registry</code>.</p>
+   * Getter for the field <code>registry</code>.
    *
    * @return a {@link PeerProperties.Registry} object.
    */
@@ -94,7 +94,7 @@ public class PeerProperties {
   }
 
   /**
-   * <p>Getter for the field <code>security</code>.</p>
+   * Getter for the field <code>security</code>.
    *
    * @return a {@link PeerProperties.Security} object.
    */
@@ -103,7 +103,7 @@ public class PeerProperties {
   }
 
   /**
-   * <p>Getter for the field <code>api-docs</code>.</p>
+   * Getter for the field <code>api-docs</code>.
    *
    * @return a {@link PeerProperties.ApiDocs} object.
    */
@@ -112,7 +112,7 @@ public class PeerProperties {
   }
 
   /**
-   * <p>Getter for the field <code>logging</code>.</p>
+   * Getter for the field <code>logging</code>.
    *
    * @return a {@link PeerProperties.Logging} object.
    */
@@ -121,7 +121,7 @@ public class PeerProperties {
   }
 
   /**
-   * <p>Getter for the field <code>cors</code>.</p>
+   * Getter for the field <code>cors</code>.
    *
    * @return a {@link org.springframework.web.cors.CorsConfiguration} object.
    */
@@ -130,7 +130,7 @@ public class PeerProperties {
   }
 
   /**
-   * <p>Getter for the field <code>social</code>.</p>
+   * Getter for the field <code>social</code>.
    *
    * @return a {@link PeerProperties.Social} object.
    */
@@ -139,7 +139,7 @@ public class PeerProperties {
   }
 
   /**
-   * <p>Getter for the field <code>gateway</code>.</p>
+   * Getter for the field <code>gateway</code>.
    *
    * @return a {@link PeerProperties.Gateway} object.
    */
@@ -148,7 +148,7 @@ public class PeerProperties {
   }
 
   /**
-   * <p>Getter for the field <code>clientApp</code>.</p>
+   * Getter for the field <code>clientApp</code>.
    *
    * @return a {@link PeerProperties.ClientApp} object.
    */
@@ -157,7 +157,7 @@ public class PeerProperties {
   }
 
   /**
-   * <p>Getter for the field <code>auditEvents</code>.</p>
+   * Getter for the field <code>auditEvents</code>.
    *
    * @return a {@link PeerProperties.AuditEvents} object.
    */
@@ -422,12 +422,12 @@ public class PeerProperties {
         public void setMaxEntries(long maxEntries) {
           this.maxEntries = maxEntries;
         }
-
       }
 
       public static class Distributed {
 
-        private long timeToLiveSeconds = PeerDefaults.Cache.Infinispan.Distributed.timeToLiveSeconds;
+        private long timeToLiveSeconds =
+            PeerDefaults.Cache.Infinispan.Distributed.timeToLiveSeconds;
 
         private long maxEntries = PeerDefaults.Cache.Infinispan.Distributed.maxEntries;
 
@@ -479,7 +479,6 @@ public class PeerProperties {
         public void setMaxEntries(long maxEntries) {
           this.maxEntries = maxEntries;
         }
-
       }
     }
 
@@ -487,9 +486,7 @@ public class PeerProperties {
 
       private boolean enabled = PeerDefaults.Cache.Memcached.enabled;
 
-      /**
-       * Comma or whitespace separated list of servers' addresses.
-       */
+      /** Comma or whitespace separated list of servers' addresses. */
       private String servers = PeerDefaults.Cache.Memcached.servers;
 
       private int expiration = PeerDefaults.Cache.Memcached.expiration;
@@ -575,8 +572,10 @@ public class PeerProperties {
       private boolean cluster = PeerDefaults.Cache.Redis.cluster;
       private int connectionPoolSize = PeerDefaults.Cache.Redis.connectionPoolSize;
       private int connectionMinimumIdleSize = PeerDefaults.Cache.Redis.connectionMinimumIdleSize;
-      private int subscriptionConnectionPoolSize = PeerDefaults.Cache.Redis.subscriptionConnectionPoolSize;
-      private int subscriptionConnectionMinimumIdleSize = PeerDefaults.Cache.Redis.subscriptionConnectionMinimumIdleSize;
+      private int subscriptionConnectionPoolSize =
+          PeerDefaults.Cache.Redis.subscriptionConnectionPoolSize;
+      private int subscriptionConnectionMinimumIdleSize =
+          PeerDefaults.Cache.Redis.subscriptionConnectionMinimumIdleSize;
 
       public String[] getServer() {
         return server;
@@ -633,7 +632,8 @@ public class PeerProperties {
         return subscriptionConnectionMinimumIdleSize;
       }
 
-      public Redis setSubscriptionConnectionMinimumIdleSize(int subscriptionConnectionMinimumIdleSize) {
+      public Redis setSubscriptionConnectionMinimumIdleSize(
+          int subscriptionConnectionMinimumIdleSize) {
         this.subscriptionConnectionMinimumIdleSize = subscriptionConnectionMinimumIdleSize;
         return this;
       }
@@ -766,11 +766,11 @@ public class PeerProperties {
 
         private String base64Secret = PeerDefaults.Security.Authentication.Jwt.base64Secret;
 
-        private long tokenValidityInSeconds = PeerDefaults.Security.Authentication.Jwt
-            .tokenValidityInSeconds;
+        private long tokenValidityInSeconds =
+            PeerDefaults.Security.Authentication.Jwt.tokenValidityInSeconds;
 
-        private long tokenValidityInSecondsForRememberMe = PeerDefaults.Security.Authentication.Jwt
-            .tokenValidityInSecondsForRememberMe;
+        private long tokenValidityInSecondsForRememberMe =
+            PeerDefaults.Security.Authentication.Jwt.tokenValidityInSecondsForRememberMe;
 
         public String getSecret() {
           return secret;
@@ -800,7 +800,8 @@ public class PeerProperties {
           return tokenValidityInSecondsForRememberMe;
         }
 
-        public void setTokenValidityInSecondsForRememberMe(long tokenValidityInSecondsForRememberMe) {
+        public void setTokenValidityInSecondsForRememberMe(
+            long tokenValidityInSecondsForRememberMe) {
           this.tokenValidityInSecondsForRememberMe = tokenValidityInSecondsForRememberMe;
         }
       }
@@ -808,8 +809,7 @@ public class PeerProperties {
 
     public static class RememberMe {
 
-      @NotNull
-      private String key = PeerDefaults.Security.RememberMe.key;
+      @NotNull private String key = PeerDefaults.Security.RememberMe.key;
 
       public String getKey() {
         return key;
@@ -1060,14 +1060,15 @@ public class PeerProperties {
       return rateLimiting;
     }
 
-    private Map<String, List<String>> authorizedMicroservicesEndpoints = PeerDefaults.Gateway
-        .authorizedMicroservicesEndpoints;
+    private Map<String, List<String>> authorizedMicroservicesEndpoints =
+        PeerDefaults.Gateway.authorizedMicroservicesEndpoints;
 
     public Map<String, List<String>> getAuthorizedMicroservicesEndpoints() {
       return authorizedMicroservicesEndpoints;
     }
 
-    public void setAuthorizedMicroservicesEndpoints(Map<String, List<String>> authorizedMicroservicesEndpoints) {
+    public void setAuthorizedMicroservicesEndpoints(
+        Map<String, List<String>> authorizedMicroservicesEndpoints) {
       this.authorizedMicroservicesEndpoints = authorizedMicroservicesEndpoints;
     }
 

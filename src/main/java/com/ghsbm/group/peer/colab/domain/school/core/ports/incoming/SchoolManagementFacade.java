@@ -4,7 +4,6 @@ import com.ghsbm.group.peer.colab.domain.school.core.model.*;
 import com.ghsbm.group.peer.colab.domain.school.core.ports.outgoing.SchoolRepository;
 import java.util.List;
 import java.util.Objects;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

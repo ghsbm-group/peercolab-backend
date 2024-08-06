@@ -20,59 +20,62 @@ import org.springframework.context.annotation.*;
 @EnableCaching
 public class CacheConfiguration {
 
-    private GitProperties gitProperties;
-    private BuildProperties buildProperties;
-    private final javax.cache.configuration.Configuration<Object, Object> jcacheConfiguration;
+  private final javax.cache.configuration.Configuration<Object, Object> jcacheConfiguration;
+  private GitProperties gitProperties;
+  private BuildProperties buildProperties;
 
-    public CacheConfiguration(PeerProperties peerProperties) {
-        PeerProperties.Cache.Ehcache ehcache = peerProperties.getCache().getEhcache();
+  public CacheConfiguration(PeerProperties peerProperties) {
+    PeerProperties.Cache.Ehcache ehcache = peerProperties.getCache().getEhcache();
 
-        jcacheConfiguration =
-            Eh107Configuration.fromEhcacheCacheConfiguration(
-                CacheConfigurationBuilder
-                    .newCacheConfigurationBuilder(Object.class, Object.class, ResourcePoolsBuilder.heap(ehcache.getMaxEntries()))
-                    .withExpiry(ExpiryPolicyBuilder.timeToLiveExpiration(Duration.ofSeconds(ehcache.getTimeToLiveSeconds())))
-                    .build()
-            );
+    jcacheConfiguration =
+        Eh107Configuration.fromEhcacheCacheConfiguration(
+            CacheConfigurationBuilder.newCacheConfigurationBuilder(
+                    Object.class, Object.class, ResourcePoolsBuilder.heap(ehcache.getMaxEntries()))
+                .withExpiry(
+                    ExpiryPolicyBuilder.timeToLiveExpiration(
+                        Duration.ofSeconds(ehcache.getTimeToLiveSeconds())))
+                .build());
+  }
+
+  @Bean
+  public HibernatePropertiesCustomizer hibernatePropertiesCustomizer(
+      javax.cache.CacheManager cacheManager) {
+    return hibernateProperties ->
+        hibernateProperties.put(ConfigSettings.CACHE_MANAGER, cacheManager);
+  }
+
+  @Bean
+  public JCacheManagerCustomizer cacheManagerCustomizer() {
+    return cm -> {
+      createCache(cm, UserRepository.USERS_BY_LOGIN_CACHE);
+      createCache(cm, UserRepository.USERS_BY_EMAIL_CACHE);
+      createCache(cm, UserEntity.class.getName());
+      createCache(cm, AuthorityEntity.class.getName());
+      createCache(cm, UserEntity.class.getName() + ".authorities");
+    };
+  }
+
+  private void createCache(javax.cache.CacheManager cm, String cacheName) {
+    javax.cache.Cache<Object, Object> cache = cm.getCache(cacheName);
+    if (cache != null) {
+      cache.clear();
+    } else {
+      cm.createCache(cacheName, jcacheConfiguration);
     }
+  }
 
-    @Bean
-    public HibernatePropertiesCustomizer hibernatePropertiesCustomizer(javax.cache.CacheManager cacheManager) {
-        return hibernateProperties -> hibernateProperties.put(ConfigSettings.CACHE_MANAGER, cacheManager);
-    }
+  @Autowired(required = false)
+  public void setGitProperties(GitProperties gitProperties) {
+    this.gitProperties = gitProperties;
+  }
 
-    @Bean
-    public JCacheManagerCustomizer cacheManagerCustomizer() {
-        return cm -> {
-            createCache(cm, UserRepository.USERS_BY_LOGIN_CACHE);
-            createCache(cm, UserRepository.USERS_BY_EMAIL_CACHE);
-            createCache(cm, UserEntity.class.getName());
-            createCache(cm, AuthorityEntity.class.getName());
-            createCache(cm, UserEntity.class.getName() + ".authorities");
-        };
-    }
+  @Autowired(required = false)
+  public void setBuildProperties(BuildProperties buildProperties) {
+    this.buildProperties = buildProperties;
+  }
 
-    private void createCache(javax.cache.CacheManager cm, String cacheName) {
-        javax.cache.Cache<Object, Object> cache = cm.getCache(cacheName);
-        if (cache != null) {
-            cache.clear();
-        } else {
-            cm.createCache(cacheName, jcacheConfiguration);
-        }
-    }
-
-    @Autowired(required = false)
-    public void setGitProperties(GitProperties gitProperties) {
-        this.gitProperties = gitProperties;
-    }
-
-    @Autowired(required = false)
-    public void setBuildProperties(BuildProperties buildProperties) {
-        this.buildProperties = buildProperties;
-    }
-
-    @Bean
-    public KeyGenerator keyGenerator() {
-        return new PrefixedKeyGenerator(this.gitProperties, this.buildProperties);
-    }
+  @Bean
+  public KeyGenerator keyGenerator() {
+    return new PrefixedKeyGenerator(this.gitProperties, this.buildProperties);
+  }
 }

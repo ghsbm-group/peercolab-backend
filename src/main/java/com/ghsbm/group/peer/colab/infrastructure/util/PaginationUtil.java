@@ -12,14 +12,16 @@ public class PaginationUtil {
   private PaginationUtil() {}
 
   /**
-   * Generate pagination headers for a Spring Data {@link org.springframework.data.domain.Page} object.
+   * Generate pagination headers for a Spring Data {@link org.springframework.data.domain.Page}
+   * object.
    *
    * @param uriBuilder The URI builder.
    * @param page The page.
    * @param <T> The type of object.
    * @return http header.
    */
-  public static <T> HttpHeaders generatePaginationHttpHeaders(UriComponentsBuilder uriBuilder, Page<T> page) {
+  public static <T> HttpHeaders generatePaginationHttpHeaders(
+      UriComponentsBuilder uriBuilder, Page<T> page) {
     HttpHeaders headers = new HttpHeaders();
     headers.add(HEADER_X_TOTAL_COUNT, Long.toString(page.getTotalElements()));
     headers.add(HttpHeaders.LINK, linkHeaderUtil.prepareLinkHeaders(uriBuilder, page));

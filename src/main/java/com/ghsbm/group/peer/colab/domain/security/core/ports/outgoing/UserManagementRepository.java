@@ -2,12 +2,9 @@ package com.ghsbm.group.peer.colab.domain.security.core.ports.outgoing;
 
 import com.ghsbm.group.peer.colab.domain.security.core.model.Authority;
 import com.ghsbm.group.peer.colab.domain.security.core.model.User;
-import java.nio.channels.FileChannel;
 import java.time.Instant;
-import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
-import org.apache.el.stream.Stream;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
