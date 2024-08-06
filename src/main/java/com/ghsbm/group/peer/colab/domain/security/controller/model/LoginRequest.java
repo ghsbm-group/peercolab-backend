@@ -4,28 +4,23 @@ import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import lombok.Data;
 
-/**
- * View Model object for storing a user's credentials.
- */
+/** View Model object for storing a user's credentials. */
 @Data
 public class LoginRequest {
 
-    @NotNull
-    @Size(min = 1, max = 50)
-    private String username;
+  @NotNull
+  @Size(min = 1, max = 50)
+  private String username;
 
-    @NotNull
-    @Size(min = 4, max = 100)
-    private String password;
+  @NotNull
+  @Size(min = 4, max = 100)
+  private String password;
 
-    private boolean rememberMe;
+  private boolean rememberMe;
 
-    // prettier-ignore
-    @Override
-    public String toString() {
-        return "LoginVM{" +
-            "username='" + username + '\'' +
-            ", rememberMe=" + rememberMe +
-            '}';
-    }
+  // prettier-ignore
+  @Override
+  public String toString() {
+    return "LoginVM{" + "username='" + username + '\'' + ", rememberMe=" + rememberMe + '}';
+  }
 }

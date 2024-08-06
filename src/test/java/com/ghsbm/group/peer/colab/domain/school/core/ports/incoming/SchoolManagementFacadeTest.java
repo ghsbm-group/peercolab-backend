@@ -1,18 +1,17 @@
 package com.ghsbm.group.peer.colab.domain.school.core.ports.incoming;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.mockito.Mockito.*;
+
 import com.ghsbm.group.peer.colab.domain.school.core.model.*;
 import com.ghsbm.group.peer.colab.domain.school.core.ports.outgoing.SchoolRepository;
+import java.util.List;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
-
-import java.util.List;
-
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.mockito.Mockito.*;
 
 public class SchoolManagementFacadeTest {
   public static final String UNIVERSITY_NAME = "UniversityName";

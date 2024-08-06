@@ -5,10 +5,10 @@ import com.ghsbm.group.peer.colab.domain.classes.core.ports.incoming.exception.C
 import com.ghsbm.group.peer.colab.domain.classes.core.ports.incoming.exception.FolderAlreadyExistsException;
 import com.ghsbm.group.peer.colab.domain.classes.core.ports.outgoing.ClassRepository;
 import com.ghsbm.group.peer.colab.infrastructure.RandomUtil;
+import com.ghsbm.group.peer.colab.infrastructure.SecurityUtils;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
-
 import org.springframework.stereotype.Service;
 
 /** Service that contains the core business logic. */
@@ -54,7 +54,8 @@ class ClassManagementFacade implements ClassManagementService {
       throw new ClassConfigurationAlreadyExistsException();
     }
     String enrolmentKey = RandomUtil.generateClassEnrolmentKey();
-    final ClassConfiguration classConfiguration = classRepository.create(classConfigurationInfo, enrolmentKey);
+    final ClassConfiguration classConfiguration =
+        classRepository.create(classConfigurationInfo, enrolmentKey);
 
     // method returns ClassDetails type that contains ClassStructure and ClassDetails
     final ClassDetails classDetails = new ClassDetails();
@@ -121,5 +122,13 @@ class ClassManagementFacade implements ClassManagementService {
       throw new FolderAlreadyExistsException();
     }
     return classRepository.renameFolder(folder);
+  }
+
+  @Override
+  public void enrolStudent(String enrolmentKey) {
+    String userLogin =
+        SecurityUtils.getCurrentUserLogin()
+            .orElseThrow(() -> new IllegalStateException("User must be logged in"));
+    classRepository.enrol(userLogin, enrolmentKey);
   }
 }

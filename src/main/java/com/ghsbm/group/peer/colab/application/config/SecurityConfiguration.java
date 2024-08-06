@@ -1,7 +1,8 @@
 package com.ghsbm.group.peer.colab.application.config;
 
-import java.util.Arrays;
+import static com.ghsbm.group.peer.colab.infrastructure.AuthoritiesConstants.*;
 
+import java.util.Arrays;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
@@ -19,8 +20,6 @@ import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 import org.springframework.web.servlet.handler.HandlerMappingIntrospector;
-
-import static com.ghsbm.group.peer.colab.infrastructure.AuthoritiesConstants.*;
 
 @Configuration
 @EnableMethodSecurity(securedEnabled = true)

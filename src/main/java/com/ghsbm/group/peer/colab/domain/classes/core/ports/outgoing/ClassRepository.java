@@ -2,7 +2,6 @@ package com.ghsbm.group.peer.colab.domain.classes.core.ports.outgoing;
 
 import com.ghsbm.group.peer.colab.domain.classes.core.model.ClassConfiguration;
 import com.ghsbm.group.peer.colab.domain.classes.core.model.Folder;
-
 import java.util.List;
 
 /**
@@ -72,6 +71,7 @@ public interface ClassRepository {
 
   /**
    * Checks if a folder/messageboard already exists with the same parmeters
+   *
    * @param folder the folder to be checked
    * @return if the specific folder exists
    */
@@ -79,9 +79,17 @@ public interface ClassRepository {
 
   /**
    * Find a folder by its id
+   *
    * @param folderId the folder id
    * @return A {@link Folder} object
    */
   Folder findFolderById(Long folderId);
 
+  /**
+   * Enrols a user into a class based on the enrolmentKey assosicated to that class.
+   *
+   * @param userLogin lower case username of that user.
+   * @param enrolmentKey the enrolment key of the class.
+   */
+  void enrol(String userLogin, String enrolmentKey);
 }

@@ -2,10 +2,9 @@ package com.ghsbm.group.peer.colab.domain.school.controller;
 
 import com.ghsbm.group.peer.colab.domain.school.controller.model.*;
 import com.ghsbm.group.peer.colab.domain.school.core.ports.incoming.SchoolManagementService;
+import jakarta.validation.Valid;
 import java.util.List;
 import java.util.Objects;
-
-import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;

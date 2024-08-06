@@ -14,11 +14,10 @@ public class RandomUtil {
     SECURE_RANDOM.nextBytes(new byte[64]);
   }
 
-  private RandomUtil() {
-  }
+  private RandomUtil() {}
 
   /**
-   * <p>generateRandomAlphanumericString.</p>
+   * generateRandomAlphanumericString.
    *
    * @return a {@link java.lang.String} object.
    */

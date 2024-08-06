@@ -5,12 +5,17 @@ import com.ghsbm.group.peer.colab.domain.classes.core.model.Folder;
 import com.ghsbm.group.peer.colab.domain.classes.core.ports.outgoing.ClassRepository;
 import com.ghsbm.group.peer.colab.domain.classes.persistence.model.ClassConfigurationEntity;
 import com.ghsbm.group.peer.colab.domain.classes.persistence.model.ClassEntitiesMapper;
+import com.ghsbm.group.peer.colab.domain.classes.persistence.model.EnrolmentEntity;
+import com.ghsbm.group.peer.colab.domain.classes.persistence.model.EnrolmentId;
 import com.ghsbm.group.peer.colab.domain.classes.persistence.model.FolderEntity;
 import com.ghsbm.group.peer.colab.domain.classes.persistence.repository.ClassPsqlDbRepository;
+import com.ghsbm.group.peer.colab.domain.classes.persistence.repository.EnrolmentPsqlDbRepository;
 import com.ghsbm.group.peer.colab.domain.classes.persistence.repository.FolderPsqlDbRespository;
+import com.ghsbm.group.peer.colab.domain.security.infrastructure.persistence.model.UserEntity;
+import com.ghsbm.group.peer.colab.domain.security.infrastructure.persistence.repository.UserRepository;
+import com.ghsbm.group.peer.colab.infrastructure.exception.BadRequestAlertException;
 import java.util.List;
 import java.util.Optional;
-
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,16 +29,22 @@ public class ClassRepositoryAdapter implements ClassRepository {
 
   private ClassPsqlDbRepository classPsqlDbRepository;
   private FolderPsqlDbRespository folderPsqlDbRespository;
+  private UserRepository userRepository;
+  private EnrolmentPsqlDbRepository enrolmentPsqlDbRepository;
   private ClassEntitiesMapper classEntitiesMapper;
 
   @Autowired
   public ClassRepositoryAdapter(
       ClassPsqlDbRepository classPsqlDbRepository,
       FolderPsqlDbRespository folderPsqlDbRespository,
-      ClassEntitiesMapper classEntitiesMapper) {
+      ClassEntitiesMapper classEntitiesMapper,
+      UserRepository userRepository,
+      EnrolmentPsqlDbRepository enrolmentPsqlDbRepository) {
     this.classPsqlDbRepository = classPsqlDbRepository;
     this.folderPsqlDbRespository = folderPsqlDbRespository;
     this.classEntitiesMapper = classEntitiesMapper;
+    this.userRepository = userRepository;
+    this.enrolmentPsqlDbRepository = enrolmentPsqlDbRepository;
   }
 
   /**
@@ -138,5 +149,35 @@ public class ClassRepositoryAdapter implements ClassRepository {
   @Override
   public Folder findFolderById(Long folderId) {
     return classEntitiesMapper.folderFromEntity(folderPsqlDbRespository.getReferenceById(folderId));
+  }
+
+  /**
+   * @inheritDoc
+   */
+  @Override
+  public void enrol(String userLogin, String enrolmentKey) {
+    UserEntity userEntity =
+        userRepository
+            .findOneByLogin(userLogin)
+            .orElseThrow(
+                () ->
+                    new IllegalStateException("User with username" + userLogin + "does not exist"));
+    ClassConfigurationEntity classConfigurationEntity =
+        classPsqlDbRepository
+            .findByEnrolmentKey(enrolmentKey)
+            .orElseThrow(
+                () ->
+                    new BadRequestAlertException(
+                        "Invalid enrolment key", "class", "invalid.enrlomentKey"));
+    EnrolmentId enrolmentId =
+        EnrolmentId.builder()
+            .classConfigurationId(classConfigurationEntity.getId())
+            .userId(userEntity.getId())
+            .build();
+    if (enrolmentPsqlDbRepository.existsById(enrolmentId)) {
+      return;
+    } else {
+      enrolmentPsqlDbRepository.save(new EnrolmentEntity(userEntity, classConfigurationEntity));
+    }
   }
 }

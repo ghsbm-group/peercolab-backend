@@ -2,6 +2,7 @@ package com.ghsbm.group.peer.colab.domain.classes.persistence.repository;
 
 import com.ghsbm.group.peer.colab.domain.classes.persistence.model.ClassConfigurationEntity;
 import java.util.List;
+import java.util.Optional;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 /** JPA repository for {@link ClassConfigurationEntity} */
@@ -23,4 +24,6 @@ public interface ClassPsqlDbRepository extends JpaRepository<ClassConfigurationE
    * @return if the entity exists or not
    */
   boolean existsByNameAndStartYear(String name, int startYear);
+
+  Optional<ClassConfigurationEntity> findByEnrolmentKey(String enrolmentKey);
 }

@@ -10,11 +10,10 @@ import org.springframework.http.HttpHeaders;
 public class HeaderUtil {
   private static final Logger log = LoggerFactory.getLogger(HeaderUtil.class);
 
-  private HeaderUtil() {
-  }
+  private HeaderUtil() {}
 
   /**
-   * <p>createAlert.</p>
+   * createAlert.
    *
    * @param applicationName a {@link java.lang.String} object.
    * @param message a {@link java.lang.String} object.
@@ -25,15 +24,18 @@ public class HeaderUtil {
     HttpHeaders headers = new HttpHeaders();
     headers.add("X-" + applicationName + "-alert", message);
     try {
-      headers.add("X-" + applicationName + "-params", URLEncoder.encode(param, StandardCharsets.UTF_8.toString()));
+      headers.add(
+          "X-" + applicationName + "-params",
+          URLEncoder.encode(param, StandardCharsets.UTF_8.toString()));
     } catch (UnsupportedEncodingException e) {
-      // StandardCharsets are supported by every Java implementation so this exception will never happen
+      // StandardCharsets are supported by every Java implementation so this exception will never
+      // happen
     }
     return headers;
   }
 
   /**
-   * <p>createEntityCreationAlert.</p>
+   * createEntityCreationAlert.
    *
    * @param applicationName a {@link java.lang.String} object.
    * @param enableTranslation a boolean.
@@ -41,14 +43,17 @@ public class HeaderUtil {
    * @param param a {@link java.lang.String} object.
    * @return a {@link org.springframework.http.HttpHeaders} object.
    */
-  public static HttpHeaders createEntityCreationAlert(String applicationName, boolean enableTranslation, String entityName, String param) {
-    String message = enableTranslation ? applicationName + "." + entityName + ".created"
-        : "A new " + entityName + " is created with identifier " + param;
+  public static HttpHeaders createEntityCreationAlert(
+      String applicationName, boolean enableTranslation, String entityName, String param) {
+    String message =
+        enableTranslation
+            ? applicationName + "." + entityName + ".created"
+            : "A new " + entityName + " is created with identifier " + param;
     return createAlert(applicationName, message, param);
   }
 
   /**
-   * <p>createEntityUpdateAlert.</p>
+   * createEntityUpdateAlert.
    *
    * @param applicationName a {@link java.lang.String} object.
    * @param enableTranslation a boolean.
@@ -56,14 +61,17 @@ public class HeaderUtil {
    * @param param a {@link java.lang.String} object.
    * @return a {@link org.springframework.http.HttpHeaders} object.
    */
-  public static HttpHeaders createEntityUpdateAlert(String applicationName, boolean enableTranslation, String entityName, String param) {
-    String message = enableTranslation ? applicationName + "." + entityName + ".updated"
-        : "A " + entityName + " is updated with identifier " + param;
+  public static HttpHeaders createEntityUpdateAlert(
+      String applicationName, boolean enableTranslation, String entityName, String param) {
+    String message =
+        enableTranslation
+            ? applicationName + "." + entityName + ".updated"
+            : "A " + entityName + " is updated with identifier " + param;
     return createAlert(applicationName, message, param);
   }
 
   /**
-   * <p>createEntityDeletionAlert.</p>
+   * createEntityDeletionAlert.
    *
    * @param applicationName a {@link java.lang.String} object.
    * @param enableTranslation a boolean.
@@ -71,14 +79,17 @@ public class HeaderUtil {
    * @param param a {@link java.lang.String} object.
    * @return a {@link org.springframework.http.HttpHeaders} object.
    */
-  public static HttpHeaders createEntityDeletionAlert(String applicationName, boolean enableTranslation, String entityName, String param) {
-    String message = enableTranslation ? applicationName + "." + entityName + ".deleted"
-        : "A " + entityName + " is deleted with identifier " + param;
+  public static HttpHeaders createEntityDeletionAlert(
+      String applicationName, boolean enableTranslation, String entityName, String param) {
+    String message =
+        enableTranslation
+            ? applicationName + "." + entityName + ".deleted"
+            : "A " + entityName + " is deleted with identifier " + param;
     return createAlert(applicationName, message, param);
   }
 
   /**
-   * <p>createFailureAlert.</p>
+   * createFailureAlert.
    *
    * @param applicationName a {@link java.lang.String} object.
    * @param enableTranslation a boolean.
@@ -87,7 +98,12 @@ public class HeaderUtil {
    * @param defaultMessage a {@link java.lang.String} object.
    * @return a {@link org.springframework.http.HttpHeaders} object.
    */
-  public static HttpHeaders createFailureAlert(String applicationName, boolean enableTranslation, String entityName, String errorKey, String defaultMessage) {
+  public static HttpHeaders createFailureAlert(
+      String applicationName,
+      boolean enableTranslation,
+      String entityName,
+      String errorKey,
+      String defaultMessage) {
     log.error("Entity processing failed, {}", defaultMessage);
 
     String message = enableTranslation ? "error." + errorKey : defaultMessage;
