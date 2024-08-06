@@ -4,6 +4,7 @@ import com.ghsbm.group.peer.colab.domain.classes.core.model.*;
 import com.ghsbm.group.peer.colab.domain.classes.core.ports.incoming.exception.ClassConfigurationAlreadyExistsException;
 import com.ghsbm.group.peer.colab.domain.classes.core.ports.incoming.exception.FolderAlreadyExistsException;
 import com.ghsbm.group.peer.colab.domain.classes.core.ports.outgoing.ClassRepository;
+import com.ghsbm.group.peer.colab.infrastructure.RandomUtil;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -52,10 +53,12 @@ class ClassManagementFacade implements ClassManagementService {
     if (classRepository.classConfigurationAlreadyExists(classConfigurationInfo)) {
       throw new ClassConfigurationAlreadyExistsException();
     }
-    final ClassConfiguration classConfiguration = classRepository.create(classConfigurationInfo);
+    String enrolmentKey = RandomUtil.generateClassEnrolmentKey();
+    final ClassConfiguration classConfiguration = classRepository.create(classConfigurationInfo, enrolmentKey);
 
     // method returns ClassDetails type that contains ClassStructure and ClassDetails
     final ClassDetails classDetails = new ClassDetails();
+    classDetails.setEnrolmentKey(enrolmentKey);
     final ClassStructure classStructure = new ClassStructure();
     final List<Folder> folders = new ArrayList<>();
 

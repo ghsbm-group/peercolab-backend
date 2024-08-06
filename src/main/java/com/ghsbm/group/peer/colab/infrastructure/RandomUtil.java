@@ -52,4 +52,13 @@ public class RandomUtil {
   public static String generateResetKey() {
     return generateRandomAlphanumericString();
   }
+
+  /**
+   * Generate a reset key.
+   *
+   * @return the generated reset key.
+   */
+  public static String generateClassEnrolmentKey() {
+    return generateRandomAlphanumericString();
+  }
 }

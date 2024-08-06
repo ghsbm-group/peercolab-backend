@@ -9,4 +9,5 @@ import lombok.Getter;
 public class ClassDetails {
   private ClassConfiguration classConfiguration;
   private ClassStructure classStructure;
+  private String enrolmentKey;
 }

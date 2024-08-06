@@ -66,7 +66,7 @@ public class ClassRepositoryAdapter implements ClassRepository {
    * @inheritDoc
    */
   @Override
-  public ClassConfiguration create(ClassConfiguration classConfigurationInfo) {
+  public ClassConfiguration create(ClassConfiguration classConfigurationInfo, String enrolmentKey) {
     final var savedClass =
         classPsqlDbRepository.save(
             ClassConfigurationEntity.builder()
@@ -75,6 +75,7 @@ public class ClassRepositoryAdapter implements ClassRepository {
                 .noOfStudyYears(classConfigurationInfo.getNoOfStudyYears())
                 .noOfSemestersPerYear(classConfigurationInfo.getNoOfSemestersPerYear())
                 .departmentId(classConfigurationInfo.getDepartmentId())
+                .enrolmentKey(enrolmentKey)
                 .build());
     return classEntitiesMapper.classFromEntity(savedClass);
   }

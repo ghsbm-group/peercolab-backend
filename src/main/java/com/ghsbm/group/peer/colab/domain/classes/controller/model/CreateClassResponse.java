@@ -14,4 +14,5 @@ import lombok.Data;
 public class CreateClassResponse {
   private Long classConfigurationId;
   private List<FolderDTO> folders;
+  private String enrolmentKey;
 }
