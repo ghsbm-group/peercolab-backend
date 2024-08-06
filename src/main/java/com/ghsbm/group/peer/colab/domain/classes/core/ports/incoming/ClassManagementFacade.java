@@ -1,13 +1,13 @@
 package com.ghsbm.group.peer.colab.domain.classes.core.ports.incoming;
 
-import com.ghsbm.group.peer.colab.domain.classes.core.model.ClassConfiguration;
-import com.ghsbm.group.peer.colab.domain.classes.core.model.ClassDetails;
-import com.ghsbm.group.peer.colab.domain.classes.core.model.ClassStructure;
-import com.ghsbm.group.peer.colab.domain.classes.core.model.Folder;
+import com.ghsbm.group.peer.colab.domain.classes.core.model.*;
+import com.ghsbm.group.peer.colab.domain.classes.core.ports.incoming.exception.ClassConfigurationAlreadyExistsException;
+import com.ghsbm.group.peer.colab.domain.classes.core.ports.incoming.exception.FolderAlreadyExistsException;
 import com.ghsbm.group.peer.colab.domain.classes.core.ports.outgoing.ClassRepository;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
+
 import org.springframework.stereotype.Service;
 
 /** Service that contains the core business logic. */
@@ -49,6 +49,9 @@ class ClassManagementFacade implements ClassManagementService {
    */
   @Override
   public ClassDetails createClass(final ClassConfiguration classConfigurationInfo) {
+    if (classRepository.classConfigurationAlreadyExists(classConfigurationInfo)) {
+      throw new ClassConfigurationAlreadyExistsException();
+    }
     final ClassConfiguration classConfiguration = classRepository.create(classConfigurationInfo);
 
     // method returns ClassDetails type that contains ClassStructure and ClassDetails
@@ -62,6 +65,7 @@ class ClassManagementFacade implements ClassManagementService {
       final Folder yearFolder =
           Folder.builder()
               .name("Year " + i)
+              .isMessageBoard(false)
               .classConfigurationId(classConfiguration.getId())
               .build();
 
@@ -74,6 +78,7 @@ class ClassManagementFacade implements ClassManagementService {
         final Folder semesterFolder =
             Folder.builder()
                 .name("Semester " + j)
+                .isMessageBoard(false)
                 .parentId(persistedCurrentYearFolder.getId())
                 .classConfigurationId(classConfiguration.getId())
                 .build();
@@ -95,7 +100,9 @@ class ClassManagementFacade implements ClassManagementService {
     Objects.requireNonNull(folder);
     Objects.requireNonNull(folder.getName());
     Objects.requireNonNull(folder.getClassConfigurationId());
-
+    if (classRepository.folderAlreadyExists(folder)) {
+      throw new FolderAlreadyExistsException();
+    }
     return classRepository.create(folder);
   }
 
@@ -104,14 +111,12 @@ class ClassManagementFacade implements ClassManagementService {
    */
   @Override
   public Folder renameFolder(Folder folder) {
-    return classRepository.renameFolder(folder);
-  }
+    Folder folderWithNewNameSet = classRepository.findFolderById(folder.getId());
+    folderWithNewNameSet.setName(folder.getName());
 
-  /**
-   * @inheritDoc
-   */
-  @Override
-  public boolean classConfigurationAlreadyExists(ClassConfiguration classConfiguration) {
-    return classRepository.classConfigurationAlreadyExists(classConfiguration);
+    if (classRepository.folderAlreadyExists(folderWithNewNameSet)) {
+      throw new FolderAlreadyExistsException();
+    }
+    return classRepository.renameFolder(folder);
   }
 }

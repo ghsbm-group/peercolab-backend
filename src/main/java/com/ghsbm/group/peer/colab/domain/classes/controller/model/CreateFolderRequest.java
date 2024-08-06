@@ -15,4 +15,7 @@ public class CreateFolderRequest {
     private Long parentId;
     @NotNull
     private Long classConfigurationId;
+    private String description;
+    @NotNull
+    private Boolean isMessageBoard;
 }
