@@ -82,6 +82,31 @@ public class ClassManagementController {
   }
 
   /**
+   * Endpoint for creating a new Message post by a user.
+   *
+   * <p>Calling this api will create a new message structure based on message passed as a parameter
+   * send by a user.
+   *
+   * @param createMessageRequest {@link CreateMessageRequest} encapsulates the message parameters.
+   * @return a {@link CreateMessageResponse} containing the configuration identifiers for the
+   *     created message
+   */
+  @PostMapping("/create-message")
+  public ResponseEntity<CreateMessageResponse> createMessage(
+      @Valid @RequestBody final CreateMessageRequest createMessageRequest) {
+
+    final var message =
+        classManagementService.createMessage(
+            classMapper.fromCreateMessageRequest(createMessageRequest));
+    return ResponseEntity.ok(
+        CreateMessageResponse.builder()
+            .content(message.getContent())
+            .userId(message.getUserId())
+            .postDate(message.getPostDate())
+            .build());
+  }
+
+  /**
    * Returns information about classes that are part of a specific department.
    *
    * @param departmentId The department identifier for which the list of classes will be returned.
@@ -136,7 +161,8 @@ public class ClassManagementController {
    *     update the folder name
    * @return a {@link RenameFolderResponse} containing the configuration identifiers for the updated
    *     folder.
-   *   @throws {@link FolderAlreadyExistsException} if the folder already exists with the requested name
+   * @throws {@link FolderAlreadyExistsException} if the folder already exists with the requested
+   *     name
    */
   @PostMapping("/rename-folder")
   public ResponseEntity<RenameFolderResponse> renameFolder(

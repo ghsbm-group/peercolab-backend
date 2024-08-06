@@ -53,7 +53,7 @@ public interface FolderPsqlDbRespository extends JpaRepository<FolderEntity, Lon
           + "WHERE f.name = :name AND "
           + "f.classConfiguration.id = :classConfigurationId AND "
           + "f.parent.id = :parentId")
-  Boolean existsByNameAndAndClassConfigurationIdAndParentId(
+  boolean existsByNameAndAndClassConfigurationIdAndParentId(
       @Param("name") String name,
       @Param("classConfigurationId") Long classConfigurationId,
       @Param("parentId") Long folderId);

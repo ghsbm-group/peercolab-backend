@@ -4,6 +4,8 @@ import com.ghsbm.group.peer.colab.domain.classes.core.model.ClassConfiguration;
 import com.ghsbm.group.peer.colab.domain.classes.core.model.ClassDetails;
 import com.ghsbm.group.peer.colab.domain.classes.core.model.Folder;
 import java.util.List;
+
+import com.ghsbm.group.peer.colab.domain.classes.core.model.Message;
 import org.springframework.transaction.annotation.Transactional;
 
 /**
@@ -60,6 +62,15 @@ public interface ClassManagementService {
    */
   @Transactional
   Folder createFolder(Folder folder);
+
+  /**
+   * Persists the message in a message board post by a user.
+   *
+   * @param message encapsulates message data.
+   * @return a {@link Message} objects with the id attribute set.
+   */
+  @Transactional
+  Message createMessage(Message message);
 
   /**
    * Rename the folder.

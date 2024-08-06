@@ -2,15 +2,21 @@ package com.ghsbm.group.peer.colab.domain.classes.persistence;
 
 import com.ghsbm.group.peer.colab.domain.classes.core.model.ClassConfiguration;
 import com.ghsbm.group.peer.colab.domain.classes.core.model.Folder;
+import com.ghsbm.group.peer.colab.domain.classes.core.model.Message;
 import com.ghsbm.group.peer.colab.domain.classes.core.ports.outgoing.ClassRepository;
 import com.ghsbm.group.peer.colab.domain.classes.persistence.model.ClassConfigurationEntity;
 import com.ghsbm.group.peer.colab.domain.classes.persistence.model.ClassEntitiesMapper;
 import com.ghsbm.group.peer.colab.domain.classes.persistence.model.FolderEntity;
+import com.ghsbm.group.peer.colab.domain.classes.persistence.model.MessageEntity;
 import com.ghsbm.group.peer.colab.domain.classes.persistence.repository.ClassPsqlDbRepository;
 import com.ghsbm.group.peer.colab.domain.classes.persistence.repository.FolderPsqlDbRespository;
+
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 
+import com.ghsbm.group.peer.colab.domain.classes.persistence.repository.MessagePsqlDbRepository;
+import com.ghsbm.group.peer.colab.domain.security.infrastructure.persistence.repository.UserRepository;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,16 +30,23 @@ public class ClassRepositoryAdapter implements ClassRepository {
 
   private ClassPsqlDbRepository classPsqlDbRepository;
   private FolderPsqlDbRespository folderPsqlDbRespository;
+  private MessagePsqlDbRepository messagePsqlDbRepository;
+
+  private UserRepository userRepository;
   private ClassEntitiesMapper classEntitiesMapper;
 
   @Autowired
   public ClassRepositoryAdapter(
       ClassPsqlDbRepository classPsqlDbRepository,
       FolderPsqlDbRespository folderPsqlDbRespository,
-      ClassEntitiesMapper classEntitiesMapper) {
+      ClassEntitiesMapper classEntitiesMapper,
+      MessagePsqlDbRepository messagePsqlDbRepository,
+      UserRepository userRepository) {
     this.classPsqlDbRepository = classPsqlDbRepository;
     this.folderPsqlDbRespository = folderPsqlDbRespository;
     this.classEntitiesMapper = classEntitiesMapper;
+    this.messagePsqlDbRepository = messagePsqlDbRepository;
+    this.userRepository = userRepository;
   }
 
   /**
@@ -108,6 +121,25 @@ public class ClassRepositoryAdapter implements ClassRepository {
    * @inheritDoc
    */
   @Override
+  public Message create(Message message) {
+    final var userEntity = userRepository.getReferenceById(message.getUserId());
+    final var messageBoardEntity =
+        folderPsqlDbRespository.getReferenceById(message.getMessageboardId());
+    final var messageEntity =
+        MessageEntity.builder()
+            .content(message.getContent())
+            .postDate(LocalDate.now())
+            .user(userEntity)
+            .messageboard(messageBoardEntity)
+            .build();
+    final var savedMessage = messagePsqlDbRepository.save(messageEntity);
+    return classEntitiesMapper.messageFromEntity(savedMessage);
+  }
+
+  /**
+   * @inheritDoc
+   */
+  @Override
   public Folder renameFolder(Folder folder) {
     folderPsqlDbRespository.updateFolderName(folder.getId(), folder.getName());
     return classEntitiesMapper.folderFromEntity(
@@ -128,6 +160,7 @@ public class ClassRepositoryAdapter implements ClassRepository {
    */
   @Override
   public boolean folderAlreadyExists(Folder folder) {
+
     return folderPsqlDbRespository.existsByNameAndAndClassConfigurationIdAndParentId(
         folder.getName(), folder.getClassConfigurationId(), folder.getParentId());
   }

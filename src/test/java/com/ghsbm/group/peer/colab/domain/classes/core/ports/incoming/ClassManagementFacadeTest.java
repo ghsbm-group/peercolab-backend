@@ -71,10 +71,10 @@ class ClassManagementFacadeTest {
 
   private Folder buildValidFolderWithNewName() {
     return Folder.builder()
-            .id(FOLDER_ID)
-            .classConfigurationId(CLASS_CONFIGURATION_ID)
-            .name(FOLDER_NEW_NAME)
-            .build();
+        .id(FOLDER_ID)
+        .classConfigurationId(CLASS_CONFIGURATION_ID)
+        .name(FOLDER_NEW_NAME)
+        .build();
   }
 
   @BeforeEach
@@ -199,26 +199,23 @@ class ClassManagementFacadeTest {
   void renameFolderShouldReturnUpdatedFolder() {
 
     Folder folderWithNewName = buildValidFolderWithNewName();
-    Folder initialFolder= buildValidFolderWithIdSet();
+    Folder initialFolder = buildValidFolderWithIdSet();
     when(classRepository.findFolderById(folderWithNewName.getId())).thenReturn(initialFolder);
     when(classRepository.folderAlreadyExists(folderWithNewName)).thenReturn(false);
     when(classRepository.renameFolder(folderWithNewName)).thenReturn(folderWithNewName);
 
-    Folder response= victim.renameFolder(folderWithNewName);
+    Folder response = victim.renameFolder(folderWithNewName);
 
     assertEquals(folderWithNewName, response);
-
   }
 
   @Test
-  void renameFolderShouldThrowFolderAlreadyExistsException(){
+  void renameFolderShouldThrowFolderAlreadyExistsException() {
     Folder folderWithNewName = buildValidFolderWithIdSet();
-    Folder initialFolder= buildValidFolderWithIdSet();
+    Folder initialFolder = buildValidFolderWithIdSet();
     when(classRepository.findFolderById(folderWithNewName.getId())).thenReturn(initialFolder);
     when(classRepository.folderAlreadyExists(folderWithNewName)).thenReturn(true);
 
-    assertThrows(
-            FolderAlreadyExistsException.class,
-            () -> victim.renameFolder(folderWithNewName));
+    assertThrows(FolderAlreadyExistsException.class, () -> victim.renameFolder(folderWithNewName));
   }
 }
