@@ -1,10 +1,10 @@
 CREATE TABLE message
 (
     id              SERIAL PRIMARY KEY,
-    content         VARCHAR(250) NOT NULL,
+    content         VARCHAR(500) NOT NULL,
     user_id         INTEGER      NOT NULL,
     messageboard_id INTEGER      NOT NULL,
-    post_date       DATE         NOT NULL,
+    post_date       TIMESTAMP    NOT NULL,
     FOREIGN KEY (messageboard_id) REFERENCES folder (id) ON DELETE CASCADE,
     FOREIGN KEY (user_id) REFERENCES  "user" (id) ON DELETE CASCADE
 );

@@ -3,7 +3,7 @@ package com.ghsbm.group.peer.colab.domain.classes.core.model;
 import lombok.Builder;
 import lombok.Data;
 
-import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 /** Encapsulates information about a message. */
 @Data
@@ -12,7 +12,7 @@ public class Message {
 
   private Long id;
   private String content;
-  private LocalDate postDate;
+  private LocalDateTime postDateAndTime;
   private Long userId;
   private Long messageboardId;
 }

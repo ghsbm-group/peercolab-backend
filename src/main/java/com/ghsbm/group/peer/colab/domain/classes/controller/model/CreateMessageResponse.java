@@ -3,12 +3,12 @@ package com.ghsbm.group.peer.colab.domain.classes.controller.model;
 import lombok.Builder;
 import lombok.Data;
 
-import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 @Data
 @Builder
 public class CreateMessageResponse {
   private Long userId;
-  private LocalDate postDate;
+  private LocalDateTime postDate;
   private String content;
 }

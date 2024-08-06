@@ -7,7 +7,7 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 @Data
 @Entity
@@ -24,7 +24,7 @@ public class MessageEntity {
   private String content;
 
   @Column(name = "post_date")
-  private LocalDate postDate;
+  private LocalDateTime postDate;
 
   @ManyToOne(fetch = FetchType.LAZY)
   @JoinColumn(name = "user_id")

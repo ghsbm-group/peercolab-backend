@@ -118,7 +118,6 @@ class ClassManagementFacade implements ClassManagementService {
   public Message createMessage(Message message) {
     Objects.requireNonNull(message);
     Objects.requireNonNull(message.getContent());
-    Objects.requireNonNull(message.getUserId());
     Objects.requireNonNull(message.getMessageboardId());
 
     return classRepository.create(message);

@@ -12,6 +12,5 @@ public class CreateMessageRequest {
   @Size(min = 1, max = 250)
   private String content;
 
-  @NotNull private Long userId;
   @NotNull private Long messageboardId;
 }

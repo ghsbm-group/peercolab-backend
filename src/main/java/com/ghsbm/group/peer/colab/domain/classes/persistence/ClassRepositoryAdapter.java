@@ -11,12 +11,14 @@ import com.ghsbm.group.peer.colab.domain.classes.persistence.model.MessageEntity
 import com.ghsbm.group.peer.colab.domain.classes.persistence.repository.ClassPsqlDbRepository;
 import com.ghsbm.group.peer.colab.domain.classes.persistence.repository.FolderPsqlDbRespository;
 
-import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
 import com.ghsbm.group.peer.colab.domain.classes.persistence.repository.MessagePsqlDbRepository;
+import com.ghsbm.group.peer.colab.domain.security.controller.AccountController;
 import com.ghsbm.group.peer.colab.domain.security.infrastructure.persistence.repository.UserRepository;
+import com.ghsbm.group.peer.colab.infrastructure.SecurityUtils;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -33,6 +35,7 @@ public class ClassRepositoryAdapter implements ClassRepository {
   private MessagePsqlDbRepository messagePsqlDbRepository;
 
   private UserRepository userRepository;
+
   private ClassEntitiesMapper classEntitiesMapper;
 
   @Autowired
@@ -122,14 +125,16 @@ public class ClassRepositoryAdapter implements ClassRepository {
    */
   @Override
   public Message create(Message message) {
-    final var userEntity = userRepository.getReferenceById(message.getUserId());
+    String userLogin =
+            SecurityUtils.getCurrentUserLogin().get();
+    final var userEntity = userRepository.findOneByLogin(userLogin);
     final var messageBoardEntity =
         folderPsqlDbRespository.getReferenceById(message.getMessageboardId());
     final var messageEntity =
         MessageEntity.builder()
             .content(message.getContent())
-            .postDate(LocalDate.now())
-            .user(userEntity)
+            .postDate(LocalDateTime.now())
+            .user(userEntity.orElse(null))
             .messageboard(messageBoardEntity)
             .build();
     final var savedMessage = messagePsqlDbRepository.save(messageEntity);
