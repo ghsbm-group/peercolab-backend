@@ -3,10 +3,10 @@ package com.ghsbm.group.peer.colab.domain.security.infrastructure.persistence;
 import com.ghsbm.group.peer.colab.domain.security.core.model.Authority;
 import com.ghsbm.group.peer.colab.domain.security.core.model.User;
 import com.ghsbm.group.peer.colab.domain.security.core.ports.outgoing.UserManagementRepository;
-import com.ghsbm.group.peer.colab.domain.security.infrastructure.persistence.model.UserMapper;
-import com.ghsbm.group.peer.colab.domain.security.infrastructure.persistence.repository.UserRepository;
 import com.ghsbm.group.peer.colab.domain.security.infrastructure.persistence.model.UserEntity;
+import com.ghsbm.group.peer.colab.domain.security.infrastructure.persistence.model.UserMapper;
 import com.ghsbm.group.peer.colab.domain.security.infrastructure.persistence.repository.AuthorityRepository;
+import com.ghsbm.group.peer.colab.domain.security.infrastructure.persistence.repository.UserRepository;
 import java.time.Instant;
 import java.util.List;
 import java.util.Optional;
@@ -25,8 +25,10 @@ public class UserManagementRepositoryAdapter implements UserManagementRepository
 
   private final UserMapper userMapper;
 
-  public UserManagementRepositoryAdapter(UserRepository userRepository,
-      AuthorityRepository authorityRepository, UserMapper userMapper) {
+  public UserManagementRepositoryAdapter(
+      UserRepository userRepository,
+      AuthorityRepository authorityRepository,
+      UserMapper userMapper) {
     this.userRepository = userRepository;
     this.authorityRepository = authorityRepository;
     this.userMapper = userMapper;
@@ -81,7 +83,9 @@ public class UserManagementRepositoryAdapter implements UserManagementRepository
 
   @Override
   public Page<User> findAllActivatedUsers(Pageable pageable) {
-    return userRepository.findAllByIdNotNullAndActivatedIsTrue(pageable).map(userMapper::fromEntity);
+    return userRepository
+        .findAllByIdNotNullAndActivatedIsTrue(pageable)
+        .map(userMapper::fromEntity);
   }
 
   @Override
@@ -91,7 +95,11 @@ public class UserManagementRepositoryAdapter implements UserManagementRepository
 
   @Override
   public Iterable<User> findInactiveUsersOlderThan(Instant minus) {
-    return userRepository.findAllByActivatedIsFalseAndActivationKeyIsNotNullAndCreatedDateBefore(minus).stream().map(userMapper::fromEntity).toList();
+    return userRepository
+        .findAllByActivatedIsFalseAndActivationKeyIsNotNullAndCreatedDateBefore(minus)
+        .stream()
+        .map(userMapper::fromEntity)
+        .toList();
   }
 
   @Override

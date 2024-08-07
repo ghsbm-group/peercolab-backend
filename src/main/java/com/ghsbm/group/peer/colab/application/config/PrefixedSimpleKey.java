@@ -10,10 +10,10 @@ public class PrefixedSimpleKey implements Serializable {
   private final String prefix;
   private transient Object[] params;
   private final String methodName;
-  private int hashCodeValue ;
+  private int hashCodeValue;
 
   /**
-   * <p>Constructor for PrefixedSimpleKey.</p>
+   * Constructor for PrefixedSimpleKey.
    *
    * @param prefix a {@link java.lang.String} object.
    * @param methodName a {@link java.lang.String} object.
@@ -27,33 +27,36 @@ public class PrefixedSimpleKey implements Serializable {
     params = new Object[elements.length];
     System.arraycopy(elements, 0, params, 0, elements.length);
 
-    hashCodeValue  = prefix.hashCode();
-    hashCodeValue  = 31 * hashCodeValue  + methodName.hashCode();
-    hashCodeValue  = 31 * hashCodeValue  + Arrays.deepHashCode(params);
+    hashCodeValue = prefix.hashCode();
+    hashCodeValue = 31 * hashCodeValue + methodName.hashCode();
+    hashCodeValue = 31 * hashCodeValue + Arrays.deepHashCode(params);
   }
 
   /** {@inheritDoc} */
   @Override
   public boolean equals(Object other) {
-    return (
-        this == other ||
-            (other instanceof PrefixedSimpleKey &&
-                prefix.equals(((PrefixedSimpleKey) other).prefix) &&
-                methodName.equals(((PrefixedSimpleKey) other).methodName) &&
-                Arrays.deepEquals(params, ((PrefixedSimpleKey) other).params))
-    );
+    return (this == other
+        || (other instanceof PrefixedSimpleKey
+            && prefix.equals(((PrefixedSimpleKey) other).prefix)
+            && methodName.equals(((PrefixedSimpleKey) other).methodName)
+            && Arrays.deepEquals(params, ((PrefixedSimpleKey) other).params)));
   }
 
   /** {@inheritDoc} */
   @Override
   public final int hashCode() {
-    return hashCodeValue ;
+    return hashCodeValue;
   }
 
   /** {@inheritDoc} */
   @Override
   public String toString() {
-    return prefix + " " + getClass().getSimpleName() + methodName + " [" + StringUtils.arrayToCommaDelimitedString(params) + "]";
+    return prefix
+        + " "
+        + getClass().getSimpleName()
+        + methodName
+        + " ["
+        + StringUtils.arrayToCommaDelimitedString(params)
+        + "]";
   }
 }
-

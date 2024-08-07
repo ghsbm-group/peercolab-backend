@@ -6,10 +6,10 @@ import com.ghsbm.group.peer.colab.domain.security.controller.errors.LoginAlready
 import com.ghsbm.group.peer.colab.domain.security.controller.model.FinishResetPasswordRequest;
 import com.ghsbm.group.peer.colab.domain.security.controller.model.RegisterUserRequest;
 import com.ghsbm.group.peer.colab.domain.security.controller.model.UserDtoMapper;
-import com.ghsbm.group.peer.colab.domain.security.core.model.User;
-import com.ghsbm.group.peer.colab.domain.security.core.ports.incoming.UserManagementService;
 import com.ghsbm.group.peer.colab.domain.security.controller.model.dto.AdminUserDTO;
 import com.ghsbm.group.peer.colab.domain.security.controller.model.dto.PasswordChangeDTO;
+import com.ghsbm.group.peer.colab.domain.security.core.model.User;
+import com.ghsbm.group.peer.colab.domain.security.core.ports.incoming.UserManagementService;
 import com.ghsbm.group.peer.colab.infrastructure.SecurityUtils;
 import jakarta.validation.Valid;
 import java.util.Optional;

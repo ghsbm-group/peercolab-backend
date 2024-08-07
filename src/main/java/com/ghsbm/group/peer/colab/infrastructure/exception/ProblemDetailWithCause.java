@@ -32,7 +32,7 @@ public class ProblemDetailWithCause extends ProblemDetail {
     private Map<String, Object> properties = new HashMap<>();
     private ProblemDetailWithCause cause;
 
-    public static ProblemDetailWithCauseBuilder instance(){
+    public static ProblemDetailWithCauseBuilder instance() {
       return new ProblemDetailWithCauseBuilder();
     }
 

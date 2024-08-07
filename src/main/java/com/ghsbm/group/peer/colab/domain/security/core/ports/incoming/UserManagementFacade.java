@@ -222,15 +222,16 @@ public class UserManagementFacade implements UserManagementService {
    */
   @Override
   public Optional<User> updateUser(User userDTO) {
-    Optional<User> existingUser = userManagementRepository.findOneByEmailIgnoreCase(userDTO.getEmail());
+    Optional<User> existingUser =
+        userManagementRepository.findOneByEmailIgnoreCase(userDTO.getEmail());
     if (existingUser.isPresent() && (!existingUser.orElseThrow().getId().equals(userDTO.getId()))) {
-      throw new com.ghsbm.group.peer.colab.domain.security.controller.errors.EmailAlreadyUsedException();
+      throw new com.ghsbm.group.peer.colab.domain.security.controller.errors
+          .EmailAlreadyUsedException();
     }
     existingUser = userManagementRepository.findOneByLogin(userDTO.getLogin().toLowerCase());
     if (existingUser.isPresent() && (!existingUser.orElseThrow().getId().equals(userDTO.getId()))) {
       throw new UsernameAlreadyUsedException();
     }
-
 
     return Optional.of(userManagementRepository.findUserById(userDTO.getId()))
         .filter(Optional::isPresent)

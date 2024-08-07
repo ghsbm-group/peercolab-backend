@@ -6,11 +6,12 @@ import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
-import com.ghsbm.group.peer.colab.domain.classes.core.ports.incoming.exception.FolderAlreadyExistsException;
 import com.ghsbm.group.peer.colab.domain.classes.core.model.ClassConfiguration;
 import com.ghsbm.group.peer.colab.domain.classes.core.model.ClassDetails;
 import com.ghsbm.group.peer.colab.domain.classes.core.model.Folder;
+import com.ghsbm.group.peer.colab.domain.classes.core.ports.incoming.exception.FolderAlreadyExistsException;
 import com.ghsbm.group.peer.colab.domain.classes.core.ports.outgoing.ClassRepository;
+import com.ghsbm.group.peer.colab.domain.infrastructure.SecurityTestUtils;
 import java.util.List;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -31,6 +32,7 @@ class ClassManagementFacadeTest {
   public static final int START_YEAR = 2009;
   public static final int NO_OF_SEMESTERS_PER_YEAR = 2;
   public static final int NO_OF_STUDY_YEARS = 4;
+  public static final String ENROLMENT_KEY = "EnrolmentKey";
   @InjectMocks private ClassManagementFacade victim;
 
   @Mock private ClassRepository classRepository;
@@ -217,5 +219,14 @@ class ClassManagementFacadeTest {
     when(classRepository.folderAlreadyExists(folderWithNewName)).thenReturn(true);
 
     assertThrows(FolderAlreadyExistsException.class, () -> victim.renameFolder(folderWithNewName));
+  }
+
+  @Test
+  void shouldNotThrowExceptionWhenUserAlreadyEnroled() {
+    SecurityTestUtils.mockAdminUser();
+
+    victim.enrolStudent(ENROLMENT_KEY);
+
+    verify(classRepository).enrol("admin", ENROLMENT_KEY);
   }
 }

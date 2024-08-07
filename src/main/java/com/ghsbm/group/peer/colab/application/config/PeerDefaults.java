@@ -103,7 +103,8 @@ public interface PeerDefaults {
   }
 
   interface Security {
-    String contentSecurityPolicy = "default-src 'self'; frame-src 'self' data:; script-src 'self' 'unsafe-inline' 'unsafe-eval' https://storage.googleapis.com; style-src 'self' 'unsafe-inline'; img-src 'self' data:; font-src 'self' data:";
+    String contentSecurityPolicy =
+        "default-src 'self'; frame-src 'self' data:; script-src 'self' 'unsafe-inline' 'unsafe-eval' https://storage.googleapis.com; style-src 'self' 'unsafe-inline'; img-src 'self' data:; font-src 'self' data:";
 
     interface ClientAuthorization {
 
@@ -175,7 +176,6 @@ public interface PeerDefaults {
       boolean enabled = false;
       long limit = 100_000L;
       int durationInSeconds = 3_600;
-
     }
   }
 

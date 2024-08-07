@@ -6,7 +6,7 @@ import org.springframework.context.support.ResourceBundleMessageSource;
 
 @Configuration
 public class WebConfigurer {
-  @Bean(name="messageSource")
+  @Bean(name = "messageSource")
   public ResourceBundleMessageSource bundleMessageSource() {
     ResourceBundleMessageSource messageSource = new ResourceBundleMessageSource();
     messageSource.setBasename("i18n/messages");

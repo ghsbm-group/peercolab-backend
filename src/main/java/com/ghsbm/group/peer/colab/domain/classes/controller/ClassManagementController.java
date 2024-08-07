@@ -1,13 +1,11 @@
 package com.ghsbm.group.peer.colab.domain.classes.controller;
 
-import com.ghsbm.group.peer.colab.domain.classes.controller.errors.ClassConfigurationAlreadyExistsException;
-import com.ghsbm.group.peer.colab.domain.classes.controller.errors.FolderAlreadyExistsException;
 import com.ghsbm.group.peer.colab.domain.classes.controller.model.*;
 import com.ghsbm.group.peer.colab.domain.classes.core.ports.incoming.ClassManagementService;
+import jakarta.validation.Valid;
+import jakarta.validation.constraints.NotNull;
 import java.util.List;
 import java.util.Objects;
-
-import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -54,6 +52,7 @@ public class ClassManagementController {
         CreateClassResponse.builder()
             .classConfigurationId(classInfo.getClassConfiguration().getId())
             .folders(classMapper.foldersDTOFrom(classInfo.getClassStructure().getFolders()))
+            .enrolmentKey(classInfo.getEnrolmentKey())
             .build());
   }
 
@@ -175,5 +174,14 @@ public class ClassManagementController {
         RenameFolderResponse.builder()
             .folderDTO(new FolderDTO(folder.getId(), folder.getName(), folder.getIsMessageBoard()))
             .build());
+  }
+
+  /**
+   * @param enrolmentKey
+   */
+  @PostMapping("/enrol")
+  @ResponseStatus(HttpStatus.CREATED)
+  public void enrolByActivationKey(@RequestBody @NotNull String enrolmentKey) {
+    classManagementService.enrolStudent(enrolmentKey);
   }
 }

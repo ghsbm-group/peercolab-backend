@@ -94,4 +94,12 @@ public interface ClassRepository {
    * @return A {@link Folder} object
    */
   Folder findFolderById(Long folderId);
+
+  /**
+   * Enrols a user into a class based on the enrolmentKey assosicated to that class.
+   *
+   * @param userLogin lower case username of that user.
+   * @param enrolmentKey the enrolment key of the class.
+   */
+  void enrol(String userLogin, String enrolmentKey);
 }

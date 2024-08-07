@@ -6,10 +6,11 @@ import ch.qos.logback.classic.spi.ILoggingEvent;
 import ch.qos.logback.classic.spi.LoggerContextListener;
 import ch.qos.logback.core.ConsoleAppender;
 import ch.qos.logback.core.spi.ContextAwareBase;
-
+import java.net.InetSocketAddress;
 import net.logstash.logback.appender.LogstashTcpSocketAppender;
 import net.logstash.logback.composite.ContextJsonProvider;
 import net.logstash.logback.composite.GlobalCustomFieldsJsonProvider;
+import net.logstash.logback.composite.loggingevent.*;
 import net.logstash.logback.composite.loggingevent.ArgumentsJsonProvider;
 import net.logstash.logback.composite.loggingevent.LoggerNameJsonProvider;
 import net.logstash.logback.composite.loggingevent.LoggingEventFormattedTimestampJsonProvider;
@@ -19,11 +20,8 @@ import net.logstash.logback.composite.loggingevent.StackTraceJsonProvider;
 import net.logstash.logback.encoder.LoggingEventCompositeJsonEncoder;
 import net.logstash.logback.encoder.LogstashEncoder;
 import net.logstash.logback.stacktrace.ShortenedThrowableConverter;
-import net.logstash.logback.composite.loggingevent.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-import java.net.InetSocketAddress;
 
 /**
  * Utility methods to add appenders to a {@link ch.qos.logback.classic.LoggerContext}.

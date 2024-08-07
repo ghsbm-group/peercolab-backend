@@ -4,6 +4,7 @@ import com.ghsbm.group.peer.colab.domain.school.core.model.*;
 import java.util.List;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
+
 /**
  * {@link Mapper}
  *

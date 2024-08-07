@@ -18,7 +18,7 @@ public class PrefixedKeyGenerator implements KeyGenerator {
   private String version = null;
 
   /**
-   * <p>Constructor for PrefixedKeyGenerator.</p>
+   * Constructor for PrefixedKeyGenerator.
    *
    * @param gitProperties a {@link org.springframework.boot.info.GitProperties} object.
    * @param buildProperties a {@link org.springframework.boot.info.BuildProperties} object.
@@ -40,7 +40,9 @@ public class PrefixedKeyGenerator implements KeyGenerator {
       time = buildProperties.getTime();
       version = buildProperties.getVersion();
     }
-    Object p = ObjectUtils.firstNonNull(shortCommitId, time, version, RandomStringUtils.randomAlphanumeric(12));
+    Object p =
+        ObjectUtils.firstNonNull(
+            shortCommitId, time, version, RandomStringUtils.randomAlphanumeric(12));
 
     if (p instanceof Instant) {
       return DateTimeFormatter.ISO_INSTANT.format((Instant) p);

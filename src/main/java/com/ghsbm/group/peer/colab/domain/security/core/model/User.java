@@ -20,7 +20,7 @@ public class User {
   private String resetKey;
   private Instant resetDate = null;
   private Set<Authority> authorities = new HashSet<>();
-  
+
   private String createdBy;
   private Instant createdDate = Instant.now();
   private String lastModifiedBy;

@@ -8,10 +8,9 @@ import org.springframework.beans.factory.DisposableBean;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.core.task.AsyncTaskExecutor;
 
-/**
- * <p>ExceptionHandlingAsyncTaskExecutor class.</p>
- */
-public class ExceptionHandlingAsyncTaskExecutor implements AsyncTaskExecutor, InitializingBean, DisposableBean {
+/** ExceptionHandlingAsyncTaskExecutor class. */
+public class ExceptionHandlingAsyncTaskExecutor
+    implements AsyncTaskExecutor, InitializingBean, DisposableBean {
 
   static final String EXCEPTION_MESSAGE = "Caught async exception";
 
@@ -20,7 +19,7 @@ public class ExceptionHandlingAsyncTaskExecutor implements AsyncTaskExecutor, In
   private final AsyncTaskExecutor executor;
 
   /**
-   * <p>Constructor for ExceptionHandlingAsyncTaskExecutor.</p>
+   * Constructor for ExceptionHandlingAsyncTaskExecutor.
    *
    * @param executor a {@link org.springframework.core.task.AsyncTaskExecutor} object.
    */
@@ -63,7 +62,7 @@ public class ExceptionHandlingAsyncTaskExecutor implements AsyncTaskExecutor, In
   }
 
   /**
-   * <p>handle.</p>
+   * handle.
    *
    * @param e a {@link java.lang.Exception} object.
    */
