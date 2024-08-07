@@ -12,7 +12,7 @@ public class Message {
 
   private Long id;
   private String content;
-  private LocalDateTime postDateAndTime;
+  private LocalDateTime postDate;
   private Long userId;
   private Long messageboardId;
 }
