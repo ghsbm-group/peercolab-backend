@@ -1,4 +1,4 @@
-package com.ghsbm.group.peer.colab.domain.classes.controller.model;
+package com.ghsbm.group.peer.colab.domain.classes.controller.model.dto;
 
 import lombok.Data;
 

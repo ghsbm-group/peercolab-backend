@@ -1,6 +1,9 @@
 package com.ghsbm.group.peer.colab.domain.classes.controller;
 
 import com.ghsbm.group.peer.colab.domain.classes.controller.model.*;
+import com.ghsbm.group.peer.colab.domain.classes.controller.model.dto.ClassDTO;
+import com.ghsbm.group.peer.colab.domain.classes.controller.model.dto.FolderDTO;
+import com.ghsbm.group.peer.colab.domain.classes.controller.model.dto.PostedMessageDTO;
 import com.ghsbm.group.peer.colab.domain.classes.core.ports.incoming.ClassManagementService;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotNull;
@@ -22,11 +25,15 @@ public class ClassManagementController {
   private final ClassManagementService classManagementService;
 
   private final ClassMapper classMapper;
+  private final PostedMessageDtoMapper postedMessageDtoMapper;
 
   public ClassManagementController(
-      ClassManagementService classManagementService, ClassMapper classMapper) {
+      ClassManagementService classManagementService,
+      ClassMapper classMapper,
+      PostedMessageDtoMapper postedMessageDtoMapper) {
     this.classManagementService = classManagementService;
     this.classMapper = classMapper;
+    this.postedMessageDtoMapper = postedMessageDtoMapper;
   }
 
   /**
@@ -39,8 +46,6 @@ public class ClassManagementController {
    *     parameters.
    * @return a {@link CreateClassResponse} containing the configuration identifier and the root
    *     folders for the created class.
-   * @throws {@link ClassConfigurationAlreadyExistsException} if the class configuration already
-   *     exists
    */
   @PostMapping("/create")
   public ResponseEntity<CreateClassResponse> createClass(
@@ -66,7 +71,6 @@ public class ClassManagementController {
    *     configuration parameters.
    * @return a {@link CreateFolderResponse} containing the configuration identifiers for the created
    *     folder/messageboard.
-   * @throws {@link FolderAlreadyExistsException} if the folder already exists
    */
   @PostMapping("/create-folder")
   public ResponseEntity<CreateFolderResponse> createFolder(
@@ -160,8 +164,6 @@ public class ClassManagementController {
    *     update the folder name
    * @return a {@link RenameFolderResponse} containing the configuration identifiers for the updated
    *     folder.
-   * @throws {@link FolderAlreadyExistsException} if the folder already exists with the requested
-   *     name
    */
   @PostMapping("/rename-folder")
   public ResponseEntity<RenameFolderResponse> renameFolder(
@@ -183,5 +185,22 @@ public class ClassManagementController {
   @ResponseStatus(HttpStatus.CREATED)
   public void enrolByActivationKey(@RequestBody @NotNull String enrolmentKey) {
     classManagementService.enrolStudent(enrolmentKey);
+  }
+
+  /**
+   * Returns information about messages that are part of a specific messageboard.
+   *
+   * @param messageboardId The messageboard identifier for which the list of messages will be
+   *     returned.
+   * @return A list of {@link PostedMessageDTO} encapsulating data about posted messages.
+   */
+  @GetMapping("/messages")
+  public ResponseEntity<List<PostedMessageDTO>> retrieveMessagesByMessageboardId(
+      final Long messageboardId) {
+    Objects.requireNonNull(messageboardId);
+
+    return ResponseEntity.ok(
+        postedMessageDtoMapper.postedMessagesDTOFrom(
+            classManagementService.retrieveMessagesByMessageboardId(messageboardId)));
   }
 }

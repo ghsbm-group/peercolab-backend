@@ -20,6 +20,8 @@ public abstract class ClassEntitiesMapper {
 
   public abstract List<Folder> fromFolderEntities(List<FolderEntity> folders);
 
+  public abstract List<Message> fromMessageEntities(List<MessageEntity> messages);
+
   public abstract ClassConfiguration classFromEntity(ClassConfigurationEntity savedClass);
 
   @Mappings({

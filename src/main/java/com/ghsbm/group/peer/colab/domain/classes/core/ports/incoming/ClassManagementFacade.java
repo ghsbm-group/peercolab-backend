@@ -4,6 +4,7 @@ import com.ghsbm.group.peer.colab.domain.classes.core.model.*;
 import com.ghsbm.group.peer.colab.domain.classes.core.ports.incoming.exception.ClassConfigurationAlreadyExistsException;
 import com.ghsbm.group.peer.colab.domain.classes.core.ports.incoming.exception.FolderAlreadyExistsException;
 import com.ghsbm.group.peer.colab.domain.classes.core.ports.outgoing.ClassRepository;
+import com.ghsbm.group.peer.colab.domain.security.core.ports.outgoing.UserManagementRepository;
 import com.ghsbm.group.peer.colab.infrastructure.RandomUtil;
 import com.ghsbm.group.peer.colab.infrastructure.SecurityUtils;
 import java.util.ArrayList;
@@ -16,9 +17,12 @@ import org.springframework.stereotype.Service;
 class ClassManagementFacade implements ClassManagementService {
 
   private final ClassRepository classRepository;
+  private final UserManagementRepository userManagementRepository;
 
-  public ClassManagementFacade(ClassRepository classRepository) {
+  public ClassManagementFacade(
+      ClassRepository classRepository, UserManagementRepository userManagementRepository) {
     this.classRepository = classRepository;
+    this.userManagementRepository = userManagementRepository;
   }
 
   /**
@@ -43,6 +47,20 @@ class ClassManagementFacade implements ClassManagementService {
   @Override
   public List<Folder> retrieveFolderByParentId(Long parentId) {
     return classRepository.findFoldersByParentId(parentId);
+  }
+
+  /**
+   * @inheritDoc
+   */
+  @Override
+  public List<PostedMessage> retrieveMessagesByMessageboardId(Long messageboardId) {
+
+    List<Message> messages = classRepository.findMessagesByMessageBoardId(messageboardId);
+    List<PostedMessage> list = new ArrayList<PostedMessage>(messages.size());
+    for (Message message : messages) {
+      list.add(messageToPostedMessage(message));
+    }
+    return list;
   }
 
   /**
@@ -137,11 +155,37 @@ class ClassManagementFacade implements ClassManagementService {
     return classRepository.renameFolder(folder);
   }
 
+  /**
+   * @inheritDoc
+   */
   @Override
   public void enrolStudent(String enrolmentKey) {
     String userLogin =
         SecurityUtils.getCurrentUserLogin()
             .orElseThrow(() -> new IllegalStateException("User must be logged in"));
     classRepository.enrol(userLogin, enrolmentKey);
+  }
+
+  /**
+   * Transform a {@link Message} into a {@link PostedMessage}
+   *
+   * @param message a {@link Message} object
+   * @return a {@link PostedMessage} object
+   */
+  protected PostedMessage messageToPostedMessage(Message message) {
+    if (message == null) {
+      return null;
+    }
+
+    PostedMessage postedMessage =
+        PostedMessage.builder()
+            .id(message.getId())
+            .content(message.getContent())
+            .userId(message.getUserId())
+            .postDate(message.getPostDate())
+            .login(userManagementRepository.findUserById(message.getUserId()).get().getLogin())
+            .build();
+
+    return postedMessage;
   }
 }

@@ -1,11 +1,9 @@
 package com.ghsbm.group.peer.colab.domain.classes.core.ports.incoming;
 
-import com.ghsbm.group.peer.colab.domain.classes.core.model.ClassConfiguration;
-import com.ghsbm.group.peer.colab.domain.classes.core.model.ClassDetails;
-import com.ghsbm.group.peer.colab.domain.classes.core.model.Folder;
+import com.ghsbm.group.peer.colab.domain.classes.core.model.*;
+
 import java.util.List;
 
-import com.ghsbm.group.peer.colab.domain.classes.core.model.Message;
 import org.springframework.transaction.annotation.Transactional;
 
 /**
@@ -39,6 +37,14 @@ public interface ClassManagementService {
    * @return a list of {@link Folder} associated with the provided folder id.
    */
   List<Folder> retrieveFolderByParentId(Long parentId);
+
+  /**
+   * Retrieves the posted messages associated with a messageboard
+   *
+   * @param messageboardId the messagedboard id for which the posted message are retrieved.
+   * @return a list of {@link PostedMessage} associated with the provided messageboard id.
+   */
+  List<PostedMessage> retrieveMessagesByMessageboardId(Long messageboardId);
 
   /**
    * Creates a class configuration and an initial folder structure for that class based on the

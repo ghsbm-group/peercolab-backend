@@ -39,6 +39,14 @@ public interface ClassRepository {
   List<Folder> findFoldersByParentId(Long parentId);
 
   /**
+   * Retrieves all messages belonging to this messageboard.
+   *
+   * @param messageboardId The messageboard id for which the messages are returned.
+   * @return a list of {@link Message} entities.
+   */
+  List<Message> findMessagesByMessageBoardId(Long messageboardId);
+
+  /**
    * Persists a class configuration.
    *
    * @param classConfigurationInfo the class configuration to be persisted.

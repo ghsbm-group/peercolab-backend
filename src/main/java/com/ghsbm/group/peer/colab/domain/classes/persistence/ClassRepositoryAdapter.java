@@ -22,8 +22,6 @@ import java.util.List;
 import java.util.Optional;
 
 import com.ghsbm.group.peer.colab.domain.classes.persistence.repository.MessagePsqlDbRepository;
-import com.ghsbm.group.peer.colab.domain.security.controller.AccountController;
-import com.ghsbm.group.peer.colab.domain.security.infrastructure.persistence.repository.UserRepository;
 import com.ghsbm.group.peer.colab.infrastructure.SecurityUtils;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -89,6 +87,16 @@ public class ClassRepositoryAdapter implements ClassRepository {
    * @inheritDoc
    */
   @Override
+  public List<Message> findMessagesByMessageBoardId(Long messageboardId) {
+
+    return classEntitiesMapper.fromMessageEntities(
+        messagePsqlDbRepository.findByMessageboardId(messageboardId));
+  }
+
+  /**
+   * @inheritDoc
+   */
+  @Override
   public ClassConfiguration create(ClassConfiguration classConfigurationInfo, String enrolmentKey) {
     final var savedClass =
         classPsqlDbRepository.save(
@@ -132,16 +140,20 @@ public class ClassRepositoryAdapter implements ClassRepository {
    */
   @Override
   public Message create(Message message) {
-    String userLogin =
-            SecurityUtils.getCurrentUserLogin().get();
-    final var userEntity = userRepository.findOneByLogin(userLogin);
+    String userLogin = SecurityUtils.getCurrentUserLogin().get();
+    final var userEntity =
+        userRepository
+            .findOneByLogin(userLogin)
+            .orElseThrow(
+                () ->
+                    new IllegalStateException("User with username" + userLogin + "does not exist"));
     final var messageBoardEntity =
         folderPsqlDbRespository.getReferenceById(message.getMessageboardId());
     final var messageEntity =
         MessageEntity.builder()
             .content(message.getContent())
             .postDate(LocalDateTime.now())
-            .user(userEntity.orElse(null))
+            .user(userEntity)
             .messageboard(messageBoardEntity)
             .build();
     final var savedMessage = messagePsqlDbRepository.save(messageEntity);
