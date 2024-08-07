@@ -54,7 +54,8 @@ class ClassManagementFacade implements ClassManagementService {
       throw new ClassConfigurationAlreadyExistsException();
     }
     String enrolmentKey = RandomUtil.generateClassEnrolmentKey();
-    final ClassConfiguration classConfiguration = classRepository.create(classConfigurationInfo, enrolmentKey);
+    final ClassConfiguration classConfiguration =
+        classRepository.create(classConfigurationInfo, enrolmentKey);
 
     // method returns ClassDetails type that contains ClassStructure and ClassDetails
     final ClassDetails classDetails = new ClassDetails();
@@ -103,10 +104,23 @@ class ClassManagementFacade implements ClassManagementService {
     Objects.requireNonNull(folder);
     Objects.requireNonNull(folder.getName());
     Objects.requireNonNull(folder.getClassConfigurationId());
+
     if (classRepository.folderAlreadyExists(folder)) {
       throw new FolderAlreadyExistsException();
     }
     return classRepository.create(folder);
+  }
+
+  /**
+   * @inheritDoc
+   */
+  @Override
+  public Message createMessage(Message message) {
+    Objects.requireNonNull(message);
+    Objects.requireNonNull(message.getContent());
+    Objects.requireNonNull(message.getMessageboardId());
+
+    return classRepository.create(message);
   }
 
   /**
