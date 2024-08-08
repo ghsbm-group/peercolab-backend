@@ -236,4 +236,11 @@ public class ClassRepositoryAdapter implements ClassRepository {
     return enrolmentPsqlDbRepository.existsByUserNameAndClassConfigurationId(
         userLogin, classConfigurationId);
   }
+  /**
+   * @inheritDoc
+   */
+  @Override
+  public String getEnrolemntKeyByClassConfigurationId(Long classConfigurationId) {
+    return classPsqlDbRepository.findEnrolmentKeyById(classConfigurationId);
+  }
 }
