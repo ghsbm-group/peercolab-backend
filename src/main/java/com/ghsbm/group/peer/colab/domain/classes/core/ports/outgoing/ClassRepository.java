@@ -112,9 +112,18 @@ public interface ClassRepository {
 
   /**
    * Checks if the user is enroled in a specif message board.
+   *
    * @param userLogin the current user logged
    * @param classConfigurationId the class configuration to which user should be enrolled
    * @return if the user is enrolled in a specific class configuration
    */
   boolean isEnrolled(String userLogin, Long classConfigurationId);
+
+  /**
+   * Find enrolment key by class configuration id
+   *
+   * @param classConfigurationId The class configuration id for which the enrolemnt key are returned
+   * @return a {@link String} that contains the enrolment key
+   */
+  String getEnrolemntKeyByClassConfigurationId(Long classConfigurationId);
 }

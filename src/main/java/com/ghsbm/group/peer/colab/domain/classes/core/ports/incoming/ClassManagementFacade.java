@@ -190,6 +190,13 @@ class ClassManagementFacade implements ClassManagementService {
         .enrolmentKey(enrolmentKey)
         .build();
   }
+  /**
+   * @inheritDoc
+   */
+  @Override
+  public String getEnrolmentKeyByClassConfigurationId(Long classConfigurationId) {
+    return classRepository.getEnrolemntKeyByClassConfigurationId(classConfigurationId);
+  }
 
   /**
    * Transform a {@link Message} into a {@link PostedMessage}

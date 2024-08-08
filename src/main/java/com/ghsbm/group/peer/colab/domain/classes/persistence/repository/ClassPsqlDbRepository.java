@@ -4,6 +4,7 @@ import com.ghsbm.group.peer.colab.domain.classes.persistence.model.ClassConfigur
 import java.util.List;
 import java.util.Optional;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
 
 /** JPA repository for {@link ClassConfigurationEntity} */
 public interface ClassPsqlDbRepository extends JpaRepository<ClassConfigurationEntity, Long> {
@@ -26,4 +27,13 @@ public interface ClassPsqlDbRepository extends JpaRepository<ClassConfigurationE
   boolean existsByNameAndStartYear(String name, int startYear);
 
   Optional<ClassConfigurationEntity> findByEnrolmentKey(String enrolmentKey);
+
+  /**
+   * Retrieve enrolment key based on class configuration id
+   *
+   * @param classConfigurationId
+   * @return
+   */
+  @Query("Select c.enrolmentKey from ClassConfigurationEntity c where c.id = :classConfigurationId")
+  String findEnrolmentKeyById(Long classConfigurationId);
 }

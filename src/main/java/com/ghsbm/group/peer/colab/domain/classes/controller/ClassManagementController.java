@@ -212,4 +212,18 @@ public class ClassManagementController {
         postedMessageDtoMapper.postedMessagesDTOFrom(
             classManagementService.retrieveMessagesByMessageboardId(messageboardId)));
   }
+
+  /**
+   * Returns the enrolment key that is part of a specific class configuration.
+   * @param classConfigurationId The class configuration identifier
+   * @return the enrolment key associated with a specific class configuration.
+   */
+  @GetMapping("/enrolment-key")
+  public ResponseEntity getEnrolmentKeyBasedOnClassConfigurationId(final Long classConfigurationId)
+  {
+    Objects.requireNonNull(classConfigurationId);
+
+    return ResponseEntity.ok(
+            classManagementService.getEnrolmentKeyByClassConfigurationId(classConfigurationId));
+  }
 }
