@@ -33,6 +33,7 @@ class ClassManagementFacadeTest {
   public static final int NO_OF_SEMESTERS_PER_YEAR = 2;
   public static final int NO_OF_STUDY_YEARS = 4;
   public static final String ENROLMENT_KEY = "EnrolmentKey";
+  public static final String ADMIN = "admin";
   @InjectMocks private ClassManagementFacade victim;
 
   @Mock private ClassRepository classRepository;
@@ -224,9 +225,11 @@ class ClassManagementFacadeTest {
   @Test
   void shouldNotThrowExceptionWhenUserAlreadyEnroled() {
     SecurityTestUtils.mockAdminUser();
+    when(classRepository.enrol(ADMIN, ENROLMENT_KEY))
+        .thenReturn(ClassConfiguration.builder().id(CLASS_CONFIGURATION_ID).build());
 
     victim.enrolStudent(ENROLMENT_KEY);
 
-    verify(classRepository).enrol("admin", ENROLMENT_KEY);
+    verify(classRepository).enrol(ADMIN, ENROLMENT_KEY);
   }
 }

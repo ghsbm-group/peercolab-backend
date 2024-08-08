@@ -4,12 +4,12 @@ import com.ghsbm.group.peer.colab.domain.classes.controller.model.*;
 import com.ghsbm.group.peer.colab.domain.classes.controller.model.dto.ClassDTO;
 import com.ghsbm.group.peer.colab.domain.classes.controller.model.dto.FolderDTO;
 import com.ghsbm.group.peer.colab.domain.classes.controller.model.dto.PostedMessageDTO;
+import com.ghsbm.group.peer.colab.domain.classes.core.model.ClassDetails;
 import com.ghsbm.group.peer.colab.domain.classes.core.ports.incoming.ClassManagementService;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotNull;
 import java.util.List;
 import java.util.Objects;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -179,12 +179,21 @@ public class ClassManagementController {
   }
 
   /**
-   * @param enrolmentKey
+   * Enrols the current logged-in user in the class associated with the enrolmentKey.
+   *
+   * @param enrolmentKey the key used to enrol the user in a class.
+   * @return a {@link EnrolmentResponse} which contains data about the class in which the user was
+   *     enroled.
    */
   @PostMapping("/enrol")
-  @ResponseStatus(HttpStatus.CREATED)
-  public void enrolByActivationKey(@RequestBody @NotNull String enrolmentKey) {
-    classManagementService.enrolStudent(enrolmentKey);
+  public ResponseEntity<EnrolmentResponse> enrolByActivationKey(
+      @RequestBody @NotNull String enrolmentKey) {
+    ClassDetails classInfo = classManagementService.enrolStudent(enrolmentKey);
+    return ResponseEntity.ok(
+        EnrolmentResponse.builder()
+            .classConfigurationId(classInfo.getClassConfiguration().getId())
+            .folders(classMapper.foldersDTOFrom(classInfo.getClassStructure().getFolders()))
+            .build());
   }
 
   /**

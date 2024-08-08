@@ -13,11 +13,12 @@ import com.ghsbm.group.peer.colab.domain.classes.persistence.model.MessageEntity
 import com.ghsbm.group.peer.colab.domain.classes.persistence.repository.ClassPsqlDbRepository;
 import com.ghsbm.group.peer.colab.domain.classes.persistence.repository.EnrolmentPsqlDbRepository;
 import com.ghsbm.group.peer.colab.domain.classes.persistence.repository.FolderPsqlDbRespository;
-
-import java.time.LocalDateTime;
+import com.ghsbm.group.peer.colab.domain.classes.persistence.repository.MessagePsqlDbRepository;
 import com.ghsbm.group.peer.colab.domain.security.infrastructure.persistence.model.UserEntity;
 import com.ghsbm.group.peer.colab.domain.security.infrastructure.persistence.repository.UserRepository;
+import com.ghsbm.group.peer.colab.infrastructure.SecurityUtils;
 import com.ghsbm.group.peer.colab.infrastructure.exception.BadRequestAlertException;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
@@ -202,7 +203,7 @@ public class ClassRepositoryAdapter implements ClassRepository {
    * @inheritDoc
    */
   @Override
-  public void enrol(String userLogin, String enrolmentKey) {
+  public ClassConfiguration enrol(String userLogin, String enrolmentKey) {
     UserEntity userEntity =
         userRepository
             .findOneByLogin(userLogin)
@@ -221,11 +222,11 @@ public class ClassRepositoryAdapter implements ClassRepository {
             .classConfigurationId(classConfigurationEntity.getId())
             .userId(userEntity.getId())
             .build();
-    if (enrolmentPsqlDbRepository.existsById(enrolmentId)) {
-      return;
-    } else {
+    if (!enrolmentPsqlDbRepository.existsById(enrolmentId)) {
       enrolmentPsqlDbRepository.save(new EnrolmentEntity(userEntity, classConfigurationEntity));
     }
+
+    return classEntitiesMapper.classFromEntity(classConfigurationEntity);
   }
   /**
    * @inheritDoc
