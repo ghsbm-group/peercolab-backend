@@ -14,6 +14,7 @@ import java.util.Objects;
 import org.springframework.stereotype.Service;
 
 import static com.ghsbm.group.peer.colab.infrastructure.AuthoritiesConstants.ADMIN;
+import static com.ghsbm.group.peer.colab.infrastructure.AuthoritiesConstants.USER_MUST_BE_LOGGED_IN;
 
 /** Service that contains the core business logic. */
 @Service
@@ -60,10 +61,10 @@ class ClassManagementFacade implements ClassManagementService {
 
     String userLogin =
         SecurityUtils.getCurrentUserLogin()
-            .orElseThrow(() -> new IllegalStateException("User must be logged in"));
+            .orElseThrow(() -> new IllegalStateException(USER_MUST_BE_LOGGED_IN));
     Folder folder = classRepository.findFolderById(messageboardId);
 
-    if (classRepository.isEnrolled(userLogin, folder.getClassConfigurationId()) == false
+    if (!classRepository.isEnrolled(userLogin, folder.getClassConfigurationId())
         && !SecurityUtils.hasCurrentUserThisAuthority(ADMIN)) {
       throw new UserIsNotEnrolledInClassConfigurationException();
     }
@@ -152,9 +153,9 @@ class ClassManagementFacade implements ClassManagementService {
     Objects.requireNonNull(message.getMessageboardId());
     String userLogin =
         SecurityUtils.getCurrentUserLogin()
-            .orElseThrow(() -> new IllegalStateException("User must be logged in"));
+            .orElseThrow(() -> new IllegalStateException(USER_MUST_BE_LOGGED_IN));
     Folder folder = classRepository.findFolderById(message.getMessageboardId());
-    if (classRepository.isEnrolled(userLogin, folder.getClassConfigurationId()) == false) {
+    if (!classRepository.isEnrolled(userLogin, folder.getClassConfigurationId())) {
       throw new UserIsNotEnrolledInClassConfigurationException();
     }
     return classRepository.create(message);
@@ -181,7 +182,7 @@ class ClassManagementFacade implements ClassManagementService {
   public void enrolStudent(String enrolmentKey) {
     String userLogin =
         SecurityUtils.getCurrentUserLogin()
-            .orElseThrow(() -> new IllegalStateException("User must be logged in"));
+            .orElseThrow(() -> new IllegalStateException(USER_MUST_BE_LOGGED_IN));
     classRepository.enrol(userLogin, enrolmentKey);
   }
 
@@ -195,16 +196,12 @@ class ClassManagementFacade implements ClassManagementService {
     if (message == null) {
       return null;
     }
-
-    PostedMessage postedMessage =
-        PostedMessage.builder()
-            .id(message.getId())
-            .content(message.getContent())
-            .userId(message.getUserId())
-            .postDate(message.getPostDate())
-            .login(userManagementRepository.findUserById(message.getUserId()).get().getLogin())
-            .build();
-
-    return postedMessage;
+    return PostedMessage.builder()
+        .id(message.getId())
+        .content(message.getContent())
+        .userId(message.getUserId())
+        .postDate(message.getPostDate())
+        .login(userManagementRepository.findUserById(message.getUserId()).get().getLogin())
+        .build();
   }
 }
