@@ -177,11 +177,20 @@ public class ClassManagementController {
   }
 
   /**
-   * @param enrolmentKey
+   * Enrols the current logged-in user in the class associated with the enrolmentKey.
+   *
+   * @param enrolmentKey the key used to enrol the user in a class.
+   * @return a {@link EnrolmentResponse} which contains data about the class in which the user was
+   *     enroled.
    */
   @PostMapping("/enrol")
-  public ResponseEntity<ClassDetails> enrolByActivationKey(
+  public ResponseEntity<EnrolmentResponse> enrolByActivationKey(
       @RequestBody @NotNull String enrolmentKey) {
-    return ResponseEntity.ok(classManagementService.enrolStudent(enrolmentKey));
+    ClassDetails classInfo = classManagementService.enrolStudent(enrolmentKey);
+    return ResponseEntity.ok(
+        EnrolmentResponse.builder()
+            .classConfigurationId(classInfo.getClassConfiguration().getId())
+            .folders(classMapper.foldersDTOFrom(classInfo.getClassStructure().getFolders()))
+            .build());
   }
 }

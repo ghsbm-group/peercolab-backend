@@ -83,8 +83,9 @@ public interface ClassManagementService {
   /**
    * Enrols the current logged-in user into the class defined by this enrolmentKey.
    *
-   * @param enrolmentKey the key used to find the class in which the user will be enroled.
-   * @return
+   * @param enrolmentKey the key used to find the class in which the user will be enrolled.
+   * @return a {@link ClassDetails} object containing data about the class in which the user was
+   *     enrolled.
    */
   @Transactional
   ClassDetails enrolStudent(String enrolmentKey);
