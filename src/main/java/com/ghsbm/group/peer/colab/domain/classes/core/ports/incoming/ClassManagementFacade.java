@@ -57,12 +57,7 @@ class ClassManagementFacade implements ClassManagementService {
     final ClassConfiguration classConfiguration =
         classRepository.create(classConfigurationInfo, enrolmentKey);
 
-    // method returns ClassDetails type that contains ClassStructure and ClassDetails
-    final ClassDetails classDetails = new ClassDetails();
-    classDetails.setEnrolmentKey(enrolmentKey);
-    final ClassStructure classStructure = new ClassStructure();
     final List<Folder> folders = new ArrayList<>();
-
     for (int i = 1;
         i <= classConfigurationInfo.getNoOfStudyYears();
         i++) { // for creating years folders
@@ -89,11 +84,12 @@ class ClassManagementFacade implements ClassManagementService {
         classRepository.create(semesterFolder);
       }
     }
-    classStructure.setFolders(folders);
-    classDetails.setClassStructure(classStructure);
-    classDetails.setClassConfiguration(classConfiguration);
 
-    return classDetails;
+    return ClassDetails.builder()
+        .enrolmentKey(enrolmentKey)
+        .classStructure(ClassStructure.builder().folders(folders).build())
+        .classConfiguration(classConfiguration)
+        .build();
   }
 
   /**
@@ -138,10 +134,19 @@ class ClassManagementFacade implements ClassManagementService {
   }
 
   @Override
-  public void enrolStudent(String enrolmentKey) {
+  public ClassDetails enrolStudent(String enrolmentKey) {
     String userLogin =
         SecurityUtils.getCurrentUserLogin()
             .orElseThrow(() -> new IllegalStateException("User must be logged in"));
-    classRepository.enrol(userLogin, enrolmentKey);
+    ClassConfiguration classConfiguration = classRepository.enrol(userLogin, enrolmentKey);
+
+    return ClassDetails.builder()
+        .classConfiguration(classConfiguration)
+        .classStructure(
+            ClassStructure.builder()
+                .folders(retrieveRootFolderByClassConfigurationId(classConfiguration.getId()))
+                .build())
+        .enrolmentKey(enrolmentKey)
+        .build();
   }
 }

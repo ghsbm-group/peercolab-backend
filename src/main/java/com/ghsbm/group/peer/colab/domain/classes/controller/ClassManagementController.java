@@ -1,12 +1,12 @@
 package com.ghsbm.group.peer.colab.domain.classes.controller;
 
 import com.ghsbm.group.peer.colab.domain.classes.controller.model.*;
+import com.ghsbm.group.peer.colab.domain.classes.core.model.ClassDetails;
 import com.ghsbm.group.peer.colab.domain.classes.core.ports.incoming.ClassManagementService;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotNull;
 import java.util.List;
 import java.util.Objects;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -180,8 +180,8 @@ public class ClassManagementController {
    * @param enrolmentKey
    */
   @PostMapping("/enrol")
-  @ResponseStatus(HttpStatus.CREATED)
-  public void enrolByActivationKey(@RequestBody @NotNull String enrolmentKey) {
-    classManagementService.enrolStudent(enrolmentKey);
+  public ResponseEntity<ClassDetails> enrolByActivationKey(
+      @RequestBody @NotNull String enrolmentKey) {
+    return ResponseEntity.ok(classManagementService.enrolStudent(enrolmentKey));
   }
 }

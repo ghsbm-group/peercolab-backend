@@ -3,7 +3,6 @@ package com.ghsbm.group.peer.colab.domain.classes.core.ports.outgoing;
 import com.ghsbm.group.peer.colab.domain.classes.core.model.ClassConfiguration;
 import com.ghsbm.group.peer.colab.domain.classes.core.model.Folder;
 import com.ghsbm.group.peer.colab.domain.classes.core.model.Message;
-
 import java.util.List;
 
 /**
@@ -101,5 +100,5 @@ public interface ClassRepository {
    * @param userLogin lower case username of that user.
    * @param enrolmentKey the enrolment key of the class.
    */
-  void enrol(String userLogin, String enrolmentKey);
+  ClassConfiguration enrol(String userLogin, String enrolmentKey);
 }
