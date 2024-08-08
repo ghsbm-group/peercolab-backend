@@ -1,6 +1,7 @@
 package com.ghsbm.group.peer.colab.domain.classes.core.ports.incoming;
 
 import com.ghsbm.group.peer.colab.domain.classes.core.model.*;
+import com.ghsbm.group.peer.colab.domain.classes.core.ports.incoming.exception.UserIsNotEnrolledInClassConfigurationException;
 
 import java.util.List;
 
@@ -43,6 +44,8 @@ public interface ClassManagementService {
    *
    * @param messageboardId the messagedboard id for which the posted message are retrieved.
    * @return a list of {@link PostedMessage} associated with the provided messageboard id.
+   * @throws {@link UserIsNotEnrolledInClassConfigurationException} if the user is not enrolled in
+   *     the class or it's not admin
    */
   List<PostedMessage> retrieveMessagesByMessageboardId(Long messageboardId);
 
@@ -74,6 +77,8 @@ public interface ClassManagementService {
    *
    * @param message encapsulates message data.
    * @return a {@link Message} objects with the id attribute set.
+   * @throws {@link UserIsNotEnrolledInClassConfigurationException} if the user is not enrolled in
+   *     the class
    */
   @Transactional
   Message createMessage(Message message);

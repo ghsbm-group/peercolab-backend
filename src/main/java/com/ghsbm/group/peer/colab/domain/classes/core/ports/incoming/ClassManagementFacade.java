@@ -13,6 +13,8 @@ import java.util.List;
 import java.util.Objects;
 import org.springframework.stereotype.Service;
 
+import static com.ghsbm.group.peer.colab.infrastructure.AuthoritiesConstants.ADMIN;
+
 /** Service that contains the core business logic. */
 @Service
 class ClassManagementFacade implements ClassManagementService {
@@ -55,6 +57,16 @@ class ClassManagementFacade implements ClassManagementService {
    */
   @Override
   public List<PostedMessage> retrieveMessagesByMessageboardId(Long messageboardId) {
+
+    String userLogin =
+        SecurityUtils.getCurrentUserLogin()
+            .orElseThrow(() -> new IllegalStateException("User must be logged in"));
+    Folder folder = classRepository.findFolderById(messageboardId);
+
+    if (classRepository.isEnrolled(userLogin, folder.getClassConfigurationId()) == false
+        && !SecurityUtils.hasCurrentUserThisAuthority(ADMIN)) {
+      throw new UserIsNotEnrolledInClassConfigurationException();
+    }
 
     List<Message> messages = classRepository.findMessagesByMessageBoardId(messageboardId);
     List<PostedMessage> list = new ArrayList<PostedMessage>(messages.size());
@@ -138,13 +150,14 @@ class ClassManagementFacade implements ClassManagementService {
     Objects.requireNonNull(message);
     Objects.requireNonNull(message.getContent());
     Objects.requireNonNull(message.getMessageboardId());
-
-    Folder folder= classRepository.findFolderById(message.getMessageboardId());
-    if (classRepository.isEnrolled(message.getUserId(), folder.getClassConfigurationId())==false)
-    {
+    String userLogin =
+        SecurityUtils.getCurrentUserLogin()
+            .orElseThrow(() -> new IllegalStateException("User must be logged in"));
+    Folder folder = classRepository.findFolderById(message.getMessageboardId());
+    if (classRepository.isEnrolled(userLogin, folder.getClassConfigurationId()) == false) {
       throw new UserIsNotEnrolledInClassConfigurationException();
     }
-      return classRepository.create(message);
+    return classRepository.create(message);
   }
 
   /**

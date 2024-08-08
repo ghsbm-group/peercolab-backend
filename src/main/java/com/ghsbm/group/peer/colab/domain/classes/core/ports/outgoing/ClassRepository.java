@@ -113,9 +113,9 @@ public interface ClassRepository {
 
   /**
    * Checks if the user is enroled in a specif message board.
-   * @param userId the user to be checked
+   * @param userLogin the current user logged
    * @param classConfigurationId the class configuration to which user should be enrolled
    * @return if the user is enrolled in a specific class configuration
    */
-  boolean isEnrolled(Long userId, Long classConfigurationId);
+  boolean isEnrolled(String userLogin, Long classConfigurationId);
 }

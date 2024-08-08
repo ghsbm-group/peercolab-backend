@@ -227,13 +227,12 @@ public class ClassRepositoryAdapter implements ClassRepository {
       enrolmentPsqlDbRepository.save(new EnrolmentEntity(userEntity, classConfigurationEntity));
     }
   }
-
   /**
    * @inheritDoc
    */
   @Override
-  public boolean isEnrolled(Long userId, Long classConfigurationId) {
-    return enrolmentPsqlDbRepository.existsByUserIdAndClassConfigurationId(
-        userId, classConfigurationId);
+  public boolean isEnrolled(String userLogin, Long classConfigurationId) {
+    return enrolmentPsqlDbRepository.existsByUserNameAndClassConfigurationId(
+        userLogin, classConfigurationId);
   }
 }
