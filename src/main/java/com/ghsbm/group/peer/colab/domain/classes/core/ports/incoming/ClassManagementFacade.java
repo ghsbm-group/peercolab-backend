@@ -3,6 +3,7 @@ package com.ghsbm.group.peer.colab.domain.classes.core.ports.incoming;
 import com.ghsbm.group.peer.colab.domain.classes.core.model.*;
 import com.ghsbm.group.peer.colab.domain.classes.core.ports.incoming.exception.ClassConfigurationAlreadyExistsException;
 import com.ghsbm.group.peer.colab.domain.classes.core.ports.incoming.exception.FolderAlreadyExistsException;
+import com.ghsbm.group.peer.colab.domain.classes.core.ports.incoming.exception.UserIsNotEnrolledInClassConfigurationException;
 import com.ghsbm.group.peer.colab.domain.classes.core.ports.outgoing.ClassRepository;
 import com.ghsbm.group.peer.colab.domain.security.core.ports.outgoing.UserManagementRepository;
 import com.ghsbm.group.peer.colab.infrastructure.RandomUtil;
@@ -138,7 +139,12 @@ class ClassManagementFacade implements ClassManagementService {
     Objects.requireNonNull(message.getContent());
     Objects.requireNonNull(message.getMessageboardId());
 
-    return classRepository.create(message);
+    Folder folder= classRepository.findFolderById(message.getMessageboardId());
+    if (classRepository.isEnrolled(message.getUserId(), folder.getClassConfigurationId())==false)
+    {
+      throw new UserIsNotEnrolledInClassConfigurationException();
+    }
+      return classRepository.create(message);
   }
 
   /**

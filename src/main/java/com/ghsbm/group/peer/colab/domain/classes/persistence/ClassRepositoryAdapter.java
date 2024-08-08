@@ -147,6 +147,7 @@ public class ClassRepositoryAdapter implements ClassRepository {
             .orElseThrow(
                 () ->
                     new IllegalStateException("User with username" + userLogin + "does not exist"));
+
     final var messageBoardEntity =
         folderPsqlDbRespository.getReferenceById(message.getMessageboardId());
     final var messageEntity =
@@ -225,5 +226,14 @@ public class ClassRepositoryAdapter implements ClassRepository {
     } else {
       enrolmentPsqlDbRepository.save(new EnrolmentEntity(userEntity, classConfigurationEntity));
     }
+  }
+
+  /**
+   * @inheritDoc
+   */
+  @Override
+  public boolean isEnrolled(Long userId, Long classConfigurationId) {
+    return enrolmentPsqlDbRepository.existsByUserIdAndClassConfigurationId(
+        userId, classConfigurationId);
   }
 }
