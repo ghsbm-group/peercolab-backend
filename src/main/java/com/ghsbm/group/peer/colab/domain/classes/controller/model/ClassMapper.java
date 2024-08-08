@@ -1,5 +1,7 @@
 package com.ghsbm.group.peer.colab.domain.classes.controller.model;
 
+import com.ghsbm.group.peer.colab.domain.classes.controller.model.dto.ClassDTO;
+import com.ghsbm.group.peer.colab.domain.classes.controller.model.dto.FolderDTO;
 import com.ghsbm.group.peer.colab.domain.classes.core.model.ClassConfiguration;
 import com.ghsbm.group.peer.colab.domain.classes.core.model.Folder;
 import java.util.List;

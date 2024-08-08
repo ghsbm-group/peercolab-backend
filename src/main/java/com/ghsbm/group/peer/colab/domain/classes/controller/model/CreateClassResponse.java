@@ -1,6 +1,8 @@
 package com.ghsbm.group.peer.colab.domain.classes.controller.model;
 
 import java.util.List;
+
+import com.ghsbm.group.peer.colab.domain.classes.controller.model.dto.FolderDTO;
 import lombok.Builder;
 import lombok.Data;
 

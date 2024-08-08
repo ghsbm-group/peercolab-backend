@@ -1,5 +1,10 @@
 package com.ghsbm.group.peer.colab.domain.classes.core.ports.incoming;
 
+import com.ghsbm.group.peer.colab.domain.classes.core.model.*;
+import com.ghsbm.group.peer.colab.domain.classes.core.ports.incoming.exception.UserIsNotEnrolledInClassConfigurationException;
+
+import java.util.List;
+
 import com.ghsbm.group.peer.colab.domain.classes.core.model.ClassConfiguration;
 import com.ghsbm.group.peer.colab.domain.classes.core.model.ClassDetails;
 import com.ghsbm.group.peer.colab.domain.classes.core.model.Folder;
@@ -40,6 +45,16 @@ public interface ClassManagementService {
   List<Folder> retrieveFolderByParentId(Long parentId);
 
   /**
+   * Retrieves the posted messages associated with a messageboard
+   *
+   * @param messageboardId the messagedboard id for which the posted message are retrieved.
+   * @return a list of {@link PostedMessage} associated with the provided messageboard id.
+   * @throws {@link UserIsNotEnrolledInClassConfigurationException} if the user is not enrolled in
+   *     the class or it's not admin
+   */
+  List<PostedMessage> retrieveMessagesByMessageboardId(Long messageboardId);
+
+  /**
    * Creates a class configuration and an initial folder structure for that class based on the
    * number of years and number of semesters parameters configured.
    *
@@ -67,6 +82,8 @@ public interface ClassManagementService {
    *
    * @param message encapsulates message data.
    * @return a {@link Message} objects with the id attribute set.
+   * @throws {@link UserIsNotEnrolledInClassConfigurationException} if the user is not enrolled in
+   *     the class
    */
   @Transactional
   Message createMessage(Message message);

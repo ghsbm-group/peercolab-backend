@@ -38,6 +38,14 @@ public interface ClassRepository {
   List<Folder> findFoldersByParentId(Long parentId);
 
   /**
+   * Retrieves all messages belonging to this messageboard.
+   *
+   * @param messageboardId The messageboard id for which the messages are returned.
+   * @return a list of {@link Message} entities.
+   */
+  List<Message> findMessagesByMessageBoardId(Long messageboardId);
+
+  /**
    * Persists a class configuration.
    *
    * @param classConfigurationInfo the class configuration to be persisted.
@@ -101,4 +109,12 @@ public interface ClassRepository {
    * @param enrolmentKey the enrolment key of the class.
    */
   ClassConfiguration enrol(String userLogin, String enrolmentKey);
+
+  /**
+   * Checks if the user is enroled in a specif message board.
+   * @param userLogin the current user logged
+   * @param classConfigurationId the class configuration to which user should be enrolled
+   * @return if the user is enrolled in a specific class configuration
+   */
+  boolean isEnrolled(String userLogin, Long classConfigurationId);
 }
