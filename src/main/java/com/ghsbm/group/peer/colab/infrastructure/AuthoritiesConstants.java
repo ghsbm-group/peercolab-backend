@@ -11,5 +11,7 @@ public final class AuthoritiesConstants {
 
   public static final String ANONYMOUS = "ROLE_ANONYMOUS";
 
+  public static final String USER_MUST_BE_LOGGED_IN = "User must be logged in";
+
   private AuthoritiesConstants() {}
 }

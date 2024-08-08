@@ -23,7 +23,7 @@ public class PostedMessageDtoMapper {
 
   public List<PostedMessageDTO> postedMessagesDTOFrom(List<PostedMessage> postedMessages) {
     if (postedMessages == null) {
-      return null;
+      return Collections.EMPTY_LIST;
     }
 
     List<PostedMessageDTO> list = new ArrayList<PostedMessageDTO>(postedMessages.size());
