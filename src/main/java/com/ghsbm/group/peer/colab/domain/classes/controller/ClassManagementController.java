@@ -219,7 +219,7 @@ public class ClassManagementController {
    * @return the enrolment key associated with a specific class configuration.
    */
   @GetMapping("/enrolment-key")
-  public ResponseEntity getEnrolmentKeyBasedOnClassConfigurationId(final Long classConfigurationId)
+  public ResponseEntity<String> getEnrolmentKeyBasedOnClassConfigurationId(final Long classConfigurationId)
   {
     Objects.requireNonNull(classConfigurationId);
 
