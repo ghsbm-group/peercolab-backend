@@ -9,6 +9,7 @@ import com.ghsbm.group.peer.colab.domain.classes.core.model.ClassConfiguration;
 import com.ghsbm.group.peer.colab.domain.classes.core.model.ClassDetails;
 import com.ghsbm.group.peer.colab.domain.classes.core.model.Folder;
 import com.ghsbm.group.peer.colab.domain.classes.core.model.Message;
+import java.util.List;
 import org.springframework.transaction.annotation.Transactional;
 
 /**
