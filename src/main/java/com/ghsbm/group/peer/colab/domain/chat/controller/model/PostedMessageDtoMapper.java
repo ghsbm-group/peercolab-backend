@@ -1,10 +1,7 @@
-package com.ghsbm.group.peer.colab.domain.classes.controller.model;
+package com.ghsbm.group.peer.colab.domain.chat.controller.model;
 
-import com.ghsbm.group.peer.colab.domain.classes.controller.model.dto.MessageDTO;
-import com.ghsbm.group.peer.colab.domain.classes.controller.model.dto.PostedMessageDTO;
-import com.ghsbm.group.peer.colab.domain.classes.core.model.PostedMessage;
+import com.ghsbm.group.peer.colab.domain.chat.core.model.PostedMessage;
 import com.ghsbm.group.peer.colab.domain.security.controller.model.dto.UserDTO;
-import com.ghsbm.group.peer.colab.domain.security.core.model.User;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;

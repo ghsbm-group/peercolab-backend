@@ -1,11 +1,11 @@
 package com.ghsbm.group.peer.colab.domain.classes.core.ports.incoming;
 
+import com.ghsbm.group.peer.colab.domain.chat.core.model.Message;
+import com.ghsbm.group.peer.colab.domain.chat.core.model.PostedMessage;
 import com.ghsbm.group.peer.colab.domain.classes.core.model.*;
 import com.ghsbm.group.peer.colab.domain.classes.core.ports.incoming.exception.ClassConfigurationAlreadyExistsException;
 import com.ghsbm.group.peer.colab.domain.classes.core.ports.incoming.exception.FolderAlreadyExistsException;
-import com.ghsbm.group.peer.colab.domain.classes.core.ports.incoming.exception.UserIsNotEnrolledInClassConfigurationException;
 import com.ghsbm.group.peer.colab.domain.classes.core.ports.outgoing.ClassRepository;
-import com.ghsbm.group.peer.colab.domain.security.core.ports.outgoing.UserManagementRepository;
 import com.ghsbm.group.peer.colab.infrastructure.RandomUtil;
 import com.ghsbm.group.peer.colab.infrastructure.SecurityUtils;
 import java.util.ArrayList;
@@ -13,7 +13,6 @@ import java.util.List;
 import java.util.Objects;
 import org.springframework.stereotype.Service;
 
-import static com.ghsbm.group.peer.colab.infrastructure.AuthoritiesConstants.ADMIN;
 import static com.ghsbm.group.peer.colab.infrastructure.AuthoritiesConstants.USER_MUST_BE_LOGGED_IN;
 
 /** Service that contains the core business logic. */
@@ -21,12 +20,10 @@ import static com.ghsbm.group.peer.colab.infrastructure.AuthoritiesConstants.USE
 class ClassManagementFacade implements ClassManagementService {
 
   private final ClassRepository classRepository;
-  private final UserManagementRepository userManagementRepository;
 
   public ClassManagementFacade(
-      ClassRepository classRepository, UserManagementRepository userManagementRepository) {
+      ClassRepository classRepository) {
     this.classRepository = classRepository;
-    this.userManagementRepository = userManagementRepository;
   }
 
   /**
@@ -51,30 +48,6 @@ class ClassManagementFacade implements ClassManagementService {
   @Override
   public List<Folder> retrieveFolderByParentId(Long parentId) {
     return classRepository.findFoldersByParentId(parentId);
-  }
-
-  /**
-   * @inheritDoc
-   */
-  @Override
-  public List<PostedMessage> retrieveMessagesByMessageboardId(Long messageboardId) {
-
-    String userLogin =
-        SecurityUtils.getCurrentUserLogin()
-            .orElseThrow(() -> new IllegalStateException(USER_MUST_BE_LOGGED_IN));
-    Folder folder = classRepository.findFolderById(messageboardId);
-
-    if (!classRepository.isEnrolled(userLogin, folder.getClassConfigurationId())
-        && !SecurityUtils.hasCurrentUserThisAuthority(ADMIN)) {
-      throw new UserIsNotEnrolledInClassConfigurationException();
-    }
-
-    List<Message> messages = classRepository.findMessagesByMessageBoardId(messageboardId);
-    List<PostedMessage> list = new ArrayList<PostedMessage>(messages.size());
-    for (Message message : messages) {
-      list.add(messageToPostedMessage(message));
-    }
-    return list;
   }
 
   /**
@@ -143,24 +116,6 @@ class ClassManagementFacade implements ClassManagementService {
    * @inheritDoc
    */
   @Override
-  public Message createMessage(Message message) {
-    Objects.requireNonNull(message);
-    Objects.requireNonNull(message.getContent());
-    Objects.requireNonNull(message.getMessageboardId());
-    String userLogin =
-        SecurityUtils.getCurrentUserLogin()
-            .orElseThrow(() -> new IllegalStateException(USER_MUST_BE_LOGGED_IN));
-    Folder folder = classRepository.findFolderById(message.getMessageboardId());
-    if (!classRepository.isEnrolled(userLogin, folder.getClassConfigurationId())) {
-      throw new UserIsNotEnrolledInClassConfigurationException();
-    }
-    return classRepository.create(message);
-  }
-
-  /**
-   * @inheritDoc
-   */
-  @Override
   public Folder renameFolder(Folder folder) {
     Folder folderWithNewNameSet = classRepository.findFolderById(folder.getId());
     folderWithNewNameSet.setName(folder.getName());
@@ -195,7 +150,8 @@ class ClassManagementFacade implements ClassManagementService {
    */
   @Override
   public String getEnrolmentKeyByClassConfigurationId(Long classConfigurationId) {
-    return classRepository.getEnrolemntKeyByClassConfigurationId(classConfigurationId);
+    return classRepository.getEnrolmentKeyByClassConfigurationId(classConfigurationId).orElseThrow(
+            () -> new IllegalStateException("Class not found"));
   }
 
   /**
@@ -204,16 +160,4 @@ class ClassManagementFacade implements ClassManagementService {
    * @param message a {@link Message} object
    * @return a {@link PostedMessage} object
    */
-  protected PostedMessage messageToPostedMessage(Message message) {
-    if (message == null) {
-      return null;
-    }
-    return PostedMessage.builder()
-        .id(message.getId())
-        .content(message.getContent())
-        .userId(message.getUserId())
-        .postDate(message.getPostDate())
-        .login(userManagementRepository.findUserById(message.getUserId()).get().getLogin())
-        .build();
-  }
 }

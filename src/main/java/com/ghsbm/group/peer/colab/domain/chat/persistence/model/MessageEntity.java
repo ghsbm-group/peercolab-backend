@@ -1,5 +1,6 @@
-package com.ghsbm.group.peer.colab.domain.classes.persistence.model;
+package com.ghsbm.group.peer.colab.domain.chat.persistence.model;
 
+import com.ghsbm.group.peer.colab.domain.classes.persistence.model.FolderEntity;
 import com.ghsbm.group.peer.colab.domain.security.infrastructure.persistence.model.UserEntity;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;

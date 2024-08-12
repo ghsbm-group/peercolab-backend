@@ -6,7 +6,6 @@ import com.ghsbm.group.peer.colab.domain.classes.core.model.ClassConfiguration;
 import com.ghsbm.group.peer.colab.domain.classes.core.model.Folder;
 import java.util.List;
 
-import com.ghsbm.group.peer.colab.domain.classes.core.model.Message;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 
@@ -50,14 +49,6 @@ public interface ClassMapper {
    * @return a {@link Folder} object build based on the request parameter.
    */
   Folder fromCreateFolderRequest(CreateFolderRequest createFolderRequest);
-
-  /**
-   * Builds a {@link Message} core domain based on a {@link CreateFolderRequest} instance.
-   *
-   * @param createMessageRequest encapsulates the requests paramaeters.
-   * @return a {@link Message} object build based on the request parameter.
-   */
-  Message fromCreateMessageRequest(CreateMessageRequest createMessageRequest);
 
   /**
    * Builds a {@link Folder} core domain object based on a {@link RenameFolderRequest} instance that
