@@ -1,6 +1,5 @@
 package com.ghsbm.group.peer.colab.domain.chat.controller.model;
 
-import com.ghsbm.group.peer.colab.domain.chat.controller.model.MessageDTO;
 import com.ghsbm.group.peer.colab.domain.security.controller.model.dto.UserDTO;
 import lombok.Data;
 
