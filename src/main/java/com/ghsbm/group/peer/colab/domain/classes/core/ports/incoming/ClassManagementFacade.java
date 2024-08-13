@@ -1,10 +1,9 @@
 package com.ghsbm.group.peer.colab.domain.classes.core.ports.incoming;
 
-import com.ghsbm.group.peer.colab.domain.chat.core.model.Message;
-import com.ghsbm.group.peer.colab.domain.chat.core.model.PostedMessage;
 import com.ghsbm.group.peer.colab.domain.classes.core.model.*;
 import com.ghsbm.group.peer.colab.domain.classes.core.ports.incoming.exception.ClassConfigurationAlreadyExistsException;
 import com.ghsbm.group.peer.colab.domain.classes.core.ports.incoming.exception.FolderAlreadyExistsException;
+import com.ghsbm.group.peer.colab.domain.classes.core.ports.incoming.exception.UserIsNotEnrolledInClassConfigurationException;
 import com.ghsbm.group.peer.colab.domain.classes.core.ports.outgoing.ClassRepository;
 import com.ghsbm.group.peer.colab.infrastructure.RandomUtil;
 import com.ghsbm.group.peer.colab.infrastructure.SecurityUtils;
@@ -13,6 +12,7 @@ import java.util.List;
 import java.util.Objects;
 import org.springframework.stereotype.Service;
 
+import static com.ghsbm.group.peer.colab.infrastructure.AuthoritiesConstants.ADMIN;
 import static com.ghsbm.group.peer.colab.infrastructure.AuthoritiesConstants.USER_MUST_BE_LOGGED_IN;
 
 /** Service that contains the core business logic. */
@@ -21,8 +21,7 @@ class ClassManagementFacade implements ClassManagementService {
 
   private final ClassRepository classRepository;
 
-  public ClassManagementFacade(
-      ClassRepository classRepository) {
+  public ClassManagementFacade(ClassRepository classRepository) {
     this.classRepository = classRepository;
   }
 
@@ -145,19 +144,40 @@ class ClassManagementFacade implements ClassManagementService {
         .enrolmentKey(enrolmentKey)
         .build();
   }
+
   /**
    * @inheritDoc
    */
   @Override
   public String getEnrolmentKeyByClassConfigurationId(Long classConfigurationId) {
-    return classRepository.getEnrolmentKeyByClassConfigurationId(classConfigurationId).orElseThrow(
-            () -> new IllegalStateException("Class not found"));
+    return classRepository
+        .getEnrolmentKeyByClassConfigurationId(classConfigurationId)
+        .orElseThrow(() -> new IllegalStateException("Class not found"));
   }
 
   /**
-   * Transform a {@link Message} into a {@link PostedMessage}
-   *
-   * @param message a {@link Message} object
-   * @return a {@link PostedMessage} object
+   * @inheritDoc
    */
+  @Override
+  public void userIsEnrolled(Long messageBoardId, String action) {
+    String userLogin =
+        SecurityUtils.getCurrentUserLogin()
+            .orElseThrow(() -> new IllegalStateException(USER_MUST_BE_LOGGED_IN));
+    Folder folder = classRepository.findFolderById(messageBoardId);
+    switch (action) {
+      case ("createMessage"):
+        if (!classRepository.isEnrolled(userLogin, folder.getClassConfigurationId())) {
+          throw new UserIsNotEnrolledInClassConfigurationException();
+        }
+        break;
+      case ("readMessage"):
+        if (!classRepository.isEnrolled(userLogin, folder.getClassConfigurationId())
+            && !SecurityUtils.hasCurrentUserThisAuthority(ADMIN)) {
+          throw new UserIsNotEnrolledInClassConfigurationException();
+        }
+        break;
+      default:
+        break;
+    }
+  }
 }

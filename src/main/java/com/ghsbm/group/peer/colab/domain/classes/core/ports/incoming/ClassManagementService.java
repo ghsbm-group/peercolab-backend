@@ -5,6 +5,7 @@ import java.util.List;
 import com.ghsbm.group.peer.colab.domain.classes.core.model.ClassConfiguration;
 import com.ghsbm.group.peer.colab.domain.classes.core.model.ClassDetails;
 import com.ghsbm.group.peer.colab.domain.classes.core.model.Folder;
+import com.ghsbm.group.peer.colab.domain.classes.core.ports.incoming.exception.UserIsNotEnrolledInClassConfigurationException;
 import org.springframework.transaction.annotation.Transactional;
 
 /**
@@ -89,4 +90,17 @@ public interface ClassManagementService {
    */
   @Transactional
   String getEnrolmentKeyByClassConfigurationId(Long classConfigurationId);
+
+  /**
+   * Check if the user is enrolled in a class to post/read messages, otherwise an exception is
+   * thrown
+   *
+   * @param messageBoardId the identifier for the message board in which the action will be
+   *     performed
+   * @param action the action the user wants to perform(create/read)
+   * @throws {@link UserIsNotEnrolledInClassConfigurationException} exception if the user is not
+   *     enrolled
+   */
+  @Transactional(readOnly = true)
+  void userIsEnrolled(Long messageBoardId, String action);
 }
