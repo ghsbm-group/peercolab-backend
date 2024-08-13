@@ -97,10 +97,9 @@ public interface ClassManagementService {
    *
    * @param messageBoardId the identifier for the message board in which the action will be
    *     performed
-   * @param action the action the user wants to perform(create/read)
    * @throws {@link UserIsNotEnrolledInClassConfigurationException} exception if the user is not
    *     enrolled
    */
   @Transactional(readOnly = true)
-  void userIsEnrolled(Long messageBoardId, String action);
+  boolean userIsEnrolled(Long messageBoardId);
 }

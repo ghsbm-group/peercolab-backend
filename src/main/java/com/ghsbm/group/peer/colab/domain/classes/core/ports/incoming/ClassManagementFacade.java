@@ -159,25 +159,14 @@ class ClassManagementFacade implements ClassManagementService {
    * @inheritDoc
    */
   @Override
-  public void userIsEnrolled(Long messageBoardId, String action) {
+  public boolean userIsEnrolled(Long messageBoardId) {
     String userLogin =
         SecurityUtils.getCurrentUserLogin()
             .orElseThrow(() -> new IllegalStateException(USER_MUST_BE_LOGGED_IN));
     Folder folder = classRepository.findFolderById(messageBoardId);
-    switch (action) {
-      case ("createMessage"):
-        if (!classRepository.isEnrolled(userLogin, folder.getClassConfigurationId())) {
-          throw new UserIsNotEnrolledInClassConfigurationException();
-        }
-        break;
-      case ("readMessage"):
-        if (!classRepository.isEnrolled(userLogin, folder.getClassConfigurationId())
-            && !SecurityUtils.hasCurrentUserThisAuthority(ADMIN)) {
-          throw new UserIsNotEnrolledInClassConfigurationException();
-        }
-        break;
-      default:
-        break;
+    if (!classRepository.isEnrolled(userLogin, folder.getClassConfigurationId())) {
+      throw new UserIsNotEnrolledInClassConfigurationException();
     }
+    return classRepository.isEnrolled(userLogin, folder.getClassConfigurationId());
   }
 }

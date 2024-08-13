@@ -1,10 +1,11 @@
-package com.ghsbm.group.peer.colab.domain.classes.core.ports.incoming;
+package com.ghsbm.group.peer.colab.domain.chat.core.ports.incoming;
 
 import com.ghsbm.group.peer.colab.domain.chat.core.model.Message;
 import com.ghsbm.group.peer.colab.domain.chat.core.ports.incoming.ChatManagementFacade;
 import com.ghsbm.group.peer.colab.domain.chat.core.ports.outgoing.ChatRepository;
 import com.ghsbm.group.peer.colab.domain.classes.core.model.ClassConfiguration;
 import com.ghsbm.group.peer.colab.domain.classes.core.model.Folder;
+import com.ghsbm.group.peer.colab.domain.classes.core.ports.incoming.ClassManagementService;
 import com.ghsbm.group.peer.colab.domain.classes.core.ports.outgoing.ClassRepository;
 import com.ghsbm.group.peer.colab.domain.infrastructure.SecurityTestUtils;
 import org.junit.jupiter.api.BeforeEach;
@@ -33,6 +34,8 @@ public class ChatManagementFacadeTest {
 
   @Mock private ChatRepository chatRepository;
 
+  @Mock private ClassManagementService classManagementService;
+
   private Message buildValidMessage() {
     return Message.builder().content(CONTENT).messageboardId(FOLDER_ID).build();
   }
@@ -54,7 +57,7 @@ public class ChatManagementFacadeTest {
                 .classConfigurationId(CLASS_CONFIGURATION_ID)
                 .id(FOLDER_ID)
                 .build());
-    when(classRepository.isEnrolled(ADMIN, CLASS_CONFIGURATION_ID)).thenReturn(true);
+    when(classManagementService.userIsEnrolled(FOLDER_ID)).thenReturn(true);
     Message toBeCreated = buildValidMessage();
     when(chatRepository.create(toBeCreated))
         .thenReturn(
