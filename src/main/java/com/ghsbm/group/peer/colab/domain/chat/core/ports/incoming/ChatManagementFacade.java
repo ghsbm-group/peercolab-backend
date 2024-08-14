@@ -4,6 +4,7 @@ import com.ghsbm.group.peer.colab.domain.chat.core.ports.outgoing.ChatRepository
 import com.ghsbm.group.peer.colab.domain.chat.core.model.Message;
 import com.ghsbm.group.peer.colab.domain.chat.core.model.PostedMessage;
 import com.ghsbm.group.peer.colab.domain.classes.core.ports.incoming.ClassManagementService;
+import com.ghsbm.group.peer.colab.domain.classes.core.ports.incoming.exception.UserIsNotEnrolledInClassConfigurationException;
 import com.ghsbm.group.peer.colab.infrastructure.SecurityUtils;
 import org.springframework.stereotype.Service;
 
@@ -33,8 +34,9 @@ public class ChatManagementFacade implements ChatManagementService {
   @Override
   public List<PostedMessage> retrieveMessagesByMessageboardId(Long messageboardId) {
     Objects.requireNonNull(messageboardId);
-    if (!SecurityUtils.hasCurrentUserAnyOfAuthorities(ADMIN)) {
-      classManagementService.userIsEnrolled(messageboardId);
+    if (!SecurityUtils.hasCurrentUserAnyOfAuthorities(ADMIN)
+        && !classManagementService.userIsEnrolled(messageboardId)) {
+      throw new UserIsNotEnrolledInClassConfigurationException();
     }
     List<Message> messages = chatRepository.findMessagesByMessageBoardId(messageboardId);
     List<PostedMessage> list = new ArrayList<PostedMessage>(messages.size());
@@ -52,7 +54,9 @@ public class ChatManagementFacade implements ChatManagementService {
     Objects.requireNonNull(message);
     Objects.requireNonNull(message.getContent());
     Objects.requireNonNull(message.getMessageboardId());
-    classManagementService.userIsEnrolled(message.getMessageboardId());
+    if (!classManagementService.userIsEnrolled(message.getMessageboardId())) {
+      throw new UserIsNotEnrolledInClassConfigurationException();
+    }
     return chatRepository.create(message);
   }
 

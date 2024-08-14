@@ -5,7 +5,6 @@ import java.util.List;
 import com.ghsbm.group.peer.colab.domain.classes.core.model.ClassConfiguration;
 import com.ghsbm.group.peer.colab.domain.classes.core.model.ClassDetails;
 import com.ghsbm.group.peer.colab.domain.classes.core.model.Folder;
-import com.ghsbm.group.peer.colab.domain.classes.core.ports.incoming.exception.UserIsNotEnrolledInClassConfigurationException;
 import org.springframework.transaction.annotation.Transactional;
 
 /**
@@ -97,8 +96,6 @@ public interface ClassManagementService {
    *
    * @param messageBoardId the identifier for the message board in which the action will be
    *     performed
-   * @throws {@link UserIsNotEnrolledInClassConfigurationException} exception if the user is not
-   *     enrolled
    */
   @Transactional(readOnly = true)
   boolean userIsEnrolled(Long messageBoardId);
