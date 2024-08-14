@@ -1,11 +1,12 @@
 package com.ghsbm.group.peer.colab.domain.chat.core.ports.incoming;
 
 import com.ghsbm.group.peer.colab.domain.chat.core.model.Message;
-import com.ghsbm.group.peer.colab.domain.chat.core.ports.incoming.ChatManagementFacade;
+import com.ghsbm.group.peer.colab.domain.chat.core.model.PostedMessage;
 import com.ghsbm.group.peer.colab.domain.chat.core.ports.outgoing.ChatRepository;
 import com.ghsbm.group.peer.colab.domain.classes.core.model.ClassConfiguration;
 import com.ghsbm.group.peer.colab.domain.classes.core.model.Folder;
 import com.ghsbm.group.peer.colab.domain.classes.core.ports.incoming.ClassManagementService;
+import com.ghsbm.group.peer.colab.domain.classes.core.ports.incoming.exception.UserIsNotEnrolledInClassConfigurationException;
 import com.ghsbm.group.peer.colab.domain.classes.core.ports.outgoing.ClassRepository;
 import com.ghsbm.group.peer.colab.domain.infrastructure.SecurityTestUtils;
 import org.junit.jupiter.api.BeforeEach;
@@ -15,8 +16,10 @@ import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.Mockito.when;
 
 public class ChatManagementFacadeTest {
@@ -27,6 +30,7 @@ public class ChatManagementFacadeTest {
   public static final String ENROLMENT_KEY = "EnrolmentKey";
   public static final String ADMIN = "admin";
   public static final String CONTENT = "Content";
+  public static final String LOGIN = "admin";
 
   @InjectMocks private ChatManagementFacade victim;
 
@@ -36,8 +40,12 @@ public class ChatManagementFacadeTest {
 
   @Mock private ClassManagementService classManagementService;
 
-  private Message buildValidMessage() {
+  private static Message buildValidMessage() {
     return Message.builder().content(CONTENT).messageboardId(FOLDER_ID).build();
+  }
+
+  private static PostedMessage buildValidPostedMessage() {
+    return PostedMessage.builder().content(CONTENT).login(LOGIN).build();
   }
 
   @BeforeEach
@@ -49,28 +57,77 @@ public class ChatManagementFacadeTest {
   void createMessageShouldHaveTheIdSet() {
     SecurityTestUtils.mockAdminUser();
     when(classRepository.enrol(ADMIN, ENROLMENT_KEY))
-        .thenReturn(ClassConfiguration.builder().id(CLASS_CONFIGURATION_ID).build());
+            .thenReturn(ClassConfiguration.builder().id(CLASS_CONFIGURATION_ID).build());
     when(classRepository.findFolderById(FOLDER_ID))
-        .thenReturn(
-            Folder.builder()
-                .isMessageBoard(true)
-                .classConfigurationId(CLASS_CONFIGURATION_ID)
-                .id(FOLDER_ID)
-                .build());
+            .thenReturn(
+                    Folder.builder()
+                            .isMessageBoard(true)
+                            .classConfigurationId(CLASS_CONFIGURATION_ID)
+                            .id(FOLDER_ID)
+                            .build());
     when(classManagementService.userIsEnrolled(FOLDER_ID)).thenReturn(true);
     Message toBeCreated = buildValidMessage();
     when(chatRepository.create(toBeCreated))
-        .thenReturn(
-            Message.builder()
-                .id(MESSAGE_ID)
-                .messageboardId(FOLDER_ID)
-                .content(CONTENT)
-                .postDate(LocalDateTime.now())
-                .build());
+            .thenReturn(
+                    Message.builder()
+                            .id(MESSAGE_ID)
+                            .messageboardId(FOLDER_ID)
+                            .content(CONTENT)
+                            .postDate(LocalDateTime.now())
+                            .build());
     Message createdMessage = victim.createMessage(toBeCreated);
 
     assertEquals(MESSAGE_ID, createdMessage.getId());
     assertEquals(FOLDER_ID, createdMessage.getMessageboardId());
     assertEquals(toBeCreated.getContent(), createdMessage.getContent());
+  }
+
+  @Test
+  void createMessageShouldThrowUserIsNotEnrolledInClassConfigurationException() {
+    var message = buildValidMessage();
+
+    assertThrows(
+            UserIsNotEnrolledInClassConfigurationException.class, () -> victim.createMessage(message));
+  }
+
+  @Test
+  void createMessageShouldThrowExceptionForInvalidMessage() {
+    assertThrows(NullPointerException.class, () -> victim.createMessage(null));
+    assertThrows(
+            NullPointerException.class,
+            () -> victim.createMessage(Message.builder().content(CONTENT).build()));
+    assertThrows(
+            NullPointerException.class,
+            () -> victim.createMessage(Message.builder().messageboardId(FOLDER_ID).build()));
+  }
+
+  @Test
+  void retrieveMessagesByMessageboardIdShouldReturnAValidList() {
+    SecurityTestUtils.mockAdminUser();
+    when(classRepository.enrol(ADMIN, ENROLMENT_KEY))
+            .thenReturn(ClassConfiguration.builder().id(CLASS_CONFIGURATION_ID).build());
+    when(classRepository.findFolderById(FOLDER_ID))
+            .thenReturn(
+                    Folder.builder()
+                            .isMessageBoard(true)
+                            .classConfigurationId(CLASS_CONFIGURATION_ID)
+                            .id(FOLDER_ID)
+                            .build());
+    when(classManagementService.userIsEnrolled(FOLDER_ID)).thenReturn(true);
+    Message toBeCreated = buildValidMessage();
+    when(chatRepository.create(toBeCreated))
+            .thenReturn(
+                    Message.builder()
+                            .id(MESSAGE_ID)
+                            .messageboardId(FOLDER_ID)
+                            .content(CONTENT)
+                            .postDate(LocalDateTime.now())
+                            .build());
+    List<Message> messages = List.of(buildValidMessage());
+    List<PostedMessage> postedMessages = List.of(buildValidPostedMessage());
+    when(chatRepository.findMessagesByMessageBoardId(FOLDER_ID)).thenReturn(messages);
+    List<PostedMessage> list = victim.retrieveMessagesByMessageboardId(FOLDER_ID);
+
+    assertEquals(postedMessages, list);
   }
 }
