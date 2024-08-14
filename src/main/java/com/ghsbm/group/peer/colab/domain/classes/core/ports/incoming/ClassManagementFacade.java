@@ -12,7 +12,6 @@ import java.util.List;
 import java.util.Objects;
 import org.springframework.stereotype.Service;
 
-import static com.ghsbm.group.peer.colab.infrastructure.AuthoritiesConstants.ADMIN;
 import static com.ghsbm.group.peer.colab.infrastructure.AuthoritiesConstants.USER_MUST_BE_LOGGED_IN;
 
 /** Service that contains the core business logic. */
