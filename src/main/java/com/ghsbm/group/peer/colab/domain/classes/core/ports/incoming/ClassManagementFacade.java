@@ -11,6 +11,7 @@ import java.util.List;
 import java.util.Objects;
 import org.springframework.stereotype.Service;
 
+import static com.ghsbm.group.peer.colab.infrastructure.AuthoritiesConstants.STUDENT_ADMIN;
 import static com.ghsbm.group.peer.colab.infrastructure.AuthoritiesConstants.USER_MUST_BE_LOGGED_IN;
 
 /** Service that contains the core business logic. */
@@ -86,7 +87,9 @@ class ClassManagementFacade implements ClassManagementService {
         classRepository.create(semesterFolder);
       }
     }
-
+    if (SecurityUtils.hasCurrentUserAnyOfAuthorities(STUDENT_ADMIN)) {
+      enrolStudent(enrolmentKey);
+    }
     return ClassDetails.builder()
         .enrolmentKey(enrolmentKey)
         .classStructure(ClassStructure.builder().folders(folders).build())
