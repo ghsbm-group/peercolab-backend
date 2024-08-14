@@ -165,6 +165,9 @@ class ClassManagementFacadeTest {
     assertThrows(
         NullPointerException.class,
         () -> victim.createClass(classConfigurationBuilder.startYear(null).build()));
+    assertThrows(
+        NullPointerException.class,
+        () -> victim.createClass(classConfigurationBuilder.departmentId(null).build()));
   }
 
   @Test

@@ -55,7 +55,8 @@ public interface ClassManagementService {
 
   /**
    * Creates a class configuration and an initial folder structure for that class based on the
-   * number of years and number of semesters parameters configured.
+   * number of years and number of semesters parameters configured. If the user has the authority
+   * USER_ADMIN, then will be automatically enrolled in the specific class.
    *
    * <p>Ex: noOfYears = 2, noOfSemesters =2, the following structure will be created: {@code {
    * ['Year ',['Semester 1', 'Semester 2'], 'Year 2, ['Semester 1', 'Semester 2'] ] } }

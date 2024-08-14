@@ -13,7 +13,11 @@ import java.util.List;
 import java.util.Objects;
 import org.springframework.stereotype.Service;
 
+<<<<<<< Updated upstream
 import static com.ghsbm.group.peer.colab.infrastructure.AuthoritiesConstants.ADMIN;
+=======
+import static com.ghsbm.group.peer.colab.infrastructure.AuthoritiesConstants.STUDENT_ADMIN;
+>>>>>>> Stashed changes
 import static com.ghsbm.group.peer.colab.infrastructure.AuthoritiesConstants.USER_MUST_BE_LOGGED_IN;
 
 /** Service that contains the core business logic. */
@@ -88,7 +92,6 @@ class ClassManagementFacade implements ClassManagementService {
     String enrolmentKey = RandomUtil.generateClassEnrolmentKey();
     final ClassConfiguration classConfiguration =
         classRepository.create(classConfigurationInfo, enrolmentKey);
-
     final List<Folder> folders = new ArrayList<>();
     for (int i = 1;
         i <= classConfigurationInfo.getNoOfStudyYears();
@@ -116,7 +119,9 @@ class ClassManagementFacade implements ClassManagementService {
         classRepository.create(semesterFolder);
       }
     }
-
+    if (SecurityUtils.hasCurrentUserAnyOfAuthorities(STUDENT_ADMIN)) {
+      enrolStudent(enrolmentKey);
+    }
     return ClassDetails.builder()
         .enrolmentKey(enrolmentKey)
         .classStructure(ClassStructure.builder().folders(folders).build())
