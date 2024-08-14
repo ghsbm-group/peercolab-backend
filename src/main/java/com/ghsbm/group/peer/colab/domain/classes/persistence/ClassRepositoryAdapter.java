@@ -2,42 +2,35 @@ package com.ghsbm.group.peer.colab.domain.classes.persistence;
 
 import com.ghsbm.group.peer.colab.domain.classes.core.model.ClassConfiguration;
 import com.ghsbm.group.peer.colab.domain.classes.core.model.Folder;
-import com.ghsbm.group.peer.colab.domain.classes.core.model.Message;
 import com.ghsbm.group.peer.colab.domain.classes.core.ports.outgoing.ClassRepository;
 import com.ghsbm.group.peer.colab.domain.classes.persistence.model.ClassConfigurationEntity;
 import com.ghsbm.group.peer.colab.domain.classes.persistence.model.ClassEntitiesMapper;
 import com.ghsbm.group.peer.colab.domain.classes.persistence.model.EnrolmentEntity;
 import com.ghsbm.group.peer.colab.domain.classes.persistence.model.EnrolmentId;
 import com.ghsbm.group.peer.colab.domain.classes.persistence.model.FolderEntity;
-import com.ghsbm.group.peer.colab.domain.classes.persistence.model.MessageEntity;
 import com.ghsbm.group.peer.colab.domain.classes.persistence.repository.ClassPsqlDbRepository;
 import com.ghsbm.group.peer.colab.domain.classes.persistence.repository.EnrolmentPsqlDbRepository;
 import com.ghsbm.group.peer.colab.domain.classes.persistence.repository.FolderPsqlDbRespository;
-import com.ghsbm.group.peer.colab.domain.classes.persistence.repository.MessagePsqlDbRepository;
 import com.ghsbm.group.peer.colab.domain.security.infrastructure.persistence.model.UserEntity;
 import com.ghsbm.group.peer.colab.domain.security.infrastructure.persistence.repository.UserRepository;
-import com.ghsbm.group.peer.colab.infrastructure.SecurityUtils;
 import com.ghsbm.group.peer.colab.infrastructure.exception.BadRequestAlertException;
-import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
-import com.ghsbm.group.peer.colab.domain.classes.persistence.repository.MessagePsqlDbRepository;
-import com.ghsbm.group.peer.colab.infrastructure.SecurityUtils;
+import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-/** Implementation of the class repository interface. Reads and persists data into a db. */
 @Component
 @NoArgsConstructor
+@AllArgsConstructor
 @Setter
 public class ClassRepositoryAdapter implements ClassRepository {
 
   private ClassPsqlDbRepository classPsqlDbRepository;
   private FolderPsqlDbRespository folderPsqlDbRespository;
-  private MessagePsqlDbRepository messagePsqlDbRepository;
   private UserRepository userRepository;
   private EnrolmentPsqlDbRepository enrolmentPsqlDbRepository;
   private ClassEntitiesMapper classEntitiesMapper;
@@ -47,14 +40,12 @@ public class ClassRepositoryAdapter implements ClassRepository {
       ClassPsqlDbRepository classPsqlDbRepository,
       FolderPsqlDbRespository folderPsqlDbRespository,
       ClassEntitiesMapper classEntitiesMapper,
-      MessagePsqlDbRepository messagePsqlDbRepository,
       UserRepository userRepository,
       EnrolmentPsqlDbRepository enrolmentPsqlDbRepository) {
     this.classPsqlDbRepository = classPsqlDbRepository;
     this.folderPsqlDbRespository = folderPsqlDbRespository;
     this.classEntitiesMapper = classEntitiesMapper;
     this.enrolmentPsqlDbRepository = enrolmentPsqlDbRepository;
-    this.messagePsqlDbRepository = messagePsqlDbRepository;
     this.userRepository = userRepository;
   }
 
@@ -82,16 +73,6 @@ public class ClassRepositoryAdapter implements ClassRepository {
   @Override
   public List<Folder> findFoldersByParentId(Long parentId) {
     return classEntitiesMapper.fromFolderEntities(folderPsqlDbRespository.findByParentId(parentId));
-  }
-
-  /**
-   * @inheritDoc
-   */
-  @Override
-  public List<Message> findMessagesByMessageBoardId(Long messageboardId) {
-
-    return classEntitiesMapper.fromMessageEntities(
-        messagePsqlDbRepository.findByMessageboardId(messageboardId));
   }
 
   /**
@@ -134,32 +115,6 @@ public class ClassRepositoryAdapter implements ClassRepository {
                 .build());
 
     return classEntitiesMapper.folderFromEntity(savedFolder);
-  }
-
-  /**
-   * @inheritDoc
-   */
-  @Override
-  public Message create(Message message) {
-    String userLogin = SecurityUtils.getCurrentUserLogin().get();
-    final var userEntity =
-        userRepository
-            .findOneByLogin(userLogin)
-            .orElseThrow(
-                () ->
-                    new IllegalStateException("User with username" + userLogin + "does not exist"));
-
-    final var messageBoardEntity =
-        folderPsqlDbRespository.getReferenceById(message.getMessageboardId());
-    final var messageEntity =
-        MessageEntity.builder()
-            .content(message.getContent())
-            .postDate(LocalDateTime.now())
-            .user(userEntity)
-            .messageboard(messageBoardEntity)
-            .build();
-    final var savedMessage = messagePsqlDbRepository.save(messageEntity);
-    return classEntitiesMapper.messageFromEntity(savedMessage);
   }
 
   /**
@@ -228,6 +183,7 @@ public class ClassRepositoryAdapter implements ClassRepository {
 
     return classEntitiesMapper.classFromEntity(classConfigurationEntity);
   }
+
   /**
    * @inheritDoc
    */
@@ -236,11 +192,12 @@ public class ClassRepositoryAdapter implements ClassRepository {
     return enrolmentPsqlDbRepository.existsByUserNameAndClassConfigurationId(
         userLogin, classConfigurationId);
   }
+
   /**
    * @inheritDoc
    */
   @Override
-  public String getEnrolemntKeyByClassConfigurationId(Long classConfigurationId) {
+  public Optional<String> getEnrolmentKeyByClassConfigurationId(Long classConfigurationId) {
     return classPsqlDbRepository.findEnrolmentKeyById(classConfigurationId);
   }
 }

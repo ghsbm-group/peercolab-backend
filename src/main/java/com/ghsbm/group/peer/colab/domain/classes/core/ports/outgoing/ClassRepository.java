@@ -2,8 +2,8 @@ package com.ghsbm.group.peer.colab.domain.classes.core.ports.outgoing;
 
 import com.ghsbm.group.peer.colab.domain.classes.core.model.ClassConfiguration;
 import com.ghsbm.group.peer.colab.domain.classes.core.model.Folder;
-import com.ghsbm.group.peer.colab.domain.classes.core.model.Message;
 import java.util.List;
+import java.util.Optional;
 
 /**
  * Interface contract between core business logic and the persistence layer.
@@ -38,14 +38,6 @@ public interface ClassRepository {
   List<Folder> findFoldersByParentId(Long parentId);
 
   /**
-   * Retrieves all messages belonging to this messageboard.
-   *
-   * @param messageboardId The messageboard id for which the messages are returned.
-   * @return a list of {@link Message} entities.
-   */
-  List<Message> findMessagesByMessageBoardId(Long messageboardId);
-
-  /**
    * Persists a class configuration.
    *
    * @param classConfigurationInfo the class configuration to be persisted.
@@ -61,14 +53,6 @@ public interface ClassRepository {
    * @return A {@link Folder} objects with its id set.
    */
   Folder create(Folder folder);
-
-  /**
-   * Persists a message to the db.
-   *
-   * @param message the message to be persisted
-   * @return A {@link Message} object with its id set.
-   */
-  Message create(Message message);
 
   /**
    * Update the name of the folder in db.
@@ -125,5 +109,5 @@ public interface ClassRepository {
    * @param classConfigurationId The class configuration id for which the enrolemnt key are returned
    * @return a {@link String} that contains the enrolment key
    */
-  String getEnrolemntKeyByClassConfigurationId(Long classConfigurationId);
+  Optional<String> getEnrolmentKeyByClassConfigurationId(Long classConfigurationId);
 }

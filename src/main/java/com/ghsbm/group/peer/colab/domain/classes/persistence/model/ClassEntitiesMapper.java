@@ -20,8 +20,6 @@ public abstract class ClassEntitiesMapper {
 
   public abstract List<Folder> fromFolderEntities(List<FolderEntity> folders);
 
-  public abstract List<Message> fromMessageEntities(List<MessageEntity> messages);
-
   public abstract ClassConfiguration classFromEntity(ClassConfigurationEntity savedClass);
 
   @Mappings({
@@ -29,10 +27,4 @@ public abstract class ClassEntitiesMapper {
     @Mapping(target = "parentId", source = "parent.id")
   })
   public abstract Folder folderFromEntity(FolderEntity savedFolder);
-
-  @Mappings({
-    @Mapping(target = "userId", source = "user.id"),
-    @Mapping(target = "messageboardId", source = "messageboard.id")
-  })
-  public abstract Message messageFromEntity(MessageEntity savedMessage);
 }

@@ -3,7 +3,6 @@ package com.ghsbm.group.peer.colab.domain.classes.controller;
 import com.ghsbm.group.peer.colab.domain.classes.controller.model.*;
 import com.ghsbm.group.peer.colab.domain.classes.controller.model.dto.ClassDTO;
 import com.ghsbm.group.peer.colab.domain.classes.controller.model.dto.FolderDTO;
-import com.ghsbm.group.peer.colab.domain.classes.controller.model.dto.PostedMessageDTO;
 import com.ghsbm.group.peer.colab.domain.classes.core.model.ClassDetails;
 import com.ghsbm.group.peer.colab.domain.classes.core.ports.incoming.ClassManagementService;
 import jakarta.validation.Valid;
@@ -25,15 +24,11 @@ public class ClassManagementController {
   private final ClassManagementService classManagementService;
 
   private final ClassMapper classMapper;
-  private final PostedMessageDtoMapper postedMessageDtoMapper;
 
   public ClassManagementController(
-      ClassManagementService classManagementService,
-      ClassMapper classMapper,
-      PostedMessageDtoMapper postedMessageDtoMapper) {
+      ClassManagementService classManagementService, ClassMapper classMapper) {
     this.classManagementService = classManagementService;
     this.classMapper = classMapper;
-    this.postedMessageDtoMapper = postedMessageDtoMapper;
   }
 
   /**
@@ -81,31 +76,6 @@ public class ClassManagementController {
     return ResponseEntity.ok(
         CreateFolderResponse.builder()
             .folderDTO(new FolderDTO(folder.getId(), folder.getName(), folder.getIsMessageBoard()))
-            .build());
-  }
-
-  /**
-   * Endpoint for creating a new Message post by a user.
-   *
-   * <p>Calling this api will create a new message structure based on message passed as a parameter
-   * send by a user.
-   *
-   * @param createMessageRequest {@link CreateMessageRequest} encapsulates the message parameters.
-   * @return a {@link CreateMessageResponse} containing the configuration identifiers for the
-   *     created message
-   */
-  @PostMapping("/create-message")
-  public ResponseEntity<CreateMessageResponse> createMessage(
-      @Valid @RequestBody final CreateMessageRequest createMessageRequest) {
-
-    final var message =
-        classManagementService.createMessage(
-            classMapper.fromCreateMessageRequest(createMessageRequest));
-    return ResponseEntity.ok(
-        CreateMessageResponse.builder()
-            .content(message.getContent())
-            .userId(message.getUserId())
-            .postDate(message.getPostDate())
             .build());
   }
 
@@ -197,33 +167,17 @@ public class ClassManagementController {
   }
 
   /**
-   * Returns information about messages that are part of a specific messageboard.
-   *
-   * @param messageboardId The messageboard identifier for which the list of messages will be
-   *     returned.
-   * @return A list of {@link PostedMessageDTO} encapsulating data about posted messages.
-   */
-  @GetMapping("/messages")
-  public ResponseEntity<List<PostedMessageDTO>> retrieveMessagesByMessageboardId(
-      final Long messageboardId) {
-    Objects.requireNonNull(messageboardId);
-
-    return ResponseEntity.ok(
-        postedMessageDtoMapper.postedMessagesDTOFrom(
-            classManagementService.retrieveMessagesByMessageboardId(messageboardId)));
-  }
-
-  /**
    * Returns the enrolment key that is part of a specific class configuration.
+   *
    * @param classConfigurationId The class configuration identifier
    * @return the enrolment key associated with a specific class configuration.
    */
   @GetMapping("/enrolment-key")
-  public ResponseEntity<String> getEnrolmentKeyBasedOnClassConfigurationId(final Long classConfigurationId)
-  {
+  public ResponseEntity<String> getEnrolmentKeyBasedOnClassConfigurationId(
+      final Long classConfigurationId) {
     Objects.requireNonNull(classConfigurationId);
 
     return ResponseEntity.ok(
-            classManagementService.getEnrolmentKeyByClassConfigurationId(classConfigurationId));
+        classManagementService.getEnrolmentKeyByClassConfigurationId(classConfigurationId));
   }
 }

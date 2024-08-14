@@ -1,4 +1,4 @@
-package com.ghsbm.group.peer.colab.domain.classes.core.model;
+package com.ghsbm.group.peer.colab.domain.chat.core.model;
 
 import lombok.Builder;
 import lombok.Data;

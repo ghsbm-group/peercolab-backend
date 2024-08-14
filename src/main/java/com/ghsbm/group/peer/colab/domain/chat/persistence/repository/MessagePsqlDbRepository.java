@@ -1,6 +1,6 @@
-package com.ghsbm.group.peer.colab.domain.classes.persistence.repository;
+package com.ghsbm.group.peer.colab.domain.chat.persistence.repository;
 
-import com.ghsbm.group.peer.colab.domain.classes.persistence.model.MessageEntity;
+import com.ghsbm.group.peer.colab.domain.chat.persistence.model.MessageEntity;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.List;

@@ -1,6 +1,5 @@
-package com.ghsbm.group.peer.colab.domain.classes.persistence.model;
+package com.ghsbm.group.peer.colab.domain.chat.persistence.model;
 
-import com.ghsbm.group.peer.colab.domain.security.infrastructure.persistence.model.UserEntity;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -26,11 +25,9 @@ public class MessageEntity {
   @Column(name = "post_date")
   private LocalDateTime postDate;
 
-  @ManyToOne(fetch = FetchType.LAZY)
-  @JoinColumn(name = "user_id")
-  private UserEntity user;
+  @Column(name = "user_id")
+  private Long userId;
 
-  @ManyToOne(fetch = FetchType.LAZY)
-  @JoinColumn(name = "messageboard_id")
-  private FolderEntity messageboard;
+  @Column(name = "messageboard_id")
+  private Long messageboardId;
 }

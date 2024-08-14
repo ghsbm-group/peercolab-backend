@@ -35,5 +35,5 @@ public interface ClassPsqlDbRepository extends JpaRepository<ClassConfigurationE
    * @return
    */
   @Query("Select c.enrolmentKey from ClassConfigurationEntity c where c.id = :classConfigurationId")
-  String findEnrolmentKeyById(Long classConfigurationId);
+  Optional<String> findEnrolmentKeyById(Long classConfigurationId);
 }
