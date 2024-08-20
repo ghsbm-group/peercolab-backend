@@ -29,10 +29,10 @@ public interface ChatRepository {
   Message create(Message message);
 
   /**
-   * Retrieves the latest posted message from a message board.
+   * Retrieves the latest posted message from multiple message boards.
    *
-   * @param messageBoardId The message board id from where the last posted message is extracted.
+   * @param messageboardIds The message board ids from where the last posted message is extracted.
    * @return A {@link LatestPostedMessage} object.
    */
-  LatestPostedMessage getLatestPostedMessage(Long messageBoardId);
+  LatestPostedMessage retrieveLatestPostedMessage(List<Long> messageboardIds);
 }

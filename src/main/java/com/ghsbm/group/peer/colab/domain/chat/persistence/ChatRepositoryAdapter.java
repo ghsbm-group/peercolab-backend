@@ -12,11 +12,11 @@ import com.ghsbm.group.peer.colab.infrastructure.SecurityUtils;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Component;
 
+import org.springframework.data.domain.Pageable;
 import java.time.LocalDateTime;
-import java.util.Collections;
-import java.util.Comparator;
 import java.util.List;
 
 /** Implementation of the message repository interface. Reads and persists data into a db. */
@@ -76,16 +76,20 @@ public class ChatRepositoryAdapter implements ChatRepository {
    * @inheritDoc
    */
   @Override
-  public LatestPostedMessage getLatestPostedMessage(Long messageBoardId) {
-    List<Message> messages =
-        chatEntitiesMapper.fromMessageEntities(
-            messagePsqlDbRepository.findByMessageboardId(messageBoardId));
-    Collections.sort(messages, Comparator.comparing(o -> o.getPostDate()));
-    Message latestMessage = messages.get(messages.size() - 1);
+  public LatestPostedMessage retrieveLatestPostedMessage(List<Long> messageboardIds) {
+
+    Pageable pageable = PageRequest.of(0, 1);
+    MessageEntity lastMessage =
+        messagePsqlDbRepository
+            .findByMessageboardIdInOrderByPostDateDesc(messageboardIds, pageable)
+            .getContent()
+            .stream()
+            .findFirst()
+            .orElse(null);
     return LatestPostedMessage.builder()
-        .lastMessagePostedTime(latestMessage.getPostDate())
-        .username(userRepository.findById(latestMessage.getUserId()).get().getLogin())
-        .messageBoard(classRepository.findFolderById(messageBoardId).getName())
+        .messageBoard(classRepository.findFolderById(lastMessage.getMessageboardId()).getName())
+        .username(userRepository.findById(lastMessage.getUserId()).get().getLogin())
+        .lastMessagePostedTime(lastMessage.getPostDate())
         .build();
   }
 }

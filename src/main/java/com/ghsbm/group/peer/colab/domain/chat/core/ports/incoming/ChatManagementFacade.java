@@ -63,15 +63,8 @@ public class ChatManagementFacade implements ChatManagementService {
    * @inheritDoc
    */
   @Override
-  public LatestPostedMessage getLatestPostedMessage(Long folderId) {
-    List<Long> messageboardIds = classManagementService.getMessageBoardsIds(folderId);
-    List<LatestPostedMessage> latestPostedMessages = new ArrayList<LatestPostedMessage>();
-    for (Long messageboardId : messageboardIds) {
-      latestPostedMessages.add(chatRepository.getLatestPostedMessage(messageboardId));
-    }
-    Collections.sort(latestPostedMessages, Comparator.comparing(o -> o.getLastMessagePostedTime()));
-
-    return latestPostedMessages.get(latestPostedMessages.size() - 1);
+  public LatestPostedMessage retrieveLatestPostedMessage(List<Long> folderId) {
+    return chatRepository.retrieveLatestPostedMessage(folderId);
   }
 
   protected PostedMessage messageToPostedMessage(Message message) {

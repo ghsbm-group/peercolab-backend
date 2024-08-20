@@ -198,7 +198,7 @@ public class ClassManagementController {
   public ResponseEntity<FolderInformationResponse> retrieveFolderInformation(final Long folderId) {
     Objects.requireNonNull(folderId);
     LatestPostedMessage latestPostedMessage =
-        chatManagementService.getLatestPostedMessage(folderId);
+        chatManagementService.retrieveLatestPostedMessage(classManagementService.getMessageBoardsIds(folderId));
     FolderInformation folderInformation =
         classManagementService.retrieveFolderInformation(folderId);
 

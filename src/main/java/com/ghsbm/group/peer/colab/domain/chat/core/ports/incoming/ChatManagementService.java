@@ -42,5 +42,5 @@ public interface ChatManagementService {
    * @return A {@link LatestPostedMessage} object.
    */
   @Transactional
-  LatestPostedMessage getLatestPostedMessage(Long folderId);
+  LatestPostedMessage retrieveLatestPostedMessage(List<Long> folderId);
 }
