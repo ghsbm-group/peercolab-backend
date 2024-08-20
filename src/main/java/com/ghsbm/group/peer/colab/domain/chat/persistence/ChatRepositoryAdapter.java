@@ -1,10 +1,12 @@
 package com.ghsbm.group.peer.colab.domain.chat.persistence;
 
+import com.ghsbm.group.peer.colab.domain.chat.core.model.LatestPostedMessage;
 import com.ghsbm.group.peer.colab.domain.chat.core.model.Message;
 import com.ghsbm.group.peer.colab.domain.chat.core.ports.outgoing.ChatRepository;
 import com.ghsbm.group.peer.colab.domain.chat.persistence.model.ChatEntitiesMapper;
 import com.ghsbm.group.peer.colab.domain.chat.persistence.model.MessageEntity;
 import com.ghsbm.group.peer.colab.domain.chat.persistence.repository.MessagePsqlDbRepository;
+import com.ghsbm.group.peer.colab.domain.classes.core.ports.outgoing.ClassRepository;
 import com.ghsbm.group.peer.colab.domain.security.infrastructure.persistence.repository.UserRepository;
 import com.ghsbm.group.peer.colab.infrastructure.SecurityUtils;
 import lombok.NoArgsConstructor;
@@ -24,17 +26,19 @@ public class ChatRepositoryAdapter implements ChatRepository {
   private MessagePsqlDbRepository messagePsqlDbRepository;
 
   private UserRepository userRepository;
-
+  private ClassRepository classRepository;
   private ChatEntitiesMapper chatEntitiesMapper;
 
   @Autowired
   public ChatRepositoryAdapter(
       MessagePsqlDbRepository messagePsqlDbRepository,
       ChatEntitiesMapper chatEntitiesMapper,
-      UserRepository userRepository) {
+      UserRepository userRepository,
+      ClassRepository classRepository) {
     this.messagePsqlDbRepository = messagePsqlDbRepository;
     this.chatEntitiesMapper = chatEntitiesMapper;
     this.userRepository = userRepository;
+    this.classRepository = classRepository;
   }
 
   /**
@@ -64,5 +68,19 @@ public class ChatRepositoryAdapter implements ChatRepository {
             .build();
     final var savedMessage = messagePsqlDbRepository.save(messageEntity);
     return chatEntitiesMapper.messageFromEntity(savedMessage);
+  }
+
+  /**
+   * @inheritDoc
+   */
+  @Override
+  public LatestPostedMessage retrieveLatestPostedMessage(List<Long> messageboardIds) {
+    MessageEntity lastMessage =
+        messagePsqlDbRepository.findFirstByMessageboardIdInOrderByPostDateDesc(messageboardIds);
+    return LatestPostedMessage.builder()
+        .messageBoard(classRepository.findFolderById(lastMessage.getMessageboardId()).getName())
+        .username(userRepository.findById(lastMessage.getUserId()).get().getLogin())
+        .lastMessagePostedTime(lastMessage.getPostDate())
+        .build();
   }
 }

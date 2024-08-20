@@ -6,6 +6,7 @@ import com.ghsbm.group.peer.colab.domain.classes.core.model.ClassConfiguration;
 import com.ghsbm.group.peer.colab.domain.classes.core.model.Folder;
 import java.util.List;
 
+import com.ghsbm.group.peer.colab.domain.classes.core.model.FolderInformation;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 
@@ -59,4 +60,14 @@ public interface ClassMapper {
    */
   @Mapping(source = "newName", target = "name")
   Folder fromRenameFolderRequest(RenameFolderRequest renameFolderRequest);
+
+  /**
+   * Builds a {@link FolderInformationResponse} core domain object based on a {@link
+   * FolderInformation} instance
+   *
+   * @param folderInformation encapsulates the necessary parameters
+   * @return a {@link FolderInformationResponse} object
+   */
+  FolderInformationResponse folderInformationResponseFromFolderInformation(
+      FolderInformation folderInformation);
 }

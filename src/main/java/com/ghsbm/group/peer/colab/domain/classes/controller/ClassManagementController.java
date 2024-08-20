@@ -1,9 +1,12 @@
 package com.ghsbm.group.peer.colab.domain.classes.controller;
 
+import com.ghsbm.group.peer.colab.domain.chat.core.model.LatestPostedMessage;
+import com.ghsbm.group.peer.colab.domain.chat.core.ports.incoming.ChatManagementService;
 import com.ghsbm.group.peer.colab.domain.classes.controller.model.*;
 import com.ghsbm.group.peer.colab.domain.classes.controller.model.dto.ClassDTO;
 import com.ghsbm.group.peer.colab.domain.classes.controller.model.dto.FolderDTO;
 import com.ghsbm.group.peer.colab.domain.classes.core.model.ClassDetails;
+import com.ghsbm.group.peer.colab.domain.classes.core.model.FolderInformation;
 import com.ghsbm.group.peer.colab.domain.classes.core.ports.incoming.ClassManagementService;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotNull;
@@ -22,13 +25,16 @@ import org.springframework.web.bind.annotation.*;
 public class ClassManagementController {
 
   private final ClassManagementService classManagementService;
-
   private final ClassMapper classMapper;
+  private final ChatManagementService chatManagementService;
 
   public ClassManagementController(
-      ClassManagementService classManagementService, ClassMapper classMapper) {
+      ClassManagementService classManagementService,
+      ClassMapper classMapper,
+      ChatManagementService chatManagementService) {
     this.classManagementService = classManagementService;
     this.classMapper = classMapper;
+    this.chatManagementService = chatManagementService;
   }
 
   /**
@@ -179,5 +185,28 @@ public class ClassManagementController {
 
     return ResponseEntity.ok(
         classManagementService.getEnrolmentKeyByClassConfigurationId(classConfigurationId));
+  }
+
+  /**
+   * Returns the folder information like the number of topics, number of posts, information about
+   * the latest posted message
+   *
+   * @param folderId The folder identifier
+   * @return A {@link FolderInformationResponse} encapsulating data about the specific folder.
+   */
+  @GetMapping("/folder-information")
+  public ResponseEntity<FolderInformationResponse> retrieveFolderInformation(final Long folderId) {
+    Objects.requireNonNull(folderId);
+    LatestPostedMessage latestPostedMessage =
+        chatManagementService.retrieveLatestPostedMessage(classManagementService.getMessageBoardsIds(folderId));
+    FolderInformation folderInformation =
+        classManagementService.retrieveFolderInformation(folderId);
+
+    folderInformation.setLastMessagePostedTime(latestPostedMessage.getLastMessagePostedTime());
+    folderInformation.setUsername(latestPostedMessage.getUsername());
+    folderInformation.setMessageBoard(latestPostedMessage.getMessageBoard());
+
+    return ResponseEntity.ok(
+        classMapper.folderInformationResponseFromFolderInformation(folderInformation));
   }
 }

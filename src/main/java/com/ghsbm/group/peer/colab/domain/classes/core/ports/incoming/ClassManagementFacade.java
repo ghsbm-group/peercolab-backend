@@ -9,6 +9,7 @@ import com.ghsbm.group.peer.colab.infrastructure.SecurityUtils;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
+
 import org.springframework.stereotype.Service;
 
 import static com.ghsbm.group.peer.colab.infrastructure.AuthoritiesConstants.STUDENT_ADMIN;
@@ -19,6 +20,7 @@ import static com.ghsbm.group.peer.colab.infrastructure.AuthoritiesConstants.USE
 class ClassManagementFacade implements ClassManagementService {
 
   private final ClassRepository classRepository;
+
 
   public ClassManagementFacade(ClassRepository classRepository) {
     this.classRepository = classRepository;
@@ -167,4 +169,26 @@ class ClassManagementFacade implements ClassManagementService {
     Folder folder = classRepository.findFolderById(messageBoardId);
     return classRepository.isEnrolled(userLogin, folder.getClassConfigurationId());
   }
+  /**
+   * @inheritDoc
+   */
+  @Override
+  public FolderInformation retrieveFolderInformation(long folderId) {
+    var numberOfSubfolers= classRepository.countAllSubfolders(folderId);
+    var numberOfPosts = classRepository.countMessages(folderId);
+
+
+    return FolderInformation.builder()
+            .topics(numberOfSubfolers)
+            .posts(numberOfPosts)
+            .build();
+  }
+  /**
+   * @inheritDoc
+   */
+  @Override
+  public List<Long> getMessageBoardsIds(Long folderId) {
+    return classRepository.findMessageBoardsIds(folderId);
+  }
+
 }

@@ -5,6 +5,7 @@ import java.util.List;
 import com.ghsbm.group.peer.colab.domain.classes.core.model.ClassConfiguration;
 import com.ghsbm.group.peer.colab.domain.classes.core.model.ClassDetails;
 import com.ghsbm.group.peer.colab.domain.classes.core.model.Folder;
+import com.ghsbm.group.peer.colab.domain.classes.core.model.FolderInformation;
 import org.springframework.transaction.annotation.Transactional;
 
 /**
@@ -100,4 +101,24 @@ public interface ClassManagementService {
    */
   @Transactional(readOnly = true)
   boolean userIsEnrolled(Long messageBoardId);
+
+  /**
+   * Get information about a folder, for example: the number of subfolders associated with the
+   * folder, the number of posted messages in the folder hierarchy, information about the last
+   * message posted
+   *
+   * @param folderId the identifier of the folder for which the information is obtained
+   * @return a {@link FolderInformation} which encapsulates all the required information
+   */
+  @Transactional
+  FolderInformation retrieveFolderInformation(long folderId);
+
+  /**
+   * Retrieves the ids of the message board associated with a folder
+   *
+   * @param folderId the identifier of the folder
+   * @return a {@link List<Long>} which encapsulates the ids of the messages board
+   */
+  @Transactional
+  List<Long> getMessageBoardsIds(Long folderId);
 }
