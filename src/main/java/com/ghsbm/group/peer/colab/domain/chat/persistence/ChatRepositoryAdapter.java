@@ -77,15 +77,8 @@ public class ChatRepositoryAdapter implements ChatRepository {
    */
   @Override
   public LatestPostedMessage retrieveLatestPostedMessage(List<Long> messageboardIds) {
-
-    Pageable pageable = PageRequest.of(0, 1);
     MessageEntity lastMessage =
-        messagePsqlDbRepository
-            .findByMessageboardIdInOrderByPostDateDesc(messageboardIds, pageable)
-            .getContent()
-            .stream()
-            .findFirst()
-            .orElse(null);
+        messagePsqlDbRepository.findFirstByMessageboardIdInOrderByPostDateDesc(messageboardIds);
     return LatestPostedMessage.builder()
         .messageBoard(classRepository.findFolderById(lastMessage.getMessageboardId()).getName())
         .username(userRepository.findById(lastMessage.getUserId()).get().getLogin())

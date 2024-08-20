@@ -21,9 +21,7 @@ public interface MessagePsqlDbRepository extends JpaRepository<MessageEntity, Lo
    * Retruieves the lastest posted message from message boards
    *
    * @param messageboardId the message board ids
-   * @param pageable a {@link Pageable} to retrieve only the latest message, set the page size to 1
    * @return a {@link Page} containing the latest posted message.
    */
-  Page<MessageEntity> findByMessageboardIdInOrderByPostDateDesc(
-      List<Long> messageboardId, Pageable pageable);
+  MessageEntity findFirstByMessageboardIdInOrderByPostDateDesc(List<Long> messageboardId);
 }
