@@ -82,12 +82,10 @@ public class ChatRepositoryAdapter implements ChatRepository {
             messagePsqlDbRepository.findByMessageboardId(messageBoardId));
     Collections.sort(messages, Comparator.comparing(o -> o.getPostDate()));
     Message latestMessage = messages.get(messages.size() - 1);
-    LatestPostedMessage latestPostedMessage =
-        LatestPostedMessage.builder()
-            .lastMessagePostedTime(latestMessage.getPostDate())
-            .username(userRepository.findById(latestMessage.getUserId()).get().getLogin())
-            .messageBoard(classRepository.findFolderById(messageBoardId).getName())
-            .build();
-    return latestPostedMessage;
+    return LatestPostedMessage.builder()
+        .lastMessagePostedTime(latestMessage.getPostDate())
+        .username(userRepository.findById(latestMessage.getUserId()).get().getLogin())
+        .messageBoard(classRepository.findFolderById(messageBoardId).getName())
+        .build();
   }
 }
