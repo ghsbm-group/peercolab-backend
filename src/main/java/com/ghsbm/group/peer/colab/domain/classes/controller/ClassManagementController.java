@@ -180,8 +180,7 @@ public class ClassManagementController {
    */
   @GetMapping("/enrolment-key")
   public ResponseEntity<String> getEnrolmentKeyBasedOnClassConfigurationId(
-      final Long classConfigurationId) {
-    Objects.requireNonNull(classConfigurationId);
+      @NotNull final Long classConfigurationId) {
 
     return ResponseEntity.ok(
         classManagementService.getEnrolmentKeyByClassConfigurationId(classConfigurationId));
@@ -195,10 +194,11 @@ public class ClassManagementController {
    * @return A {@link FolderInformationResponse} encapsulating data about the specific folder.
    */
   @GetMapping("/folder-information")
-  public ResponseEntity<FolderInformationResponse> retrieveFolderInformation(final Long folderId) {
-    Objects.requireNonNull(folderId);
+  public ResponseEntity<FolderInformationResponse> retrieveFolderInformation(
+      @NotNull final Long folderId) {
     LatestPostedMessage latestPostedMessage =
-        chatManagementService.retrieveLatestPostedMessage(classManagementService.getMessageBoardsIds(folderId));
+        chatManagementService.retrieveLatestPostedMessage(
+            classManagementService.getMessageBoardsIds(folderId));
     FolderInformation folderInformation =
         classManagementService.retrieveFolderInformation(folderId);
 

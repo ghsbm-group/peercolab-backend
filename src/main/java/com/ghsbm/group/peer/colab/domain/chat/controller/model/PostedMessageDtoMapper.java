@@ -41,6 +41,7 @@ public class PostedMessageDtoMapper {
     messageDTO.setId(message.getId());
     messageDTO.setContent(message.getContent());
     messageDTO.setPostDate(message.getPostDate());
+    messageDTO.setNumberOfLikes(message.getNumberOfLikes());
     UserDTO userDTO = new UserDTO();
     userDTO.setId(message.getUserId());
     userDTO.setLogin(message.getLogin());

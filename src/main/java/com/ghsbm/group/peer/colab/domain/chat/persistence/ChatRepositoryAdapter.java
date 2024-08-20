@@ -2,13 +2,18 @@ package com.ghsbm.group.peer.colab.domain.chat.persistence;
 
 import com.ghsbm.group.peer.colab.domain.chat.core.model.LatestPostedMessage;
 import com.ghsbm.group.peer.colab.domain.chat.core.model.Message;
+import com.ghsbm.group.peer.colab.domain.chat.core.model.PostLike;
 import com.ghsbm.group.peer.colab.domain.chat.core.ports.outgoing.ChatRepository;
 import com.ghsbm.group.peer.colab.domain.chat.persistence.model.ChatEntitiesMapper;
 import com.ghsbm.group.peer.colab.domain.chat.persistence.model.MessageEntity;
+import com.ghsbm.group.peer.colab.domain.chat.persistence.model.PostLikesEntity;
 import com.ghsbm.group.peer.colab.domain.chat.persistence.repository.MessagePsqlDbRepository;
+import com.ghsbm.group.peer.colab.domain.chat.persistence.repository.PostLikesPsqlDbRepository;
 import com.ghsbm.group.peer.colab.domain.classes.core.ports.outgoing.ClassRepository;
+import com.ghsbm.group.peer.colab.domain.security.infrastructure.persistence.model.UserEntity;
 import com.ghsbm.group.peer.colab.domain.security.infrastructure.persistence.repository.UserRepository;
 import com.ghsbm.group.peer.colab.infrastructure.SecurityUtils;
+import com.ghsbm.group.peer.colab.infrastructure.exception.BadRequestAlertException;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,7 +29,7 @@ import java.util.List;
 public class ChatRepositoryAdapter implements ChatRepository {
 
   private MessagePsqlDbRepository messagePsqlDbRepository;
-
+  private PostLikesPsqlDbRepository postLikesPsqlDbRepository;
   private UserRepository userRepository;
   private ClassRepository classRepository;
   private ChatEntitiesMapper chatEntitiesMapper;
@@ -32,6 +37,7 @@ public class ChatRepositoryAdapter implements ChatRepository {
   @Autowired
   public ChatRepositoryAdapter(
       MessagePsqlDbRepository messagePsqlDbRepository,
+      PostLikesPsqlDbRepository postLikesPsqlDbRepository,
       ChatEntitiesMapper chatEntitiesMapper,
       UserRepository userRepository,
       ClassRepository classRepository) {
@@ -39,6 +45,7 @@ public class ChatRepositoryAdapter implements ChatRepository {
     this.chatEntitiesMapper = chatEntitiesMapper;
     this.userRepository = userRepository;
     this.classRepository = classRepository;
+    this.postLikesPsqlDbRepository = postLikesPsqlDbRepository;
   }
 
   /**
@@ -82,5 +89,35 @@ public class ChatRepositoryAdapter implements ChatRepository {
         .username(userRepository.findById(lastMessage.getUserId()).get().getLogin())
         .lastMessagePostedTime(lastMessage.getPostDate())
         .build();
+  }
+
+  @Override
+  public PostLike likeAPost(Long messageId) {
+
+    String userLogin = SecurityUtils.getCurrentUserLogin().get();
+    UserEntity userEntity =
+        userRepository
+            .findOneByLogin(userLogin)
+            .orElseThrow(
+                () ->
+                    new IllegalStateException("User with username" + userLogin + "does not exist"));
+    MessageEntity messageEntity =
+        messagePsqlDbRepository
+            .findById(messageId)
+            .orElseThrow(
+                () -> new BadRequestAlertException("Invalid message", "chat", "invalid.message"));
+    PostLikesEntity postLikesEntity = new PostLikesEntity(userEntity, messageEntity);
+
+    postLikesPsqlDbRepository.save(postLikesEntity);
+
+    return PostLike.builder()
+        .messageId(messageEntity.getId())
+        .userId(userEntity.getId())
+        .build();
+  }
+
+  @Override
+  public Long numberOfLikesOnAMessage(Long messageId) {
+    return postLikesPsqlDbRepository.countByMessageId(messageId);
   }
 }
