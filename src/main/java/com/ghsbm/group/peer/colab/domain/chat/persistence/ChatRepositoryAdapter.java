@@ -1,10 +1,12 @@
 package com.ghsbm.group.peer.colab.domain.chat.persistence;
 
+import com.ghsbm.group.peer.colab.domain.chat.core.model.LatestPostedMessage;
 import com.ghsbm.group.peer.colab.domain.chat.core.model.Message;
 import com.ghsbm.group.peer.colab.domain.chat.core.ports.outgoing.ChatRepository;
 import com.ghsbm.group.peer.colab.domain.chat.persistence.model.ChatEntitiesMapper;
 import com.ghsbm.group.peer.colab.domain.chat.persistence.model.MessageEntity;
 import com.ghsbm.group.peer.colab.domain.chat.persistence.repository.MessagePsqlDbRepository;
+import com.ghsbm.group.peer.colab.domain.classes.core.ports.outgoing.ClassRepository;
 import com.ghsbm.group.peer.colab.domain.security.infrastructure.persistence.repository.UserRepository;
 import com.ghsbm.group.peer.colab.infrastructure.SecurityUtils;
 import lombok.NoArgsConstructor;
@@ -13,6 +15,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.time.LocalDateTime;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 
 /** Implementation of the message repository interface. Reads and persists data into a db. */
@@ -24,17 +28,19 @@ public class ChatRepositoryAdapter implements ChatRepository {
   private MessagePsqlDbRepository messagePsqlDbRepository;
 
   private UserRepository userRepository;
-
+  private ClassRepository classRepository;
   private ChatEntitiesMapper chatEntitiesMapper;
 
   @Autowired
   public ChatRepositoryAdapter(
       MessagePsqlDbRepository messagePsqlDbRepository,
       ChatEntitiesMapper chatEntitiesMapper,
-      UserRepository userRepository) {
+      UserRepository userRepository,
+      ClassRepository classRepository) {
     this.messagePsqlDbRepository = messagePsqlDbRepository;
     this.chatEntitiesMapper = chatEntitiesMapper;
     this.userRepository = userRepository;
+    this.classRepository = classRepository;
   }
 
   /**
@@ -64,5 +70,24 @@ public class ChatRepositoryAdapter implements ChatRepository {
             .build();
     final var savedMessage = messagePsqlDbRepository.save(messageEntity);
     return chatEntitiesMapper.messageFromEntity(savedMessage);
+  }
+
+  /**
+   * @inheritDoc
+   */
+  @Override
+  public LatestPostedMessage getLatestPostedMessage(Long messageBoardId) {
+    List<Message> messages =
+        chatEntitiesMapper.fromMessageEntities(
+            messagePsqlDbRepository.findByMessageboardId(messageBoardId));
+    Collections.sort(messages, Comparator.comparing(o -> o.getPostDate()));
+    Message latestMessage = messages.get(messages.size() - 1);
+    LatestPostedMessage latestPostedMessage =
+        LatestPostedMessage.builder()
+            .lastMessagePostedTime(latestMessage.getPostDate())
+            .username(userRepository.findById(latestMessage.getUserId()).get().getLogin())
+            .messageBoard(classRepository.findFolderById(messageBoardId).getName())
+            .build();
+    return latestPostedMessage;
   }
 }

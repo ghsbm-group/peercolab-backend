@@ -1,5 +1,6 @@
 package com.ghsbm.group.peer.colab.domain.chat.core.ports.incoming;
 
+import com.ghsbm.group.peer.colab.domain.chat.core.model.LatestPostedMessage;
 import com.ghsbm.group.peer.colab.domain.chat.core.ports.outgoing.ChatRepository;
 import com.ghsbm.group.peer.colab.domain.chat.core.model.Message;
 import com.ghsbm.group.peer.colab.domain.chat.core.model.PostedMessage;
@@ -8,9 +9,7 @@ import com.ghsbm.group.peer.colab.domain.classes.core.ports.incoming.exception.U
 import com.ghsbm.group.peer.colab.infrastructure.SecurityUtils;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Objects;
+import java.util.*;
 
 import static com.ghsbm.group.peer.colab.infrastructure.AuthoritiesConstants.ADMIN;
 import static com.ghsbm.group.peer.colab.infrastructure.AuthoritiesConstants.USER_MUST_BE_LOGGED_IN;
@@ -58,6 +57,21 @@ public class ChatManagementFacade implements ChatManagementService {
       throw new UserIsNotEnrolledInClassConfigurationException();
     }
     return chatRepository.create(message);
+  }
+
+  /**
+   * @inheritDoc
+   */
+  @Override
+  public LatestPostedMessage getLatestPostedMessage(Long folderId) {
+    List<Long> messageboardIds = classManagementService.getMessageBoardsIds(folderId);
+    List<LatestPostedMessage> latestPostedMessages = new ArrayList<LatestPostedMessage>();
+    for (Long messageboardId : messageboardIds) {
+      latestPostedMessages.add(chatRepository.getLatestPostedMessage(messageboardId));
+    }
+    Collections.sort(latestPostedMessages, Comparator.comparing(o -> o.getLastMessagePostedTime()));
+
+    return latestPostedMessages.get(latestPostedMessages.size() - 1);
   }
 
   protected PostedMessage messageToPostedMessage(Message message) {

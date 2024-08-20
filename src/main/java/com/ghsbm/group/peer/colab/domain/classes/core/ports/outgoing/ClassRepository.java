@@ -2,6 +2,7 @@ package com.ghsbm.group.peer.colab.domain.classes.core.ports.outgoing;
 
 import com.ghsbm.group.peer.colab.domain.classes.core.model.ClassConfiguration;
 import com.ghsbm.group.peer.colab.domain.classes.core.model.Folder;
+
 import java.util.List;
 import java.util.Optional;
 
@@ -110,4 +111,28 @@ public interface ClassRepository {
    * @return a {@link String} that contains the enrolment key
    */
   Optional<String> getEnrolmentKeyByClassConfigurationId(Long classConfigurationId);
+
+  /**
+   * Counts all the subfolder of a folder
+   *
+   * @param folderId the id of the folder
+   * @return the number of subfolders of the specified folder
+   */
+  long countAllSubfolders(long folderId);
+
+  /**
+   * Retrieves all message boards ids belonging to this folder.
+   *
+   * @param folderId the id of the folder
+   * @return a list of the ids of a message board
+   */
+  List<Long> findMessageBoardsIds(Long folderId);
+
+  /**
+   * Counts all the posted messages in message boards of a folder
+   *
+   * @param folderId the id of the folder
+   * @return the number of posted messages
+   */
+  long countMessages(long folderId);
 }

@@ -200,4 +200,28 @@ public class ClassRepositoryAdapter implements ClassRepository {
   public Optional<String> getEnrolmentKeyByClassConfigurationId(Long classConfigurationId) {
     return classPsqlDbRepository.findEnrolmentKeyById(classConfigurationId);
   }
+
+  /**
+   * @inheritDoc
+   */
+  @Override
+  public long countAllSubfolders(long folderId) {
+    return folderPsqlDbRespository.countAllSubfolders(folderId);
+  }
+
+  /**
+   * @inheritDoc
+   */
+  @Override
+  public List<Long> findMessageBoardsIds(Long folderId) {
+    return folderPsqlDbRespository.findMessageBoardsIds(folderId);
+  }
+
+  /**
+   * @inheritDoc
+   */
+  @Override
+  public long countMessages(long folderId) {
+    return folderPsqlDbRespository.countMessages(folderId);
+  }
 }

@@ -1,5 +1,6 @@
 package com.ghsbm.group.peer.colab.domain.chat.core.ports.outgoing;
 
+import com.ghsbm.group.peer.colab.domain.chat.core.model.LatestPostedMessage;
 import com.ghsbm.group.peer.colab.domain.chat.core.model.Message;
 
 import java.util.List;
@@ -26,4 +27,12 @@ public interface ChatRepository {
    * @return A {@link Message} object with its id set.
    */
   Message create(Message message);
+
+  /**
+   * Retrieves the latest posted message from a message board.
+   *
+   * @param messageBoardId The message board id from where the last posted message is extracted.
+   * @return A {@link LatestPostedMessage} object.
+   */
+  LatestPostedMessage getLatestPostedMessage(Long messageBoardId);
 }

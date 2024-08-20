@@ -7,5 +7,13 @@ import java.util.List;
 
 /** JPA repository for {@link MessageEntity} */
 public interface MessagePsqlDbRepository extends JpaRepository<MessageEntity, Long> {
-    List<MessageEntity> findByMessageboardId(Long messageboardId);
+  /**
+   * Finds all the messages associated with a message board
+   *
+   * @param messageboardId the message board id for which the messages are retrieved.
+   * @return a list of {@link MessageEntity}
+   */
+  List<MessageEntity> findByMessageboardId(Long messageboardId);
+
+
 }
