@@ -1,7 +1,6 @@
 package com.ghsbm.group.peer.colab.domain.chat.persistence.model;
 
 import com.ghsbm.group.peer.colab.domain.chat.core.model.Message;
-import com.ghsbm.group.peer.colab.domain.chat.core.model.PostLike;
 import org.mapstruct.Mapper;
 
 import java.util.List;
