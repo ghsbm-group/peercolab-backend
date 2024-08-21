@@ -17,10 +17,18 @@ public interface MessagePsqlDbRepository extends JpaRepository<MessageEntity, Lo
   List<MessageEntity> findByMessageboardId(Long messageboardId);
 
   /**
-   * Retruieves the lastest posted message from message boards
+   * Retrieves the lastest posted message from message boards
    *
    * @param messageboardId the message board ids
    * @return a {@link Page} containing the latest posted message.
    */
   MessageEntity findFirstByMessageboardIdInOrderByPostDateDesc(List<Long> messageboardId);
+
+  /**
+   * Retrieves all the messages posted by a user
+   *
+   * @param userId the user id
+   * @return the number of posted messages by a user
+   */
+  Long countByUserId(Long userId);
 }

@@ -58,4 +58,7 @@ public interface UserManagementService {
 
   @Transactional(readOnly = true)
   List<String> getAuthorities();
+
+  @Transactional
+  Optional<User> findOneById(Long id);
 }

@@ -37,7 +37,36 @@ public interface ChatRepository {
    */
   LatestPostedMessage retrieveLatestPostedMessage(List<Long> messageboardIds);
 
+  /**
+   * Persists the appreciation of a message made by a user
+   *
+   * @param messageId The message id.
+   * @return A {@link PostLike} object.
+   */
   PostLike likeAPost(Long messageId);
 
+  /**
+   * Return the number of likes of a message
+   *
+   * @param messageId The id of the message for which the number of likes is returned
+   * @return A {@link Long} which represents the number of likes of the message
+   */
   Long numberOfLikesOnAMessage(Long messageId);
+
+  /**
+   * Return the number of posts made by a user
+   *
+   * @param userId The id of the user for which the number of posts is returned
+   * @return A {@link Long} which represents the number of posts made by a user.
+   */
+  Long numberOfPostsByUser(Long userId);
+
+  /**
+   * Returns the total number of likes received from all posts made by a user.
+   *
+   * @param userId The id of the user for which the number of likes is returned.
+   * @return A {@link Long} which represents the total number of likes from all the posted messages
+   *     made by a user.
+   */
+  Long getTotalNumberOfLikesByUserId(Long userId);
 }

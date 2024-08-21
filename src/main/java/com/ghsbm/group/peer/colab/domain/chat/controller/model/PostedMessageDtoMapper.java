@@ -1,7 +1,6 @@
 package com.ghsbm.group.peer.colab.domain.chat.controller.model;
 
 import com.ghsbm.group.peer.colab.domain.chat.core.model.PostedMessage;
-import com.ghsbm.group.peer.colab.domain.security.controller.model.dto.UserDTO;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -42,10 +41,13 @@ public class PostedMessageDtoMapper {
     messageDTO.setContent(message.getContent());
     messageDTO.setPostDate(message.getPostDate());
     messageDTO.setNumberOfLikes(message.getNumberOfLikes());
-    UserDTO userDTO = new UserDTO();
+    PostedMessageUserDTO userDTO = new PostedMessageUserDTO();
     userDTO.setId(message.getUserId());
     userDTO.setLogin(message.getLogin());
-    postedMessageDTO.setUserDTO(userDTO);
+    userDTO.setRole(message.getRoleUser());
+    userDTO.setNumberOfPosts(message.getNumberOfPostsUser());
+    userDTO.setNumberOfTotalLikes(message.getNumberOfLikesUser());
+    postedMessageDTO.setPostedMessageUserDTO(userDTO);
     postedMessageDTO.setMessageDTO(messageDTO);
     return postedMessageDTO;
   }

@@ -9,14 +9,19 @@ import com.ghsbm.group.peer.colab.domain.classes.core.ports.incoming.ClassManage
 import com.ghsbm.group.peer.colab.domain.classes.core.ports.incoming.exception.UserIsNotEnrolledInClassConfigurationException;
 import com.ghsbm.group.peer.colab.domain.classes.core.ports.outgoing.ClassRepository;
 import com.ghsbm.group.peer.colab.domain.infrastructure.SecurityTestUtils;
+import com.ghsbm.group.peer.colab.domain.security.controller.model.dto.UserDTO;
+import com.ghsbm.group.peer.colab.domain.security.core.model.User;
+import com.ghsbm.group.peer.colab.domain.security.core.ports.incoming.UserManagementService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
 
 import java.time.LocalDateTime;
-import java.util.List;
+import java.util.*;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
@@ -27,10 +32,13 @@ public class ChatManagementFacadeTest {
   public static final long CLASS_CONFIGURATION_ID = 1L;
   public static final long FOLDER_ID = 1L;
   public static final long MESSAGE_ID = 1L;
+  public static final long USER_ID = 1L;
   public static final String ENROLMENT_KEY = "EnrolmentKey";
   public static final String ADMIN = "admin";
   public static final String CONTENT = "Content";
   public static final String LOGIN = "admin";
+  public static final String PASSWORD="Password";
+  public static final Set<GrantedAuthority> authorities = new HashSet<>();
 
   @InjectMocks private ChatManagementFacade victim;
 
@@ -40,6 +48,8 @@ public class ChatManagementFacadeTest {
 
   @Mock private ClassManagementService classManagementService;
 
+  @Mock private UserManagementService userManagementService;
+
   private static Message buildValidMessage() {
     return Message.builder().content(CONTENT).messageboardId(FOLDER_ID)
             .build();
@@ -47,6 +57,10 @@ public class ChatManagementFacadeTest {
 
   private static PostedMessage buildValidPostedMessage() {
     return PostedMessage.builder().content(CONTENT).login(LOGIN)
+            .numberOfLikesUser(0L)
+            .roleUser(ADMIN)
+            .userId(USER_ID)
+            .numberOfPostsUser(0L)
             .numberOfLikes(0L)
             .build();
   }
