@@ -3,6 +3,7 @@ package com.ghsbm.group.peer.colab.domain.chat.controller;
 import com.ghsbm.group.peer.colab.domain.chat.controller.model.*;
 import com.ghsbm.group.peer.colab.domain.chat.core.ports.incoming.ChatManagementService;
 import jakarta.validation.Valid;
+import jakarta.validation.constraints.NotNull;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -55,6 +56,16 @@ public class ChatManagementController {
             .content(message.getContent())
             .userId(message.getUserId())
             .postDate(message.getPostDate())
+            .build());
+  }
+
+  @PostMapping("/like-a-post")
+  public ResponseEntity<LikeAPostResponse> likeAPost(@NotNull final Long messageId) {
+    final var postlike = chatManagementService.likeAMessage(messageId);
+    return ResponseEntity.ok(
+        LikeAPostResponse.builder()
+            .messageId(postlike.getMessageId())
+            .userId(postlike.getUserId())
             .build());
   }
 

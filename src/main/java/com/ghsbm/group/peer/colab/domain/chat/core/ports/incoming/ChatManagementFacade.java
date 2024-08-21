@@ -1,6 +1,7 @@
 package com.ghsbm.group.peer.colab.domain.chat.core.ports.incoming;
 
 import com.ghsbm.group.peer.colab.domain.chat.core.model.LatestPostedMessage;
+import com.ghsbm.group.peer.colab.domain.chat.core.model.PostLike;
 import com.ghsbm.group.peer.colab.domain.chat.core.ports.outgoing.ChatRepository;
 import com.ghsbm.group.peer.colab.domain.chat.core.model.Message;
 import com.ghsbm.group.peer.colab.domain.chat.core.model.PostedMessage;
@@ -67,6 +68,11 @@ public class ChatManagementFacade implements ChatManagementService {
     return chatRepository.retrieveLatestPostedMessage(folderId);
   }
 
+  @Override
+  public PostLike likeAMessage(Long messageId) {
+    return chatRepository.likeAPost(messageId);
+  }
+
   protected PostedMessage messageToPostedMessage(Message message) {
     if (message == null) {
       return null;
@@ -80,6 +86,7 @@ public class ChatManagementFacade implements ChatManagementService {
         .userId(message.getUserId())
         .postDate(message.getPostDate())
         .login(userLogin)
+        .numberOfLikes(chatRepository.numberOfLikesOnAMessage(message.getId()))
         .build();
   }
 }

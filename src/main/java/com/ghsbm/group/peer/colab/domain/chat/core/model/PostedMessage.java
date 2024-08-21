@@ -13,4 +13,5 @@ public class PostedMessage {
   private LocalDateTime postDate;
   private Long userId;
   private String login;
+  private Long numberOfLikes;
 }

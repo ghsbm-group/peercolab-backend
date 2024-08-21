@@ -11,4 +11,5 @@ public class MessageDTO {
   private Long id;
   private String content;
   private LocalDateTime postDate;
+  private Long numberOfLikes;
 }

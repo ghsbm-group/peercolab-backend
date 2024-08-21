@@ -2,6 +2,7 @@ package com.ghsbm.group.peer.colab.domain.chat.core.ports.outgoing;
 
 import com.ghsbm.group.peer.colab.domain.chat.core.model.LatestPostedMessage;
 import com.ghsbm.group.peer.colab.domain.chat.core.model.Message;
+import com.ghsbm.group.peer.colab.domain.chat.core.model.PostLike;
 
 import java.util.List;
 
@@ -35,4 +36,8 @@ public interface ChatRepository {
    * @return A {@link LatestPostedMessage} object.
    */
   LatestPostedMessage retrieveLatestPostedMessage(List<Long> messageboardIds);
+
+  PostLike likeAPost(Long messageId);
+
+  Long numberOfLikesOnAMessage(Long messageId);
 }

@@ -2,6 +2,7 @@ package com.ghsbm.group.peer.colab.domain.chat.core.ports.incoming;
 
 import com.ghsbm.group.peer.colab.domain.chat.core.model.LatestPostedMessage;
 import com.ghsbm.group.peer.colab.domain.chat.core.model.Message;
+import com.ghsbm.group.peer.colab.domain.chat.core.model.PostLike;
 import com.ghsbm.group.peer.colab.domain.chat.core.model.PostedMessage;
 import com.ghsbm.group.peer.colab.domain.classes.core.ports.incoming.exception.UserIsNotEnrolledInClassConfigurationException;
 import org.springframework.transaction.annotation.Transactional;
@@ -43,4 +44,7 @@ public interface ChatManagementService {
    */
   @Transactional
   LatestPostedMessage retrieveLatestPostedMessage(List<Long> folderId);
+
+  @Transactional
+  PostLike likeAMessage(Long messageId);
 }
