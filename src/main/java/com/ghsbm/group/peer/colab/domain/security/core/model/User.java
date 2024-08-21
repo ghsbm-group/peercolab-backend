@@ -3,9 +3,15 @@ package com.ghsbm.group.peer.colab.domain.security.core.model;
 import java.time.Instant;
 import java.util.HashSet;
 import java.util.Set;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 @Data
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
 public class User {
   private Long id;
   private String login;
