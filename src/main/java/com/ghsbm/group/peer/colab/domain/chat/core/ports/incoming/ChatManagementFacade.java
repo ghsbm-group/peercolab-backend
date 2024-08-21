@@ -7,13 +7,16 @@ import com.ghsbm.group.peer.colab.domain.chat.core.model.Message;
 import com.ghsbm.group.peer.colab.domain.chat.core.model.PostedMessage;
 import com.ghsbm.group.peer.colab.domain.classes.core.ports.incoming.ClassManagementService;
 import com.ghsbm.group.peer.colab.domain.classes.core.ports.incoming.exception.UserIsNotEnrolledInClassConfigurationException;
+import com.ghsbm.group.peer.colab.domain.security.core.model.Authority;
+import com.ghsbm.group.peer.colab.domain.security.core.model.User;
+import com.ghsbm.group.peer.colab.domain.security.core.ports.incoming.UserManagementService;
 import com.ghsbm.group.peer.colab.infrastructure.SecurityUtils;
+import jakarta.persistence.EntityNotFoundException;
 import org.springframework.stereotype.Service;
 
 import java.util.*;
 
-import static com.ghsbm.group.peer.colab.infrastructure.AuthoritiesConstants.ADMIN;
-import static com.ghsbm.group.peer.colab.infrastructure.AuthoritiesConstants.USER_MUST_BE_LOGGED_IN;
+import static com.ghsbm.group.peer.colab.infrastructure.AuthoritiesConstants.*;
 
 /** Service that contains the core business logic. */
 @Service
@@ -21,11 +24,15 @@ public class ChatManagementFacade implements ChatManagementService {
 
   private final ChatRepository chatRepository;
   private final ClassManagementService classManagementService;
+  private final UserManagementService userManagementService;
 
   public ChatManagementFacade(
-      ChatRepository chatRepository, ClassManagementService classManagementService) {
+      ChatRepository chatRepository,
+      ClassManagementService classManagementService,
+      UserManagementService userManagementService) {
     this.chatRepository = chatRepository;
     this.classManagementService = classManagementService;
+    this.userManagementService = userManagementService;
   }
 
   /**
@@ -68,6 +75,9 @@ public class ChatManagementFacade implements ChatManagementService {
     return chatRepository.retrieveLatestPostedMessage(folderId);
   }
 
+  /**
+   * @inheritDoc
+   */
   @Override
   public PostLike likeAMessage(Long messageId) {
     return chatRepository.likeAPost(messageId);
@@ -77,16 +87,30 @@ public class ChatManagementFacade implements ChatManagementService {
     if (message == null) {
       return null;
     }
-    String userLogin =
-        SecurityUtils.getCurrentUserLogin()
-            .orElseThrow(() -> new IllegalStateException(USER_MUST_BE_LOGGED_IN));
+    User user =
+        userManagementService
+            .findOneById(message.getUserId())
+            .orElseThrow(
+                () ->
+                    new EntityNotFoundException("User not found with ID: " + message.getUserId()));
+
     return PostedMessage.builder()
         .id(message.getId())
         .content(message.getContent())
         .userId(message.getUserId())
         .postDate(message.getPostDate())
-        .login(userLogin)
+        .login(user.getLogin())
         .numberOfLikes(chatRepository.numberOfLikesOnAMessage(message.getId()))
+        .roleUser(getUserAuthority(user.getAuthorities()))
+        .numberOfPostsUser(chatRepository.numberOfPostsByUser(message.getUserId()))
+        .numberOfLikesUser(chatRepository.getTotalNumberOfLikesByUserId(message.getUserId()))
         .build();
+  }
+
+  protected String getUserAuthority(Set<Authority> authorities) {
+    if (authorities.contains(new Authority(ADMIN))) return "ADMIN";
+    else if (authorities.contains(new Authority(STUDENT_ADMIN))) return "STUDENT ADMIN";
+
+    return "USER";
   }
 }

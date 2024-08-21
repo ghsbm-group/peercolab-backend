@@ -91,6 +91,9 @@ public class ChatRepositoryAdapter implements ChatRepository {
         .build();
   }
 
+  /**
+   * @inheritDoc
+   */
   @Override
   public PostLike likeAPost(Long messageId) {
 
@@ -110,14 +113,30 @@ public class ChatRepositoryAdapter implements ChatRepository {
 
     postLikesPsqlDbRepository.save(postLikesEntity);
 
-    return PostLike.builder()
-        .messageId(messageEntity.getId())
-        .userId(userEntity.getId())
-        .build();
+    return PostLike.builder().messageId(messageEntity.getId()).userId(userEntity.getId()).build();
   }
 
+  /**
+   * @inheritDoc
+   */
   @Override
   public Long numberOfLikesOnAMessage(Long messageId) {
     return postLikesPsqlDbRepository.countByMessageId(messageId);
+  }
+
+  /**
+   * @inheritDoc
+   */
+  @Override
+  public Long numberOfPostsByUser(Long userId) {
+    return messagePsqlDbRepository.countByUserId(userId);
+  }
+
+  /**
+   * @inheritDoc
+   */
+  @Override
+  public Long getTotalNumberOfLikesByUserId(Long userId) {
+    return postLikesPsqlDbRepository.countTotalLikesByUserId(userId);
   }
 }

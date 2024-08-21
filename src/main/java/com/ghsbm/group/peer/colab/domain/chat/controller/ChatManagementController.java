@@ -59,6 +59,13 @@ public class ChatManagementController {
             .build());
   }
 
+  /**
+   * Endpoint for liking a message by a user
+   *
+   * @param messageId The identifier of the appreciated message
+   * @return a {@link LikeAPostResponse} contains information about the appreciated message and the
+   *     user who appreciated the message
+   */
   @PostMapping("/like-a-post")
   public ResponseEntity<LikeAPostResponse> likeAPost(@NotNull final Long messageId) {
     final var postlike = chatManagementService.likeAMessage(messageId);

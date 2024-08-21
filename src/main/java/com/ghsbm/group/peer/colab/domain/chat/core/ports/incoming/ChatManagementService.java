@@ -45,6 +45,12 @@ public interface ChatManagementService {
   @Transactional
   LatestPostedMessage retrieveLatestPostedMessage(List<Long> folderId);
 
+  /**
+   * Persists the appreciation of a message made by a user
+   *
+   * @param messageId The id of the message being rated
+   * @return a {@link PostLike} object.
+   */
   @Transactional
   PostLike likeAMessage(Long messageId);
 }

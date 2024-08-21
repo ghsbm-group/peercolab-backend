@@ -385,7 +385,12 @@ public class UserManagementFacade implements UserManagementService {
     return userManagementRepository.findAllAuthorities().stream().map(Authority::getName).toList();
   }
 
-  private void clearUserCaches(User user) {
+    @Override
+    public Optional<User> findOneById(Long id) {
+        return userManagementRepository.findUserById(id);
+    }
+
+    private void clearUserCaches(User user) {
     Objects.requireNonNull(cacheManager.getCache(UserRepository.USERS_BY_LOGIN_CACHE))
         .evict(user.getLogin());
     if (user.getEmail() != null) {

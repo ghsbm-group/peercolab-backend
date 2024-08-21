@@ -14,4 +14,7 @@ public class PostedMessage {
   private Long userId;
   private String login;
   private Long numberOfLikes;
+  private Long numberOfLikesUser;
+  private Long numberOfPostsUser;
+  private String roleUser;
 }
