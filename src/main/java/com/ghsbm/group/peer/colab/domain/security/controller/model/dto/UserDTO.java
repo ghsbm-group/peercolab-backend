@@ -1,6 +1,8 @@
 package com.ghsbm.group.peer.colab.domain.security.controller.model.dto;
 
 import com.ghsbm.group.peer.colab.domain.security.core.model.User;
+import com.ghsbm.group.peer.colab.infrastructure.SecurityUtils;
+
 import java.io.Serializable;
 
 /** A DTO representing a user, with only the public attributes. */

@@ -41,11 +41,14 @@ public class ChatManagementFacadeTest {
   @Mock private ClassManagementService classManagementService;
 
   private static Message buildValidMessage() {
-    return Message.builder().content(CONTENT).messageboardId(FOLDER_ID).build();
+    return Message.builder().content(CONTENT).messageboardId(FOLDER_ID)
+            .build();
   }
 
   private static PostedMessage buildValidPostedMessage() {
-    return PostedMessage.builder().content(CONTENT).login(LOGIN).build();
+    return PostedMessage.builder().content(CONTENT).login(LOGIN)
+            .numberOfLikes(0L)
+            .build();
   }
 
   @BeforeEach
