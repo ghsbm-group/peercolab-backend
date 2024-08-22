@@ -1,5 +1,8 @@
 package com.ghsbm.group.peer.colab.domain.classes.controller;
 
+import com.ghsbm.group.peer.colab.domain.chat.controller.model.ChatMapper;
+import com.ghsbm.group.peer.colab.domain.chat.controller.model.CreateMessageResponse;
+import com.ghsbm.group.peer.colab.domain.chat.controller.model.CreateMessageRequest;
 import com.ghsbm.group.peer.colab.domain.chat.core.model.LatestPostedMessage;
 import com.ghsbm.group.peer.colab.domain.chat.core.ports.incoming.ChatManagementService;
 import com.ghsbm.group.peer.colab.domain.classes.controller.model.*;
@@ -26,14 +29,17 @@ public class ClassManagementController {
 
   private final ClassManagementService classManagementService;
   private final ClassMapper classMapper;
+  private final ChatMapper chatMapper;
   private final ChatManagementService chatManagementService;
 
   public ClassManagementController(
       ClassManagementService classManagementService,
       ClassMapper classMapper,
+      ChatMapper chatMapper,
       ChatManagementService chatManagementService) {
     this.classManagementService = classManagementService;
     this.classMapper = classMapper;
+    this.chatMapper = chatMapper;
     this.chatManagementService = chatManagementService;
   }
 
@@ -66,22 +72,58 @@ public class ClassManagementController {
    * Endpoint for creating a new Folder.
    *
    * <p>Calling this api will create a new folder, a subfolder(depending on the existence of the
-   * parentId parameter) or a message board (if the parameter isMessageBoard is set)
+   * parentId parameter)
    *
-   * @param createFolderRequest {@link CreateFolderRequest} encapsulates the folder/messageboard
+   * @param createFolderRequest {@link CreateFolderRequest} encapsulates the folder
    *     configuration parameters.
    * @return a {@link CreateFolderResponse} containing the configuration identifiers for the created
-   *     folder/messageboard.
+   *     folder.
    */
   @PostMapping("/create-folder")
   public ResponseEntity<CreateFolderResponse> createFolder(
-      @Valid @RequestBody final CreateFolderRequest createFolderRequest) {
+          @Valid @RequestBody final CreateFolderRequest createFolderRequest) {
     final var folder =
-        classManagementService.createFolder(
-            classMapper.fromCreateFolderRequest(createFolderRequest));
+            classManagementService.createFolder(
+                    classMapper.fromCreateFolderInfoDTORequest(createFolderRequest.getFolderInfoDTO()));
     return ResponseEntity.ok(
-        CreateFolderResponse.builder()
+            CreateFolderResponse.builder()
+                    .folderDTO(new FolderDTO(folder.getId(), folder.getName(), folder.getIsMessageBoard()))
+                    .build());
+  }
+  /**
+   * Endpoint for creating a new message board and the first posted message.
+   *
+   * <p>Calling this api will create a new message board (the parameter isMessageBoard is set to true)
+   *
+   * @param createMessageBoardRequest {@link CreateMessageBoardRequest} encapsulates message board
+   *     configuration parameters.
+   * @return a {@link CreateMessageResponse} containing the configuration identifiers for the created
+   *     messageboard and a {@link CreateMessageResponse} containing the first posted message.
+   */
+  @PostMapping("/create-messageboard")
+  public ResponseEntity<CreateMessageBoardResponse> createMessageboard(
+      @Valid @RequestBody final CreateMessageBoardRequest createMessageBoardRequest) {
+    final var folder =
+        classManagementService.createMessageBoard(
+            classMapper.fromCreateFolderInfoDTORequest(
+                createMessageBoardRequest.getFolderInfoDTO()));
+    CreateMessageRequest createMessageRequest =
+        CreateMessageRequest.builder()
+            .content(createMessageBoardRequest.getFirstMessage())
+            .messageboardId(folder.getId())
+            .build();
+    final var message =
+        chatManagementService.createMessage(
+            chatMapper.fromCreateMessageRequest(createMessageRequest));
+    return ResponseEntity.ok(
+        CreateMessageBoardResponse.builder()
             .folderDTO(new FolderDTO(folder.getId(), folder.getName(), folder.getIsMessageBoard()))
+            .createMessageResponse(
+                CreateMessageResponse.builder()
+                    .userId(message.getUserId())
+                    .postDate(message.getPostDate())
+                    .content(message.getContent())
+                    .build())
             .build());
   }
 

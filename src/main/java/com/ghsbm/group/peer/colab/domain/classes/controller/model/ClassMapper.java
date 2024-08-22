@@ -2,6 +2,7 @@ package com.ghsbm.group.peer.colab.domain.classes.controller.model;
 
 import com.ghsbm.group.peer.colab.domain.classes.controller.model.dto.ClassDTO;
 import com.ghsbm.group.peer.colab.domain.classes.controller.model.dto.FolderDTO;
+import com.ghsbm.group.peer.colab.domain.classes.controller.model.dto.FolderInfoDTO;
 import com.ghsbm.group.peer.colab.domain.classes.core.model.ClassConfiguration;
 import com.ghsbm.group.peer.colab.domain.classes.core.model.Folder;
 import java.util.List;
@@ -46,10 +47,10 @@ public interface ClassMapper {
   /**
    * Builds a {@link Folder} core domain object based on a {@link CreateFolderRequest} instance.
    *
-   * @param createFolderRequest encapsulates the requests parameters.
+   * @param folderInfoDTO encapsulates the requests parameters.
    * @return a {@link Folder} object build based on the request parameter.
    */
-  Folder fromCreateFolderRequest(CreateFolderRequest createFolderRequest);
+  Folder fromCreateFolderInfoDTORequest(FolderInfoDTO folderInfoDTO);
 
   /**
    * Builds a {@link Folder} core domain object based on a {@link RenameFolderRequest} instance that

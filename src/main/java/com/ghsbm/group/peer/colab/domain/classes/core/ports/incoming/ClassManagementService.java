@@ -56,13 +56,24 @@ public interface ClassManagementService {
   ClassDetails createClass(ClassConfiguration classConfigurationInfo);
 
   /**
-   * Persists the folder/messageboard.
+   * Persists the folder.
    *
    * @param folder encapsulates folder data.
-   * @return a {@link Folder} object with the id attribute set.
+   * @return a {@link Folder} object with the id attribute set and isMessageBoard parameter set to
+   *     false.
    */
   @Transactional
   Folder createFolder(Folder folder);
+
+  /**
+   * Persists the message board.
+   *
+   * @param folder encapsulates message board data.
+   * @return a {@link Folder} object with the id attribute set and isMessageBoard parameter set to
+   *     true.
+   */
+  @Transactional
+  Folder createMessageBoard(Folder folder);
 
   /**
    * Rename the folder.

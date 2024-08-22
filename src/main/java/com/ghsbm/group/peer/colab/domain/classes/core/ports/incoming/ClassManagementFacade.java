@@ -21,7 +21,6 @@ class ClassManagementFacade implements ClassManagementService {
 
   private final ClassRepository classRepository;
 
-
   public ClassManagementFacade(ClassRepository classRepository) {
     this.classRepository = classRepository;
   }
@@ -111,6 +110,23 @@ class ClassManagementFacade implements ClassManagementService {
     if (classRepository.folderAlreadyExists(folder)) {
       throw new FolderAlreadyExistsException();
     }
+    folder.setIsMessageBoard(false);
+    return classRepository.create(folder);
+  }
+
+  /**
+   * @inheritDoc
+   */
+  @Override
+  public Folder createMessageBoard(Folder folder) {
+    Objects.requireNonNull(folder);
+    Objects.requireNonNull(folder.getName());
+    Objects.requireNonNull(folder.getClassConfigurationId());
+
+    if (classRepository.folderAlreadyExists(folder)) {
+      throw new FolderAlreadyExistsException();
+    }
+    folder.setIsMessageBoard(true);
     return classRepository.create(folder);
   }
 
@@ -169,20 +185,18 @@ class ClassManagementFacade implements ClassManagementService {
     Folder folder = classRepository.findFolderById(messageBoardId);
     return classRepository.isEnrolled(userLogin, folder.getClassConfigurationId());
   }
+
   /**
    * @inheritDoc
    */
   @Override
   public FolderInformation retrieveFolderInformation(long folderId) {
-    var numberOfSubfolers= classRepository.countAllSubfolders(folderId);
+    var numberOfSubfolers = classRepository.countAllSubfolders(folderId);
     var numberOfPosts = classRepository.countMessages(folderId);
 
-
-    return FolderInformation.builder()
-            .topics(numberOfSubfolers)
-            .posts(numberOfPosts)
-            .build();
+    return FolderInformation.builder().topics(numberOfSubfolers).posts(numberOfPosts).build();
   }
+
   /**
    * @inheritDoc
    */
@@ -190,5 +204,4 @@ class ClassManagementFacade implements ClassManagementService {
   public List<Long> getMessageBoardsIds(Long folderId) {
     return classRepository.findMessageBoardsIds(folderId);
   }
-
 }
