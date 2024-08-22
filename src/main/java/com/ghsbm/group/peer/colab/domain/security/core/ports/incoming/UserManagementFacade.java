@@ -56,7 +56,6 @@ public class UserManagementFacade implements UserManagementService {
 
   @Override
   public Optional<User> activateRegistration(String key) {
-    log.debug("Activating user for activation key {}", key);
     Optional<User> toBeActivated =
         userManagementRepository
             .findByActivationKey(key)

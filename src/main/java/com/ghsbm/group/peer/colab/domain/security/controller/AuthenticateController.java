@@ -71,7 +71,7 @@ public class AuthenticateController {
    * @param request the HTTP request.
    * @return the login if the user is authenticated.
    */
-  @GetMapping("/authenticate")
+  @GetMapping(value = "/authenticate", produces = "text/plain")
   public String isAuthenticated(HttpServletRequest request) {
     log.debug("REST request to check if the current user is authenticated");
     return request.getRemoteUser();
