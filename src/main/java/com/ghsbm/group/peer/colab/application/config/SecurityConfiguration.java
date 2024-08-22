@@ -15,6 +15,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.oauth2.server.resource.web.BearerTokenAuthenticationEntryPoint;
 import org.springframework.security.oauth2.server.resource.web.access.BearerTokenAccessDeniedHandler;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.authentication.logout.HttpStatusReturningLogoutSuccessHandler;
 import org.springframework.security.web.servlet.util.matcher.MvcRequestMatcher;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
@@ -39,7 +40,9 @@ public class SecurityConfiguration {
   @Bean
   public SecurityFilterChain filterChain(HttpSecurity http, MvcRequestMatcher.Builder mvc)
       throws Exception {
-    http.cors(cors -> Customizer.withDefaults())
+    http.logout(
+            (logout) -> logout.logoutSuccessHandler(new HttpStatusReturningLogoutSuccessHandler()))
+        .cors(cors -> Customizer.withDefaults())
         .csrf(csrf -> csrf.disable())
         .authorizeHttpRequests(
             authz ->
