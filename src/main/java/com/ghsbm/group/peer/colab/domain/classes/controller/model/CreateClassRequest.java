@@ -27,7 +27,7 @@ public class CreateClassRequest {
 
   @NotNull
   @Min(value = 1)
-  @Max(value = 6)
+  @Max(value = 12)
   private Integer noOfStudyYears;
 
   @NotNull

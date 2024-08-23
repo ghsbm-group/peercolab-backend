@@ -12,13 +12,13 @@ import com.ghsbm.group.peer.colab.domain.classes.core.model.Folder;
 import com.ghsbm.group.peer.colab.domain.classes.core.ports.incoming.exception.FolderAlreadyExistsException;
 import com.ghsbm.group.peer.colab.domain.classes.core.ports.outgoing.ClassRepository;
 import com.ghsbm.group.peer.colab.domain.infrastructure.SecurityTestUtils;
-
 import java.util.List;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
+import org.springframework.context.MessageSource;
 
 class ClassManagementFacadeTest {
 
@@ -38,6 +38,7 @@ class ClassManagementFacadeTest {
   @InjectMocks private ClassManagementFacade victim;
 
   @Mock private ClassRepository classRepository;
+  @Mock private MessageSource messageSource;
 
   private static ClassConfiguration buildValidClassConfiguration() {
     return ClassConfiguration.builder()

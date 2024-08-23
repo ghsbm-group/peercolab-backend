@@ -1,5 +1,8 @@
 package com.ghsbm.group.peer.colab.domain.classes.core.ports.incoming;
 
+import static com.ghsbm.group.peer.colab.infrastructure.AuthoritiesConstants.STUDENT_ADMIN;
+import static com.ghsbm.group.peer.colab.infrastructure.AuthoritiesConstants.USER_MUST_BE_LOGGED_IN;
+
 import com.ghsbm.group.peer.colab.domain.classes.core.model.*;
 import com.ghsbm.group.peer.colab.domain.classes.core.ports.incoming.exception.ClassConfigurationAlreadyExistsException;
 import com.ghsbm.group.peer.colab.domain.classes.core.ports.incoming.exception.FolderAlreadyExistsException;
@@ -9,20 +12,20 @@ import com.ghsbm.group.peer.colab.infrastructure.SecurityUtils;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
-
+import org.springframework.context.MessageSource;
+import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.stereotype.Service;
-
-import static com.ghsbm.group.peer.colab.infrastructure.AuthoritiesConstants.STUDENT_ADMIN;
-import static com.ghsbm.group.peer.colab.infrastructure.AuthoritiesConstants.USER_MUST_BE_LOGGED_IN;
 
 /** Service that contains the core business logic. */
 @Service
 class ClassManagementFacade implements ClassManagementService {
 
   private final ClassRepository classRepository;
+  private final MessageSource messageSource;
 
-  public ClassManagementFacade(ClassRepository classRepository) {
+  public ClassManagementFacade(ClassRepository classRepository, MessageSource messageSource) {
     this.classRepository = classRepository;
+    this.messageSource = messageSource;
   }
 
   /**
@@ -67,7 +70,7 @@ class ClassManagementFacade implements ClassManagementService {
         i++) { // for creating years folders
       final Folder yearFolder =
           Folder.builder()
-              .name("Year " + i)
+              .name(messageSource.getMessage("year." + i, null, LocaleContextHolder.getLocale()))
               .isMessageBoard(false)
               .classConfigurationId(classConfiguration.getId())
               .build();
@@ -80,7 +83,9 @@ class ClassManagementFacade implements ClassManagementService {
           j++) { // for creating semesters folders
         final Folder semesterFolder =
             Folder.builder()
-                .name("Semester " + j)
+                .name(
+                    messageSource.getMessage(
+                        "semester." + j, null, LocaleContextHolder.getLocale()))
                 .isMessageBoard(false)
                 .parentId(persistedCurrentYearFolder.getId())
                 .classConfigurationId(classConfiguration.getId())
