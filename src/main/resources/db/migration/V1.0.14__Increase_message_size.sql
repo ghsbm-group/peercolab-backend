@@ -1,0 +1,2 @@
+ALTER TABLE message
+    ALTER COLUMN content TYPE VARCHAR(10000);

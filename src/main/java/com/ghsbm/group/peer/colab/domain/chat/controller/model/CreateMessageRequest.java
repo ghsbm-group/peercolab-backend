@@ -9,7 +9,7 @@ import lombok.Data;
 @Data
 public class CreateMessageRequest {
   @NotNull
-  @Size(min = 1, max = 250)
+  @Size(min = 1, max = 10000)
   private String content;
 
   @NotNull private Long messageboardId;
