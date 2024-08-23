@@ -69,4 +69,14 @@ public interface ChatRepository {
    *     made by a user.
    */
   Long getTotalNumberOfLikesByUserId(Long userId);
+
+  /**
+   * Returns if the current logged user like a specific message.
+   *
+   * @param messageId The id of the message for which is doing the checks if it was liked by the
+   *     logged user.
+   * @param login The username of the logged user.
+   * @return If the user like the message.
+   */
+  boolean currentUserLikedThePost(Long messageId, String login);
 }

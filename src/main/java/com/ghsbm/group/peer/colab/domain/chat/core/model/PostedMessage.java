@@ -17,4 +17,5 @@ public class PostedMessage {
   private Long numberOfLikesUser;
   private Long numberOfPostsUser;
   private String roleUser;
+  private boolean isLikedByCurrentUser;
 }

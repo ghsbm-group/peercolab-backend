@@ -132,4 +132,13 @@ public interface ClassManagementService {
    */
   @Transactional
   List<Long> getMessageBoardsIds(Long folderId);
+
+  /**
+   * Retrieves a list of {@link ClassConfiguration} that contains the class configuration which a
+   * logged user is enrolled based on logged user's username.
+   *
+   * @return a {@link ClassConfiguration} objects.
+   */
+  @Transactional
+  List<ClassConfiguration> getEnrolledClassOfCurrentUser();
 }

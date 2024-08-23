@@ -43,19 +43,20 @@ public interface FolderPsqlDbRespository extends JpaRepository<FolderEntity, Lon
    *
    * @param name the name of the folder
    * @param classConfigurationId the class configuration id that belongs to
-   * @param folderId the folder id that belongs to
+   * @param parentId the folder id that belongs to
    * @return if the {@link FolderEntity} exists or not (true or false)
    */
-  @Query(
-      "SELECT CASE WHEN COUNT(f)>0 THEN true ELSE false END "
-          + "FROM FolderEntity f "
-          + "WHERE f.name = :name AND "
-          + "f.classConfiguration.id = :classConfigurationId AND "
-          + "f.parent.id = :parentId")
-  boolean existsByNameAndAndClassConfigurationIdAndParentId(
-      @Param("name") String name,
-      @Param("classConfigurationId") Long classConfigurationId,
-      @Param("parentId") Long folderId);
+  boolean existsByNameAndAndClassConfiguration_IdAndParent_Id(
+      String name, Long classConfigurationId, Long parentId);
+
+  /**
+   * checks if an entity of {@link FolderEntity} already exists with the specific parameters.
+   *
+   * @param name the name of the folder
+   * @param classConfigurationId the class configuration id that belongs to
+   * @return if the {@link FolderEntity} exists or not (true or false)
+   */
+  boolean existsByNameAndAndClassConfiguration_Id(String name, Long classConfigurationId);
 
   /**
    * Counts all the subfolder of a {@link FolderEntity}

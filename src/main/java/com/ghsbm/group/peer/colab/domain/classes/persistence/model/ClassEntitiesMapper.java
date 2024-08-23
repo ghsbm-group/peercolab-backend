@@ -27,4 +27,6 @@ public abstract class ClassEntitiesMapper {
     @Mapping(target = "parentId", source = "parent.id")
   })
   public abstract Folder folderFromEntity(FolderEntity savedFolder);
+
+  public abstract List<Enrolment> fromEnrolmentEntities(List<EnrolmentEntity> enrolmentEntities);
 }

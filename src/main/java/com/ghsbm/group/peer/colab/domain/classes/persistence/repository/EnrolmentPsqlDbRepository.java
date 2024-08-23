@@ -6,6 +6,8 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
+import java.util.List;
+
 /** JPA repository for {@link EnrolmentEntity} */
 public interface EnrolmentPsqlDbRepository extends JpaRepository<EnrolmentEntity, EnrolmentId> {
   /**
@@ -21,5 +23,14 @@ public interface EnrolmentPsqlDbRepository extends JpaRepository<EnrolmentEntity
           + "WHERE e.user.login = :user_login AND "
           + "e.classConfiguration.id = :class_configuration_id")
   boolean existsByUserNameAndClassConfigurationId(
-      @Param("user_login") String userLogin, @Param("class_configuration_id") Long classConfigurationId);
+      @Param("user_login") String userLogin,
+      @Param("class_configuration_id") Long classConfigurationId);
+
+  /**
+   * retrieves a list of {@link EnrolmentEntity} based on login user.
+   *
+   * @param login the username of the user.
+   * @return A list of {@link EnrolmentEntity} entities.
+   */
+  List<EnrolmentEntity> findByUser_Login(String login);
 }

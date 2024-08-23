@@ -139,4 +139,12 @@ public class ChatRepositoryAdapter implements ChatRepository {
   public Long getTotalNumberOfLikesByUserId(Long userId) {
     return postLikesPsqlDbRepository.countTotalLikesByUserId(userId);
   }
+
+  /**
+   * @inheritDoc
+   */
+  @Override
+  public boolean currentUserLikedThePost(Long messageId, String login) {
+    return postLikesPsqlDbRepository.existsByMessage_IdAndUser_Login(messageId, login);
+  }
 }
