@@ -71,4 +71,5 @@ public interface ClassMapper {
    */
   FolderInformationResponse folderInformationResponseFromFolderInformation(
       FolderInformation folderInformation);
+  List<EnrolledClassesResponse> enrolledClassesResponseFromClassConfiguration(List<ClassConfiguration> classConfigurations);
 }

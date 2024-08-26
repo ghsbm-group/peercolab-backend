@@ -87,6 +87,10 @@ public class ChatManagementFacade implements ChatManagementService {
     if (message == null) {
       return null;
     }
+    String currentLogin =
+        SecurityUtils.getCurrentUserLogin()
+            .orElseThrow(() -> new IllegalStateException(USER_MUST_BE_LOGGED_IN));
+
     User user =
         userManagementService
             .findOneById(message.getUserId())
@@ -104,6 +108,8 @@ public class ChatManagementFacade implements ChatManagementService {
         .roleUser(getUserAuthority(user.getAuthorities()))
         .numberOfPostsUser(chatRepository.numberOfPostsByUser(message.getUserId()))
         .numberOfLikesUser(chatRepository.getTotalNumberOfLikesByUserId(message.getUserId()))
+        .isLikedByCurrentUser(
+            chatRepository.currentUserLikedThePost(message.getId(),currentLogin))
         .build();
   }
 

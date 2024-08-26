@@ -74,31 +74,34 @@ public class ClassManagementController {
    * <p>Calling this api will create a new folder, a subfolder(depending on the existence of the
    * parentId parameter)
    *
-   * @param createFolderRequest {@link CreateFolderRequest} encapsulates the folder
-   *     configuration parameters.
+   * @param createFolderRequest {@link CreateFolderRequest} encapsulates the folder configuration
+   *     parameters.
    * @return a {@link CreateFolderResponse} containing the configuration identifiers for the created
    *     folder.
    */
   @PostMapping("/create-folder")
   public ResponseEntity<CreateFolderResponse> createFolder(
-          @Valid @RequestBody final CreateFolderRequest createFolderRequest) {
+      @Valid @RequestBody final CreateFolderRequest createFolderRequest) {
     final var folder =
-            classManagementService.createFolder(
-                    classMapper.fromCreateFolderInfoDTORequest(createFolderRequest.getFolderInfoDTO()));
+        classManagementService.createFolder(
+            classMapper.fromCreateFolderInfoDTORequest(createFolderRequest.getFolderInfoDTO()));
     return ResponseEntity.ok(
-            CreateFolderResponse.builder()
-                    .folderDTO(new FolderDTO(folder.getId(), folder.getName(), folder.getIsMessageBoard()))
-                    .build());
+        CreateFolderResponse.builder()
+            .folderDTO(new FolderDTO(folder.getId(), folder.getName(), folder.getIsMessageBoard()))
+            .build());
   }
+
   /**
    * Endpoint for creating a new message board and the first posted message.
    *
-   * <p>Calling this api will create a new message board (the parameter isMessageBoard is set to true)
+   * <p>Calling this api will create a new message board (the parameter isMessageBoard is set to
+   * true)
    *
    * @param createMessageBoardRequest {@link CreateMessageBoardRequest} encapsulates message board
    *     configuration parameters.
-   * @return a {@link CreateMessageResponse} containing the configuration identifiers for the created
-   *     messageboard and a {@link CreateMessageResponse} containing the first posted message.
+   * @return a {@link CreateMessageResponse} containing the configuration identifiers for the
+   *     created messageboard and a {@link CreateMessageResponse} containing the first posted
+   *     message.
    */
   @PostMapping("/create-messageboard")
   public ResponseEntity<CreateMessageBoardResponse> createMessageboard(
@@ -250,5 +253,18 @@ public class ClassManagementController {
 
     return ResponseEntity.ok(
         classMapper.folderInformationResponseFromFolderInformation(folderInformation));
+  }
+
+  /**
+   * Returns information about classes that the logged user is enrolled.
+   *
+   * @return a list of {@link EnrolledClassesResponse} that encapsulates information about the
+   *     classes that logged user is enrolled.
+   */
+  @GetMapping("/enrolled-classes")
+  public ResponseEntity<List<EnrolledClassesResponse>> getEnrolledClassesOfCurrentUser() {
+    return ResponseEntity.ok(
+        classMapper.enrolledClassesResponseFromClassConfiguration(
+            classManagementService.getEnrolledClassOfCurrentUser()));
   }
 }

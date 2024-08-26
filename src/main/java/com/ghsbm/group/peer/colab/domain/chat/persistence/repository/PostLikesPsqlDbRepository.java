@@ -27,4 +27,13 @@ public interface PostLikesPsqlDbRepository extends JpaRepository<PostLikesEntity
           + "JOIN postlike.message m "
           + "WHERE m.userId = :userId")
   Long countTotalLikesByUserId(@Param("userId") Long userId);
+
+  /**
+   * Return if the user like a post
+   *
+   * @param messageId The message identifier
+   * @param login The username of the user
+   * @return if the current user like the message
+   */
+  boolean existsByMessageIdAndUserLogin(Long messageId, String login);
 }

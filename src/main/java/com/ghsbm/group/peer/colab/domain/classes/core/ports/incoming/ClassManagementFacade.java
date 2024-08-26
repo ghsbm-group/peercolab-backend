@@ -209,4 +209,15 @@ class ClassManagementFacade implements ClassManagementService {
   public List<Long> getMessageBoardsIds(Long folderId) {
     return classRepository.findMessageBoardsIds(folderId);
   }
+
+  /**
+   * @inheritDoc
+   */
+  @Override
+  public List<ClassConfiguration> getEnrolledClassOfCurrentUser() {
+    String userLogin =
+        SecurityUtils.getCurrentUserLogin()
+            .orElseThrow(() -> new IllegalStateException(USER_MUST_BE_LOGGED_IN));
+    return classRepository.getEnrolmentByUserLogin(userLogin);
+  }
 }

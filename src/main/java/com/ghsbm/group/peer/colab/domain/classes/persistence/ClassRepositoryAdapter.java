@@ -16,6 +16,7 @@ import com.ghsbm.group.peer.colab.domain.security.infrastructure.persistence.rep
 import com.ghsbm.group.peer.colab.infrastructure.exception.BadRequestAlertException;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;
@@ -142,6 +143,9 @@ public class ClassRepositoryAdapter implements ClassRepository {
   @Override
   public boolean folderAlreadyExists(Folder folder) {
 
+    if (!folderPsqlDbRespository.existsById(folder.getParentId()))
+      return folderPsqlDbRespository.existsByNameAndAndClassConfigurationId(
+          folder.getName(), folder.getClassConfigurationId());
     return folderPsqlDbRespository.existsByNameAndAndClassConfigurationIdAndParentId(
         folder.getName(), folder.getClassConfigurationId(), folder.getParentId());
   }
@@ -223,5 +227,17 @@ public class ClassRepositoryAdapter implements ClassRepository {
   @Override
   public long countMessages(long folderId) {
     return folderPsqlDbRespository.countMessages(folderId);
+  }
+
+  /**
+   * @inheritDoc
+   */
+  @Override
+  public List<ClassConfiguration> getEnrolmentByUserLogin(String login) {
+
+    return classEntitiesMapper.fromClassEntities(
+        enrolmentPsqlDbRepository.findByUserLogin(login).stream()
+            .map(EnrolmentEntity::getClassConfiguration)
+            .collect(Collectors.toList()));
   }
 }

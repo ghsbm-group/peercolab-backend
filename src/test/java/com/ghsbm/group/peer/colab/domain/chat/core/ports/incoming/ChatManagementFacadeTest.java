@@ -122,6 +122,13 @@ public class ChatManagementFacadeTest {
   @Test
   void retrieveMessagesByMessageboardIdShouldReturnAValidList() {
     SecurityTestUtils.mockAdminUser();
+    when(userManagementService.getUserWithAuthoritiesByLogin(LOGIN)).thenReturn(
+            Optional.of(
+                    User.builder()
+                            .id(USER_ID)
+                            .login(LOGIN)
+                            .authorities(Set.of(new Authority(AuthoritiesConstants.ADMIN)))
+                            .build()));
     when(userManagementService.findOneById(any()))
         .thenReturn(
             Optional.of(

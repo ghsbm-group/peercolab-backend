@@ -135,4 +135,13 @@ public interface ClassRepository {
    * @return the number of posted messages
    */
   long countMessages(long folderId);
+
+  /**
+   * Retrieves a list of {@link ClassConfiguration} in which a user was enrolled depending on the
+   * user's username.
+   *
+   * @param login user's username
+   * @return a list of {@link ClassConfiguration} objects.
+   */
+  List<ClassConfiguration> getEnrolmentByUserLogin(String login);
 }
