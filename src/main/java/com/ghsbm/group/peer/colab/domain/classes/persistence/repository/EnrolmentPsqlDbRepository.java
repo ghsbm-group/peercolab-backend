@@ -32,5 +32,5 @@ public interface EnrolmentPsqlDbRepository extends JpaRepository<EnrolmentEntity
    * @param login the username of the user.
    * @return A list of {@link EnrolmentEntity} entities.
    */
-  List<EnrolmentEntity> findByUser_Login(String login);
+  List<EnrolmentEntity> findByUserLogin(String login);
 }

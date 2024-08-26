@@ -144,9 +144,9 @@ public class ClassRepositoryAdapter implements ClassRepository {
   public boolean folderAlreadyExists(Folder folder) {
 
     if (!folderPsqlDbRespository.existsById(folder.getParentId()))
-      return folderPsqlDbRespository.existsByNameAndAndClassConfiguration_Id(
+      return folderPsqlDbRespository.existsByNameAndAndClassConfigurationId(
           folder.getName(), folder.getClassConfigurationId());
-    return folderPsqlDbRespository.existsByNameAndAndClassConfiguration_IdAndParent_Id(
+    return folderPsqlDbRespository.existsByNameAndAndClassConfigurationIdAndParentId(
         folder.getName(), folder.getClassConfigurationId(), folder.getParentId());
   }
 
@@ -236,7 +236,7 @@ public class ClassRepositoryAdapter implements ClassRepository {
   public List<ClassConfiguration> getEnrolmentByUserLogin(String login) {
 
     return classEntitiesMapper.fromClassEntities(
-        enrolmentPsqlDbRepository.findByUser_Login(login).stream()
+        enrolmentPsqlDbRepository.findByUserLogin(login).stream()
             .map(EnrolmentEntity::getClassConfiguration)
             .collect(Collectors.toList()));
   }

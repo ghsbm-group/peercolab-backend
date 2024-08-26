@@ -46,7 +46,7 @@ public interface FolderPsqlDbRespository extends JpaRepository<FolderEntity, Lon
    * @param parentId the folder id that belongs to
    * @return if the {@link FolderEntity} exists or not (true or false)
    */
-  boolean existsByNameAndAndClassConfiguration_IdAndParent_Id(
+  boolean existsByNameAndAndClassConfigurationIdAndParentId(
       String name, Long classConfigurationId, Long parentId);
 
   /**
@@ -56,7 +56,7 @@ public interface FolderPsqlDbRespository extends JpaRepository<FolderEntity, Lon
    * @param classConfigurationId the class configuration id that belongs to
    * @return if the {@link FolderEntity} exists or not (true or false)
    */
-  boolean existsByNameAndAndClassConfiguration_Id(String name, Long classConfigurationId);
+  boolean existsByNameAndAndClassConfigurationId(String name, Long classConfigurationId);
 
   /**
    * Counts all the subfolder of a {@link FolderEntity}

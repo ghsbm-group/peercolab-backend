@@ -35,5 +35,5 @@ public interface PostLikesPsqlDbRepository extends JpaRepository<PostLikesEntity
    * @param login The username of the user
    * @return if the current user like the message
    */
-  boolean existsByMessage_IdAndUser_Login(Long messageId, String login);
+  boolean existsByMessageIdAndUserLogin(Long messageId, String login);
 }

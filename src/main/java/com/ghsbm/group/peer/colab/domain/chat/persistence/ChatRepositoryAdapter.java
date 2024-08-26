@@ -145,6 +145,6 @@ public class ChatRepositoryAdapter implements ChatRepository {
    */
   @Override
   public boolean currentUserLikedThePost(Long messageId, String login) {
-    return postLikesPsqlDbRepository.existsByMessage_IdAndUser_Login(messageId, login);
+    return postLikesPsqlDbRepository.existsByMessageIdAndUserLogin(messageId, login);
   }
 }
