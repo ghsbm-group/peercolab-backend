@@ -3,7 +3,6 @@ package com.ghsbm.group.peer.colab.domain.classes.controller.model;
 import com.ghsbm.group.peer.colab.domain.classes.controller.model.dto.ClassDTO;
 import com.ghsbm.group.peer.colab.domain.classes.controller.model.dto.FolderDTO;
 import com.ghsbm.group.peer.colab.domain.classes.controller.model.dto.FolderInfoDTO;
-import com.ghsbm.group.peer.colab.domain.classes.controller.model.dto.FolderPathDTO;
 import com.ghsbm.group.peer.colab.domain.classes.core.model.ClassConfiguration;
 import com.ghsbm.group.peer.colab.domain.classes.core.model.Folder;
 import java.util.List;
@@ -35,7 +34,6 @@ public interface ClassMapper {
    * @return list of {@link FolderDTO} matching the parameter passed to this method.
    */
   List<FolderDTO> foldersDTOFrom(List<Folder> folders);
-  List<FolderPathDTO> foldersPathDTOFrom(List<Folder> folders);
 
   /**
    * Builds a {@link ClassConfiguration} core domain object based on a {@link CreateClassRequest}

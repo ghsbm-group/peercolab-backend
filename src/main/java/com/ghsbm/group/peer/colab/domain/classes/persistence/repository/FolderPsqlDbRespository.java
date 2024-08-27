@@ -128,6 +128,4 @@ public interface FolderPsqlDbRespository extends JpaRepository<FolderEntity, Lon
   List<Long> findMessageBoardsIds(@Param("parentId") Long parentId);
 
   FolderEntity findFirstById(Long id);
-
-
 }

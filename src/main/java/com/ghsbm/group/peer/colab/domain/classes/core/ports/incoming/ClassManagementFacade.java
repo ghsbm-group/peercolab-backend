@@ -10,6 +10,7 @@ import com.ghsbm.group.peer.colab.domain.classes.core.ports.outgoing.ClassReposi
 import com.ghsbm.group.peer.colab.infrastructure.RandomUtil;
 import com.ghsbm.group.peer.colab.infrastructure.SecurityUtils;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
 import org.springframework.context.MessageSource;
@@ -226,11 +227,11 @@ class ClassManagementFacade implements ClassManagementService {
     List<Folder> path = new ArrayList<Folder>();
     Folder folder = classRepository.findFolderById(id);
     path.add(folder);
-    while(folder.getParentId()!=null)
-    {
+    while (folder.getParentId() != null) {
       folder = classRepository.findFolderById(folder.getParentId());
       path.add(folder);
     }
+    Collections.reverse(path);
     return path;
   }
 
