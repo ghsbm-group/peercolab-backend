@@ -240,4 +240,9 @@ public class ClassRepositoryAdapter implements ClassRepository {
             .map(EnrolmentEntity::getClassConfiguration)
             .collect(Collectors.toList()));
   }
+
+  @Override
+  public ClassConfiguration getClassConfigurationByFolderId(Long folderId) {
+    return classEntitiesMapper.classFromEntity(folderPsqlDbRespository.findFirstById(folderId).getClassConfiguration());
+  }
 }
