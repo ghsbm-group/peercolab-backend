@@ -20,6 +20,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.time.LocalDateTime;
+import java.time.ZoneId;
+import java.time.ZonedDateTime;
 import java.util.List;
 
 /** Implementation of the message repository interface. Reads and persists data into a db. */
@@ -69,7 +71,7 @@ public class ChatRepositoryAdapter implements ChatRepository {
     final var messageEntity =
         MessageEntity.builder()
             .content(message.getContent())
-            .postDate(LocalDateTime.now())
+            .postDate(ZonedDateTime.now(ZoneId.of("Europe/Bucharest")))
             .userId(userId)
             .messageboardId(message.getMessageboardId())
             .build();

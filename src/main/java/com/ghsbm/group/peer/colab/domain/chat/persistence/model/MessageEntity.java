@@ -6,7 +6,7 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.time.LocalDateTime;
+import java.time.ZonedDateTime;
 
 @Data
 @Entity
@@ -23,7 +23,7 @@ public class MessageEntity {
   private String content;
 
   @Column(name = "post_date")
-  private LocalDateTime postDate;
+  private ZonedDateTime postDate;
 
   @Column(name = "user_id")
   private Long userId;

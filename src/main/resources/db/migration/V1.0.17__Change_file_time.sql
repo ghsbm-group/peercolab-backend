@@ -1,0 +1,2 @@
+ALTER TABLE "file"
+   ALTER COLUMN file_date TYPE TIMESTAMPTZ;

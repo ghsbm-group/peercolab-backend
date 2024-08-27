@@ -14,6 +14,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.time.LocalDateTime;
+import java.time.ZoneId;
+import java.time.ZonedDateTime;
 
 @Component
 @NoArgsConstructor
@@ -49,7 +51,7 @@ public class FileRepositoryAdapter implements FileRepository {
             .folderId(file.getFolderId())
             .user(userEntity.getId())
             .path(file.getPath())
-            .fileDate(LocalDateTime.now())
+            .fileDate(ZonedDateTime.now(ZoneId.of("Europe/Bucharest")))
             .build();
     FileEntity savedFile = filePsqlDbRepository.save(fileEntity);
     return fileEntitiesMapper.fileFromEntity(savedFile);
