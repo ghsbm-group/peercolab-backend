@@ -189,7 +189,7 @@ public class ClassManagementController {
                     classManagementService.retrieveFolderByParentId(parentId)))
             .path(classMapper.foldersDTOFrom(classManagementService.getFolderPath(parentId)))
             .classDTO(
-                classMapper.ClassDTOFromClassConfiguration(
+                classMapper.classDTOFromClassConfiguration(
                     classManagementService.retrieveClassConfigurationByFolderId(parentId)))
             .build());
   }

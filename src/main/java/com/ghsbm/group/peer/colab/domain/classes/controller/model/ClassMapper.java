@@ -73,5 +73,5 @@ public interface ClassMapper {
       FolderInformation folderInformation);
   List<EnrolledClassesResponse> enrolledClassesResponseFromClassConfiguration(List<ClassConfiguration> classConfigurations);
 
-  ClassDTO ClassDTOFromClassConfiguration(ClassConfiguration classConfiguration);
+  ClassDTO classDTOFromClassConfiguration(ClassConfiguration classConfiguration);
 }
