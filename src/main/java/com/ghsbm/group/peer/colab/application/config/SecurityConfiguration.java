@@ -92,6 +92,8 @@ public class SecurityConfiguration {
                     .hasAnyAuthority(ADMIN, STUDENT_ADMIN, USER)
                     .requestMatchers(mvc.pattern(HttpMethod.POST, "schools/**"))
                     .hasAnyAuthority(ADMIN, STUDENT_ADMIN)
+                    .requestMatchers(mvc.pattern(HttpMethod.POST, "file/**"))
+                    .hasAnyAuthority(STUDENT_ADMIN, ADMIN)
                     .requestMatchers(mvc.pattern(HttpMethod.GET, "schools/**"))
                     .permitAll())
         .sessionManagement(
