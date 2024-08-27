@@ -1,5 +1,6 @@
 package com.ghsbm.group.peer.colab.domain.classes.persistence.repository;
 
+import com.ghsbm.group.peer.colab.domain.classes.persistence.model.ClassConfigurationEntity;
 import com.ghsbm.group.peer.colab.domain.classes.persistence.model.FolderEntity;
 import java.util.List;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -125,4 +126,8 @@ public interface FolderPsqlDbRespository extends JpaRepository<FolderEntity, Lon
               + "WHERE is_messageboard = true",
       nativeQuery = true)
   List<Long> findMessageBoardsIds(@Param("parentId") Long parentId);
+
+  FolderEntity findFirstById(Long id);
+
+
 }

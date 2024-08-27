@@ -141,4 +141,9 @@ public interface ClassManagementService {
    */
   @Transactional
   List<ClassConfiguration> getEnrolledClassOfCurrentUser();
+
+  @Transactional
+  List<Folder> getFolderPath(Long id);
+  @Transactional
+  ClassConfiguration retrieveClassConfigurationByFolderId(Long folderId);
 }

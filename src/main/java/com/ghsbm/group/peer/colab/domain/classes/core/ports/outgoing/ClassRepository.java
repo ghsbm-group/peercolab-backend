@@ -144,4 +144,7 @@ public interface ClassRepository {
    * @return a list of {@link ClassConfiguration} objects.
    */
   List<ClassConfiguration> getEnrolmentByUserLogin(String login);
+
+  ClassConfiguration getClassConfigurationByFolderId(Long folderId);
+
 }

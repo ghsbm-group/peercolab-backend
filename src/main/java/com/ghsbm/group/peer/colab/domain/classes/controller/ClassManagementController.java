@@ -87,8 +87,11 @@ public class ClassManagementController {
             classMapper.fromCreateFolderInfoDTORequest(createFolderRequest.getFolderInfoDTO()));
     return ResponseEntity.ok(
         CreateFolderResponse.builder()
-            .folderDTO(new FolderDTO(folder.getId(), folder.getName(), folder.getIsMessageBoard()))
-            .build());
+            .folderDTO(FolderDTO.builder()
+                    .id(folder.getId())
+                    .name(folder.getName())
+                    .isMessageBoard(folder.getIsMessageBoard())
+                    .build()).build());
   }
 
   /**
@@ -120,7 +123,11 @@ public class ClassManagementController {
             chatMapper.fromCreateMessageRequest(createMessageRequest));
     return ResponseEntity.ok(
         CreateMessageBoardResponse.builder()
-            .folderDTO(new FolderDTO(folder.getId(), folder.getName(), folder.getIsMessageBoard()))
+            .folderDTO(FolderDTO.builder()
+                    .id(folder.getId())
+                    .name(folder.getName())
+                    .isMessageBoard(folder.getIsMessageBoard())
+                    .build())
             .createMessageResponse(
                 CreateMessageResponse.builder()
                     .userId(message.getUserId())
@@ -170,10 +177,14 @@ public class ClassManagementController {
    * @return A list of {@link FolderDTO} encapsulating data about folders.
    */
   @GetMapping("/subfolders")
-  public ResponseEntity<List<FolderDTO>> retrieveFoldersByParentId(final Long parentId) {
+  public ResponseEntity<RetrieveFolderResponse> retrieveFoldersByParentId(final Long parentId) {
     Objects.requireNonNull(parentId);
     return ResponseEntity.ok(
-        classMapper.foldersDTOFrom(classManagementService.retrieveFolderByParentId(parentId)));
+            RetrieveFolderResponse.builder()
+                    .subfolders(classMapper.foldersDTOFrom(classManagementService.retrieveFolderByParentId(parentId)))
+                    .path(classMapper.foldersPathDTOFrom(classManagementService.getFolderPath(parentId)))
+                    .classDTO(classMapper.ClassDTOFromClassConfiguration(classManagementService.retrieveClassConfigurationByFolderId(parentId)))
+                    .build());
   }
 
   /**
@@ -195,8 +206,11 @@ public class ClassManagementController {
             classMapper.fromRenameFolderRequest(renameFolderRequest));
     return ResponseEntity.ok(
         RenameFolderResponse.builder()
-            .folderDTO(new FolderDTO(folder.getId(), folder.getName(), folder.getIsMessageBoard()))
-            .build());
+            .folderDTO(FolderDTO.builder()
+                    .id(folder.getId())
+                    .name(folder.getName())
+                    .isMessageBoard(folder.getIsMessageBoard())
+                    .build()).build());
   }
 
   /**

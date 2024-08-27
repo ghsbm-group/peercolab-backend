@@ -220,4 +220,22 @@ class ClassManagementFacade implements ClassManagementService {
             .orElseThrow(() -> new IllegalStateException(USER_MUST_BE_LOGGED_IN));
     return classRepository.getEnrolmentByUserLogin(userLogin);
   }
+
+  @Override
+  public List<Folder> getFolderPath(Long id) {
+    List<Folder> path = new ArrayList<Folder>();
+    Folder folder = classRepository.findFolderById(id);
+    path.add(folder);
+    while(folder.getParentId()!=null)
+    {
+      folder = classRepository.findFolderById(folder.getParentId());
+      path.add(folder);
+    }
+    return path;
+  }
+
+  @Override
+  public ClassConfiguration retrieveClassConfigurationByFolderId(Long folderId) {
+    return classRepository.getClassConfigurationByFolderId(folderId);
+  }
 }
