@@ -8,6 +8,7 @@ import com.ghsbm.group.peer.colab.domain.chat.core.ports.incoming.ChatManagement
 import com.ghsbm.group.peer.colab.domain.classes.controller.model.*;
 import com.ghsbm.group.peer.colab.domain.classes.controller.model.dto.ClassDTO;
 import com.ghsbm.group.peer.colab.domain.classes.controller.model.dto.FolderDTO;
+import com.ghsbm.group.peer.colab.domain.classes.controller.model.dto.FolderInfoDTO;
 import com.ghsbm.group.peer.colab.domain.classes.core.model.ClassDetails;
 import com.ghsbm.group.peer.colab.domain.classes.core.model.FolderInformation;
 import com.ghsbm.group.peer.colab.domain.classes.core.ports.incoming.ClassManagementService;
@@ -74,17 +75,17 @@ public class ClassManagementController {
    * <p>Calling this api will create a new folder, a subfolder(depending on the existence of the
    * parentId parameter)
    *
-   * @param createFolderRequest {@link CreateFolderRequest} encapsulates the folder configuration
+   * @param createFolderRequest {@link FolderInfoDTO} encapsulates the folder configuration
    *     parameters.
    * @return a {@link CreateFolderResponse} containing the configuration identifiers for the created
    *     folder.
    */
   @PostMapping("/create-folder")
   public ResponseEntity<CreateFolderResponse> createFolder(
-      @Valid @RequestBody final CreateFolderRequest createFolderRequest) {
+      @Valid @RequestBody final FolderInfoDTO createFolderRequest) {
     final var folder =
         classManagementService.createFolder(
-            classMapper.fromCreateFolderInfoDTORequest(createFolderRequest.getFolderInfoDTO()));
+            classMapper.fromCreateFolderInfoDTORequest(createFolderRequest));
     return ResponseEntity.ok(
         CreateFolderResponse.builder()
             .folderDTO(
@@ -180,17 +181,30 @@ public class ClassManagementController {
    * @return A list of {@link FolderDTO} encapsulating data about folders.
    */
   @GetMapping("/subfolders")
-  public ResponseEntity<RetrieveFolderResponse> retrieveFoldersByParentId(final Long parentId) {
+  public ResponseEntity<List<FolderDTO>> retrieveFoldersByParentId(final Long parentId) {
     Objects.requireNonNull(parentId);
     return ResponseEntity.ok(
-        RetrieveFolderResponse.builder()
-            .subfolders(
-                classMapper.foldersDTOFrom(
-                    classManagementService.retrieveFolderByParentId(parentId)))
-            .path(classMapper.foldersDTOFrom(classManagementService.getFolderPath(parentId)))
+        classMapper.foldersDTOFrom(classManagementService.retrieveFolderByParentId(parentId)));
+  }
+
+  /**
+   * Returns information about folders and the class through which to navigate to reach a specific
+   * folder, used to create a path
+   *
+   * @param folderId The folder identifier for which the list of folders and class configuration
+   *     will be returned.
+   * @return A {@link PathResponse} encapsulating a list of {@link FolderDTO} and a {@link ClassDTO}
+   *     object.
+   */
+  @GetMapping("/path")
+  public ResponseEntity<PathResponse> retrievePath(final Long folderId) {
+    Objects.requireNonNull(folderId);
+    return ResponseEntity.ok(
+        PathResponse.builder()
+            .path(classMapper.foldersDTOFrom(classManagementService.getFolderPath(folderId)))
             .classDTO(
                 classMapper.classDTOFromClassConfiguration(
-                    classManagementService.retrieveClassConfigurationByFolderId(parentId)))
+                    classManagementService.retrieveClassConfigurationByFolderId(folderId)))
             .build());
   }
 

@@ -45,7 +45,7 @@ public interface ClassMapper {
   ClassConfiguration fromCreateClassRequest(CreateClassRequest createClassRequest);
 
   /**
-   * Builds a {@link Folder} core domain object based on a {@link CreateFolderRequest} instance.
+   * Builds a {@link Folder} core domain object based on a {@link FolderInfoDTO} instance.
    *
    * @param folderInfoDTO encapsulates the requests parameters.
    * @return a {@link Folder} object build based on the request parameter.
