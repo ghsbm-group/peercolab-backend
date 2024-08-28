@@ -150,6 +150,11 @@ public class ClassRepositoryAdapter implements ClassRepository {
         folder.getName(), folder.getClassConfigurationId(), folder.getParentId());
   }
 
+  @Override
+  public boolean classDoesNotExists(Long classConfigurationId) {
+    return !classPsqlDbRepository.existsById(classConfigurationId);
+  }
+
   /**
    * @inheritDoc
    */
@@ -243,6 +248,7 @@ public class ClassRepositoryAdapter implements ClassRepository {
 
   @Override
   public ClassConfiguration getClassConfigurationByFolderId(Long folderId) {
-    return classEntitiesMapper.classFromEntity(folderPsqlDbRespository.findFirstById(folderId).getClassConfiguration());
+    return classEntitiesMapper.classFromEntity(
+        folderPsqlDbRespository.findFirstById(folderId).getClassConfiguration());
   }
 }

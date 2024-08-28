@@ -5,6 +5,7 @@ import static com.ghsbm.group.peer.colab.infrastructure.AuthoritiesConstants.USE
 
 import com.ghsbm.group.peer.colab.domain.classes.core.model.*;
 import com.ghsbm.group.peer.colab.domain.classes.core.ports.incoming.exception.ClassConfigurationAlreadyExistsException;
+import com.ghsbm.group.peer.colab.domain.classes.core.ports.incoming.exception.ClassConfigurationDoesNotExistsException;
 import com.ghsbm.group.peer.colab.domain.classes.core.ports.incoming.exception.FolderAlreadyExistsException;
 import com.ghsbm.group.peer.colab.domain.classes.core.ports.outgoing.ClassRepository;
 import com.ghsbm.group.peer.colab.infrastructure.RandomUtil;
@@ -113,7 +114,11 @@ class ClassManagementFacade implements ClassManagementService {
     Objects.requireNonNull(folder.getName());
     Objects.requireNonNull(folder.getClassConfigurationId());
 
-    if (classRepository.folderAlreadyExists(folder)) {
+    if (classRepository.classDoesNotExists(folder.getClassConfigurationId()))
+    {
+      throw new ClassConfigurationDoesNotExistsException();
+    }
+      if (classRepository.folderAlreadyExists(folder)) {
       throw new FolderAlreadyExistsException();
     }
     folder.setIsMessageBoard(false);
@@ -128,7 +133,10 @@ class ClassManagementFacade implements ClassManagementService {
     Objects.requireNonNull(folder);
     Objects.requireNonNull(folder.getName());
     Objects.requireNonNull(folder.getClassConfigurationId());
-
+    if (classRepository.classDoesNotExists(folder.getClassConfigurationId()))
+    {
+      throw new ClassConfigurationDoesNotExistsException();
+    }
     if (classRepository.folderAlreadyExists(folder)) {
       throw new FolderAlreadyExistsException();
     }

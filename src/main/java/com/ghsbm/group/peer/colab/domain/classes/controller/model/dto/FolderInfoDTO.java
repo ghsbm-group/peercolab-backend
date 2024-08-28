@@ -1,5 +1,6 @@
 package com.ghsbm.group.peer.colab.domain.classes.controller.model.dto;
 
+import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import lombok.Builder;
@@ -13,6 +14,9 @@ public class FolderInfoDTO {
   private String name;
 
   private Long parentId;
-  @NotNull private Long classConfigurationId;
+
+  @NotNull(message = "classConfigurationId is required")
+  private Long classConfigurationId;
+
   private String description;
 }

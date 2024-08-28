@@ -4,6 +4,7 @@ import static org.springframework.core.annotation.AnnotatedElementUtils.findMerg
 
 import com.ghsbm.group.peer.colab.application.config.PeerConstants;
 import com.ghsbm.group.peer.colab.domain.classes.controller.errors.ClassConfigurationAlreadyExistsException;
+import com.ghsbm.group.peer.colab.domain.classes.controller.errors.ClassConfigurationDoesNotExistsException;
 import com.ghsbm.group.peer.colab.domain.classes.controller.errors.FolderAlreadyExistsException;
 import com.ghsbm.group.peer.colab.domain.classes.controller.errors.UserIsNotEnrolledInClassConfigurationException;
 import com.ghsbm.group.peer.colab.domain.security.controller.errors.EmailAlreadyUsedException;
@@ -116,6 +117,11 @@ public class ExceptionTranslator extends ResponseEntityExceptionHandler {
         com.ghsbm.group.peer.colab.domain.classes.core.ports.incoming.exception
             .FolderAlreadyExistsException)
       return (ProblemDetailWithCause) new FolderAlreadyExistsException().getBody();
+    if (ex
+        instanceof
+        com.ghsbm.group.peer.colab.domain.classes.core.ports.incoming.exception
+            .ClassConfigurationDoesNotExistsException)
+      return (ProblemDetailWithCause) new ClassConfigurationDoesNotExistsException().getBody();
     if (ex
         instanceof
         com.ghsbm.group.peer.colab.domain.classes.core.ports.incoming.exception
