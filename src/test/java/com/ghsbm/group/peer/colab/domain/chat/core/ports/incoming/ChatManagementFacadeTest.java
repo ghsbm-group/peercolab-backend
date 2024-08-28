@@ -19,6 +19,8 @@ import com.ghsbm.group.peer.colab.domain.security.core.model.User;
 import com.ghsbm.group.peer.colab.domain.security.core.ports.incoming.UserManagementService;
 import com.ghsbm.group.peer.colab.infrastructure.AuthoritiesConstants;
 import java.time.LocalDateTime;
+import java.time.ZoneId;
+import java.time.ZonedDateTime;
 import java.util.*;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -91,7 +93,7 @@ public class ChatManagementFacadeTest {
                 .id(MESSAGE_ID)
                 .messageboardId(FOLDER_ID)
                 .content(CONTENT)
-                .postDate(LocalDateTime.now())
+                .postDate(ZonedDateTime.now(ZoneId.of("Europe/Bucharest")))
                 .build());
     Message createdMessage = victim.createMessage(toBeCreated);
 
@@ -154,7 +156,7 @@ public class ChatManagementFacadeTest {
                 .id(MESSAGE_ID)
                 .messageboardId(FOLDER_ID)
                 .content(CONTENT)
-                .postDate(LocalDateTime.now())
+                .postDate(ZonedDateTime.now(ZoneId.of("Europe/Bucharest")))
                 .build());
     List<Message> messages = List.of(buildValidMessage());
     List<PostedMessage> postedMessages = List.of(buildValidPostedMessage());

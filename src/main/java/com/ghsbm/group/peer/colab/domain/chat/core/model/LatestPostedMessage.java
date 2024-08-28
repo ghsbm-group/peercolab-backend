@@ -3,7 +3,7 @@ package com.ghsbm.group.peer.colab.domain.chat.core.model;
 import lombok.Builder;
 import lombok.Data;
 
-import java.time.LocalDateTime;
+import java.time.ZonedDateTime;
 
 /** Encapsulates information about the last posted message */
 @Data
@@ -12,5 +12,5 @@ public class LatestPostedMessage {
 
   private String messageBoard;
   private String username;
-  private LocalDateTime lastMessagePostedTime;
+  private ZonedDateTime lastMessagePostedTime;
 }
