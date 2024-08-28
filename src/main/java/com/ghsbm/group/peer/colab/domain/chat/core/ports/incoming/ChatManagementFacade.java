@@ -1,10 +1,12 @@
 package com.ghsbm.group.peer.colab.domain.chat.core.ports.incoming;
 
+import static com.ghsbm.group.peer.colab.infrastructure.AuthoritiesConstants.*;
+
 import com.ghsbm.group.peer.colab.domain.chat.core.model.LatestPostedMessage;
-import com.ghsbm.group.peer.colab.domain.chat.core.model.PostLike;
-import com.ghsbm.group.peer.colab.domain.chat.core.ports.outgoing.ChatRepository;
 import com.ghsbm.group.peer.colab.domain.chat.core.model.Message;
+import com.ghsbm.group.peer.colab.domain.chat.core.model.PostLike;
 import com.ghsbm.group.peer.colab.domain.chat.core.model.PostedMessage;
+import com.ghsbm.group.peer.colab.domain.chat.core.ports.outgoing.ChatRepository;
 import com.ghsbm.group.peer.colab.domain.classes.core.ports.incoming.ClassManagementService;
 import com.ghsbm.group.peer.colab.domain.classes.core.ports.incoming.exception.UserIsNotEnrolledInClassConfigurationException;
 import com.ghsbm.group.peer.colab.domain.security.core.model.Authority;
@@ -12,11 +14,8 @@ import com.ghsbm.group.peer.colab.domain.security.core.model.User;
 import com.ghsbm.group.peer.colab.domain.security.core.ports.incoming.UserManagementService;
 import com.ghsbm.group.peer.colab.infrastructure.SecurityUtils;
 import jakarta.persistence.EntityNotFoundException;
-import org.springframework.stereotype.Service;
-
 import java.util.*;
-
-import static com.ghsbm.group.peer.colab.infrastructure.AuthoritiesConstants.*;
+import org.springframework.stereotype.Service;
 
 /** Service that contains the core business logic. */
 @Service
@@ -61,7 +60,8 @@ public class ChatManagementFacade implements ChatManagementService {
     Objects.requireNonNull(message);
     Objects.requireNonNull(message.getContent());
     Objects.requireNonNull(message.getMessageboardId());
-    if (!classManagementService.userIsEnrolled(message.getMessageboardId())) {
+    if (!SecurityUtils.hasCurrentUserAnyOfAuthorities(ADMIN)
+        && !classManagementService.userIsEnrolled(message.getMessageboardId())) {
       throw new UserIsNotEnrolledInClassConfigurationException();
     }
     return chatRepository.create(message);
@@ -108,8 +108,7 @@ public class ChatManagementFacade implements ChatManagementService {
         .roleUser(getUserAuthority(user.getAuthorities()))
         .numberOfPostsUser(chatRepository.numberOfPostsByUser(message.getUserId()))
         .numberOfLikesUser(chatRepository.getTotalNumberOfLikesByUserId(message.getUserId()))
-        .isLikedByCurrentUser(
-            chatRepository.currentUserLikedThePost(message.getId(),currentLogin))
+        .isLikedByCurrentUser(chatRepository.currentUserLikedThePost(message.getId(), currentLogin))
         .build();
   }
 
