@@ -3,7 +3,7 @@ package com.ghsbm.group.peer.colab.domain.file.core.ports.incoming;
 import com.ghsbm.group.peer.colab.domain.file.core.model.File;
 import com.ghsbm.group.peer.colab.domain.file.core.ports.outgoing.FileRepository;
 import com.ghsbm.group.peer.colab.domain.file.core.ports.outgoing.StorageService;
-import java.time.LocalDateTime;
+import java.time.ZonedDateTime;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -27,7 +27,7 @@ public class FileManagementFacade implements FileManagementService {
                 .name(file.getOriginalFilename())
                 .folderId(folderId)
                 .path(key)
-                .fileDate(LocalDateTime.now())
+                .fileDate(ZonedDateTime.now())
                 .build());
     storageService.store(file, key);
 
