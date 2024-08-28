@@ -9,8 +9,7 @@ import java.util.List;
 
 @Data
 @Builder
-public class RetrieveFolderResponse {
-  List<FolderDTO> subfolders;
+public class PathResponse {
   List<FolderDTO> path;
   ClassDTO classDTO;
 }

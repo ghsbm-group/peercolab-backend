@@ -71,7 +71,7 @@ public class ChatRepositoryAdapter implements ChatRepository {
     final var messageEntity =
         MessageEntity.builder()
             .content(message.getContent())
-            .postDate(ZonedDateTime.now(ZoneId.of("Europe/Bucharest")))
+            .postDate(ZonedDateTime.now())
             .userId(userId)
             .messageboardId(message.getMessageboardId())
             .build();

@@ -1,6 +1,5 @@
 package com.ghsbm.group.peer.colab.domain.chat.controller.model;
 
-import com.ghsbm.group.peer.colab.domain.classes.controller.model.CreateFolderRequest;
 import com.ghsbm.group.peer.colab.domain.chat.core.model.Message;
 import org.mapstruct.Mapper;
 
@@ -13,7 +12,7 @@ import org.mapstruct.Mapper;
 public interface ChatMapper {
 
   /**
-   * Builds a {@link Message} core domain based on a {@link CreateFolderRequest} instance.
+   * Builds a {@link Message} core domain based on a {@link CreateMessageRequest} instance.
    *
    * @param createMessageRequest encapsulates the requests paramaeters.
    * @return a {@link Message} object build based on the request parameter.
