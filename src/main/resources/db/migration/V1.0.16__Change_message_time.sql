@@ -1,0 +1,2 @@
+ALTER TABLE message
+   ALTER COLUMN post_date TYPE TIMESTAMPTZ;

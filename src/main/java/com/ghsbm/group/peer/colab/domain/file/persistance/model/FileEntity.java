@@ -1,13 +1,12 @@
 package com.ghsbm.group.peer.colab.domain.file.persistance.model;
 
-import com.ghsbm.group.peer.colab.domain.security.infrastructure.persistence.model.UserEntity;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.time.LocalDateTime;
+import java.time.ZonedDateTime;
 
 @Data
 @Entity
@@ -24,7 +23,7 @@ public class FileEntity {
   private String path;
 
   @Column(name = "file_date")
-  private LocalDateTime fileDate;
+  private ZonedDateTime fileDate;
 
   @Column(name = "user_id")
   private Long user;
