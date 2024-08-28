@@ -1,6 +1,7 @@
 package com.ghsbm.group.peer.colab.domain.file.persistance.model;
 
-import com.ghsbm.group.peer.colab.domain.file.core.model.File;
+import com.ghsbm.group.peer.colab.domain.file.core.model.FileInfo;
+import java.util.List;
 import org.mapstruct.Mapper;
 
 /**
@@ -10,5 +11,7 @@ import org.mapstruct.Mapper;
  */
 @Mapper(componentModel = "spring")
 public abstract class FileEntitiesMapper {
-  public abstract File fileFromEntity(FileEntity savedFile);
+  public abstract FileInfo fileFromEntity(FileEntity savedFile);
+
+  public abstract List<FileInfo> map(List<FileEntity> byFolderId);
 }

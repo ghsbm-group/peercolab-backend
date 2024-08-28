@@ -1,6 +1,6 @@
 package com.ghsbm.group.peer.colab.domain.file.persistance;
 
-import com.ghsbm.group.peer.colab.domain.file.core.model.File;
+import com.ghsbm.group.peer.colab.domain.file.core.model.FileInfo;
 import com.ghsbm.group.peer.colab.domain.file.core.ports.outgoing.FileRepository;
 import com.ghsbm.group.peer.colab.domain.file.persistance.model.FileEntitiesMapper;
 import com.ghsbm.group.peer.colab.domain.file.persistance.model.FileEntity;
@@ -8,14 +8,13 @@ import com.ghsbm.group.peer.colab.domain.file.persistance.repository.FilePsqlDbR
 import com.ghsbm.group.peer.colab.domain.security.infrastructure.persistence.model.UserEntity;
 import com.ghsbm.group.peer.colab.domain.security.infrastructure.persistence.repository.UserRepository;
 import com.ghsbm.group.peer.colab.infrastructure.SecurityUtils;
+import java.time.ZoneId;
+import java.time.ZonedDateTime;
+import java.util.List;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-
-import java.time.LocalDateTime;
-import java.time.ZoneId;
-import java.time.ZonedDateTime;
 
 @Component
 @NoArgsConstructor
@@ -37,7 +36,7 @@ public class FileRepositoryAdapter implements FileRepository {
 
   // change to save file
   @Override
-  public File saveFile(File file) {
+  public FileInfo saveFile(FileInfo fileInfo) {
     String userLogin = SecurityUtils.getCurrentUserLogin().get();
     UserEntity userEntity =
         userRepository
@@ -47,13 +46,24 @@ public class FileRepositoryAdapter implements FileRepository {
                     new IllegalStateException("User with username" + userLogin + "does not exist"));
     FileEntity fileEntity =
         FileEntity.builder()
-            .name(file.getName())
-            .folderId(file.getFolderId())
+            .name(fileInfo.getName())
+            .folderId(fileInfo.getFolderId())
             .user(userEntity.getId())
-            .path(file.getPath())
+            .path(fileInfo.getPath())
             .fileDate(ZonedDateTime.now(ZoneId.of("Europe/Bucharest")))
             .build();
     FileEntity savedFile = filePsqlDbRepository.save(fileEntity);
     return fileEntitiesMapper.fileFromEntity(savedFile);
+  }
+
+  @Override
+  public List<FileInfo> listFiles(long folderId) {
+    List<FileEntity> byFolderId = filePsqlDbRepository.findAllByFolderId(folderId);
+    return fileEntitiesMapper.map(byFolderId);
+  }
+
+  @Override
+  public FileInfo getById(Long fileId) {
+    return fileEntitiesMapper.fileFromEntity(filePsqlDbRepository.getReferenceById(fileId));
   }
 }

@@ -1,10 +1,11 @@
 package com.ghsbm.group.peer.colab.domain.file.controller.model;
 
+import java.util.List;
 import lombok.Builder;
 import lombok.Data;
 
 @Data
 @Builder
-public class UploadFileResponse {
-  private FileDTO file;
+public class ListFilesResponse {
+  private List<FileDTO> files;
 }

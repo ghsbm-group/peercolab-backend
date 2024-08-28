@@ -1,6 +1,7 @@
 package com.ghsbm.group.peer.colab.domain.file.controller.model;
 
-import com.ghsbm.group.peer.colab.domain.file.core.model.File;
+import com.ghsbm.group.peer.colab.domain.file.core.model.FileInfo;
+import java.util.List;
 import org.mapstruct.Mapper;
 
 /**
@@ -10,5 +11,6 @@ import org.mapstruct.Mapper;
  */
 @Mapper(componentModel = "spring")
 public interface FileMapper {
-    File fromUploadFileRequest(UploadFileRequest uploadFileRequest);
+
+  List<FileDTO> map(List<FileInfo> fileInfoInfos);
 }
