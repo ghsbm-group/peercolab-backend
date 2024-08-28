@@ -1,7 +1,6 @@
 package com.ghsbm.group.peer.colab.domain.file.controller;
 
 import com.ghsbm.group.peer.colab.domain.file.controller.model.FileMapper;
-import com.ghsbm.group.peer.colab.domain.file.controller.model.UploadFileRequest;
 import com.ghsbm.group.peer.colab.domain.file.controller.model.UploadFileResponse;
 import com.ghsbm.group.peer.colab.domain.file.core.ports.incoming.FileManagementService;
 import org.springframework.http.MediaType;
@@ -22,22 +21,19 @@ public class FileManagementController {
   }
 
   @RequestMapping(
-      path = "/upload",
+      path = "/upload/{folderId}",
       method = RequestMethod.POST,
       consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
   public ResponseEntity<UploadFileResponse> handleFileUpload(
-          @ModelAttribute final UploadFileRequest uploadFileRequest,
-      @RequestParam("file") MultipartFile file) {
+      @PathVariable Long folderId, @RequestParam("file") MultipartFile file) {
 
-    final var fileInfo =
-        fileManagementService.saveFile(file, fileMapper.fromUploadFileRequest(uploadFileRequest));
+    final var fileInfo = fileManagementService.saveFile(file, folderId);
 
     return ResponseEntity.ok(
         UploadFileResponse.builder()
             .id(fileInfo.getId())
             .name(fileInfo.getName())
             .fileDate(fileInfo.getFileDate())
-            .path(fileInfo.getPath())
             .folderId(fileInfo.getFolderId())
             .build());
   }

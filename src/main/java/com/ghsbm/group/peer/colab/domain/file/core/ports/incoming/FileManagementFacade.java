@@ -3,6 +3,7 @@ package com.ghsbm.group.peer.colab.domain.file.core.ports.incoming;
 import com.ghsbm.group.peer.colab.domain.file.core.model.File;
 import com.ghsbm.group.peer.colab.domain.file.core.ports.outgoing.FileRepository;
 import com.ghsbm.group.peer.colab.domain.file.core.ports.outgoing.StorageService;
+import java.time.LocalDateTime;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -18,11 +19,22 @@ public class FileManagementFacade implements FileManagementService {
   }
 
   @Override
-  public File saveFile(MultipartFile file, File fileInfo) {
-    fileInfo.setName(file.getOriginalFilename());
-    final var fileInformation = fileRepository.saveFile(fileInfo);
-    storageService.store(file);
+  public File saveFile(MultipartFile file, long folderId) {
+    final var key = buildKey(folderId, file.getOriginalFilename());
+    final var fileInformation =
+        fileRepository.saveFile(
+            File.builder()
+                .name(file.getOriginalFilename())
+                .folderId(folderId)
+                .path(key)
+                .fileDate(LocalDateTime.now())
+                .build());
+    storageService.store(file, key);
 
     return fileInformation;
+  }
+
+  private String buildKey(long folderId, String originalFilename) {
+    return "folder_id" + folderId + "/" + originalFilename;
   }
 }
