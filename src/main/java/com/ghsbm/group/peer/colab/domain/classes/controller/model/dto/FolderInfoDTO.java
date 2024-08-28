@@ -13,6 +13,9 @@ public class FolderInfoDTO {
   private String name;
 
   private Long parentId;
-  @NotNull private Long classConfigurationId;
+
+  @NotNull(message = "classConfigurationId is required")
+  private Long classConfigurationId;
+
   private String description;
 }

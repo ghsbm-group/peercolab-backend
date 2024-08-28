@@ -78,6 +78,7 @@ public interface ClassRepository {
    * @return if the specific folder exists
    */
   boolean folderAlreadyExists(Folder folder);
+  boolean classDoesNotExists(Long classConfigurationId);
 
   /**
    * Find a folder by its id
