@@ -35,6 +35,6 @@ public class FileManagementFacade implements FileManagementService {
   }
 
   private String buildKey(long folderId, String originalFilename) {
-    return "folder_id" + folderId + "/" + originalFilename;
+    return "folder_id_" + folderId + "/" + originalFilename;
   }
 }
