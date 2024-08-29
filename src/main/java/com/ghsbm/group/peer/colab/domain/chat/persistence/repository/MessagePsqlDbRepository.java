@@ -5,6 +5,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.List;
+import java.util.Optional;
 
 /** JPA repository for {@link MessageEntity} */
 public interface MessagePsqlDbRepository extends JpaRepository<MessageEntity, Long> {
@@ -22,7 +23,7 @@ public interface MessagePsqlDbRepository extends JpaRepository<MessageEntity, Lo
    * @param messageboardId the message board ids
    * @return a {@link Page} containing the latest posted message.
    */
-  MessageEntity findFirstByMessageboardIdInOrderByPostDateDesc(List<Long> messageboardId);
+  Optional<MessageEntity> findFirstByMessageboardIdInOrderByPostDateDesc(List<Long> messageboardId);
 
   /**
    * Retrieves all the messages posted by a user

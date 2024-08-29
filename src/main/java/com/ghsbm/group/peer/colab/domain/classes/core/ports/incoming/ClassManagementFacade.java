@@ -3,6 +3,7 @@ package com.ghsbm.group.peer.colab.domain.classes.core.ports.incoming;
 import static com.ghsbm.group.peer.colab.infrastructure.AuthoritiesConstants.STUDENT_ADMIN;
 import static com.ghsbm.group.peer.colab.infrastructure.AuthoritiesConstants.USER_MUST_BE_LOGGED_IN;
 
+import com.ghsbm.group.peer.colab.domain.chat.core.model.LatestPostedMessage;
 import com.ghsbm.group.peer.colab.domain.classes.core.model.*;
 import com.ghsbm.group.peer.colab.domain.classes.core.ports.incoming.exception.ClassConfigurationAlreadyExistsException;
 import com.ghsbm.group.peer.colab.domain.classes.core.ports.incoming.exception.ClassConfigurationDoesNotExistsException;
@@ -114,11 +115,10 @@ class ClassManagementFacade implements ClassManagementService {
     Objects.requireNonNull(folder.getName());
     Objects.requireNonNull(folder.getClassConfigurationId());
 
-    if (classRepository.classDoesNotExists(folder.getClassConfigurationId()))
-    {
+    if (classRepository.classDoesNotExists(folder.getClassConfigurationId())) {
       throw new ClassConfigurationDoesNotExistsException();
     }
-      if (classRepository.folderAlreadyExists(folder)) {
+    if (classRepository.folderAlreadyExists(folder)) {
       throw new FolderAlreadyExistsException();
     }
     folder.setIsMessageBoard(false);
@@ -133,8 +133,7 @@ class ClassManagementFacade implements ClassManagementService {
     Objects.requireNonNull(folder);
     Objects.requireNonNull(folder.getName());
     Objects.requireNonNull(folder.getClassConfigurationId());
-    if (classRepository.classDoesNotExists(folder.getClassConfigurationId()))
-    {
+    if (classRepository.classDoesNotExists(folder.getClassConfigurationId())) {
       throw new ClassConfigurationDoesNotExistsException();
     }
     if (classRepository.folderAlreadyExists(folder)) {
@@ -204,11 +203,19 @@ class ClassManagementFacade implements ClassManagementService {
    * @inheritDoc
    */
   @Override
-  public FolderInformation retrieveFolderInformation(long folderId) {
+  public FolderInformation retrieveFolderInformation(
+      long folderId, LatestPostedMessage latestPostedMessage) {
     var numberOfSubfolers = classRepository.countAllSubfolders(folderId);
     var numberOfPosts = classRepository.countMessages(folderId);
-
-    return FolderInformation.builder().topics(numberOfSubfolers).posts(numberOfPosts).build();
+    if (latestPostedMessage == null)
+      return FolderInformation.builder().topics(numberOfSubfolers).posts(numberOfPosts).build();
+    return FolderInformation.builder()
+        .topics(numberOfSubfolers)
+        .messageBoard(latestPostedMessage.getMessageBoard())
+        .lastMessagePostedTime(latestPostedMessage.getLastMessagePostedTime())
+        .username(latestPostedMessage.getUsername())
+        .posts(numberOfPosts)
+        .build();
   }
 
   /**

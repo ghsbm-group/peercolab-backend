@@ -282,11 +282,7 @@ public class ClassManagementController {
         chatManagementService.retrieveLatestPostedMessage(
             classManagementService.getMessageBoardsIds(folderId));
     FolderInformation folderInformation =
-        classManagementService.retrieveFolderInformation(folderId);
-
-    folderInformation.setLastMessagePostedTime(latestPostedMessage.getLastMessagePostedTime());
-    folderInformation.setUsername(latestPostedMessage.getUsername());
-    folderInformation.setMessageBoard(latestPostedMessage.getMessageBoard());
+        classManagementService.retrieveFolderInformation(folderId, latestPostedMessage);
 
     return ResponseEntity.ok(
         classMapper.folderInformationResponseFromFolderInformation(folderInformation));
