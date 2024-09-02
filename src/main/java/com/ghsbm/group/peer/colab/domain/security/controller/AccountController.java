@@ -13,10 +13,13 @@ import com.ghsbm.group.peer.colab.domain.security.core.ports.incoming.UserManage
 import com.ghsbm.group.peer.colab.infrastructure.SecurityUtils;
 import jakarta.validation.Valid;
 import java.util.Optional;
+
+import jakarta.validation.constraints.NotNull;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.core.parameters.P;
 import org.springframework.web.bind.annotation.*;
 
 /** REST controller for managing the current user's account. */
@@ -37,7 +40,8 @@ public class AccountController {
 
   private final UserDtoMapper userDtoMapper;
 
-  public AccountController(UserManagementService userManagementService, UserDtoMapper userDtoMapper) {
+  public AccountController(
+      UserManagementService userManagementService, UserDtoMapper userDtoMapper) {
     this.userManagementService = userManagementService;
     this.userDtoMapper = userDtoMapper;
   }
@@ -56,7 +60,10 @@ public class AccountController {
     if (isPasswordLengthInvalid(registerUserRequest.getPassword())) {
       throw new InvalidPasswordException();
     }
-        userManagementService.registerUser(userDtoMapper.from(registerUserRequest), registerUserRequest.getPassword());
+    userManagementService.registerUser(
+        userDtoMapper.from(registerUserRequest),
+        registerUserRequest.getPassword(),
+        registerUserRequest.getRequestAuthority());
   }
 
   /**
@@ -130,7 +137,7 @@ public class AccountController {
    */
   @PostMapping(path = "/account/reset-password/init")
   public void requestPasswordReset(@RequestBody String mail) {
-   userManagementService.requestPasswordReset(mail);
+    userManagementService.requestPasswordReset(mail);
   }
 
   /**
@@ -154,6 +161,12 @@ public class AccountController {
     if (!user.isPresent()) {
       throw new AccountResourceException("No user was found for this reset key");
     }
+  }
+
+  /** Endpoint for requesting an authority (more precisely STUDENT_ADMIN) by the logged-in user. */
+  @PostMapping("/request-authority")
+  public void requestAuthorityCurrentUser() {
+    userManagementService.requestAuthorityCurrentUser();
   }
 
   private static boolean isPasswordLengthInvalid(String password) {
