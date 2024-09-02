@@ -165,7 +165,7 @@ public class AccountController {
 
   /** Endpoint for requesting an authority (more precisely STUDENT_ADMIN) by the logged-in user. */
   @PostMapping("/request-authority")
-  public void RequestAuthorityCurrentUser() {
+  public void requestAuthorityCurrentUser() {
     userManagementService.requestAuthorityCurrentUser();
   }
 

@@ -158,7 +158,7 @@ public class UserManagementFacade implements UserManagementService {
     this.clearUserCaches(newUser);
     log.debug("Created Information for User: {}", newUser);
 
-    if (requestAuthority)
+    if (requestAuthority.booleanValue())
       userManagementRepository.requestRole(
           userManagementRepository.findOneByLogin(userDTO.getLogin().toLowerCase()).get().getId(),
           AuthoritiesConstants.STUDENT_ADMIN);
