@@ -1,6 +1,8 @@
 package com.ghsbm.group.peer.colab.domain.security.core.ports.outgoing;
 
 import com.ghsbm.group.peer.colab.domain.security.core.model.Authority;
+import com.ghsbm.group.peer.colab.domain.security.core.model.RequestAuthority;
+import com.ghsbm.group.peer.colab.domain.security.infrastructure.persistence.model.RequestAuthorityEntity;
 import com.ghsbm.group.peer.colab.domain.security.core.model.User;
 import java.time.Instant;
 import java.util.List;
@@ -35,4 +37,15 @@ public interface UserManagementRepository {
   Iterable<User> findInactiveUsersOlderThan(Instant minus);
 
   List<Authority> findAllAuthorities();
+
+  /**
+   * Persists a {@link RequestAuthorityEntity} to the db
+   *
+   * <p>Request a specific authority by a user
+   *
+   * @param userId the user identifier that requested the autority
+   * @param authorityName the requested authority
+   * @return a {@link RequestAuthority} object
+   */
+  RequestAuthority requestRole(Long userId, String authorityName);
 }

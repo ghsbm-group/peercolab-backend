@@ -1,11 +1,15 @@
 package com.ghsbm.group.peer.colab.domain.security.infrastructure.persistence;
 
 import com.ghsbm.group.peer.colab.domain.security.core.model.Authority;
+import com.ghsbm.group.peer.colab.domain.security.core.model.RequestAuthority;
 import com.ghsbm.group.peer.colab.domain.security.core.model.User;
 import com.ghsbm.group.peer.colab.domain.security.core.ports.outgoing.UserManagementRepository;
+import com.ghsbm.group.peer.colab.domain.security.infrastructure.persistence.model.AuthorityEntity;
+import com.ghsbm.group.peer.colab.domain.security.infrastructure.persistence.model.RequestAuthorityEntity;
 import com.ghsbm.group.peer.colab.domain.security.infrastructure.persistence.model.UserEntity;
 import com.ghsbm.group.peer.colab.domain.security.infrastructure.persistence.model.UserMapper;
 import com.ghsbm.group.peer.colab.domain.security.infrastructure.persistence.repository.AuthorityRepository;
+import com.ghsbm.group.peer.colab.domain.security.infrastructure.persistence.repository.RequestAuthorityRepository;
 import com.ghsbm.group.peer.colab.domain.security.infrastructure.persistence.repository.UserRepository;
 import java.time.Instant;
 import java.util.List;
@@ -22,15 +26,18 @@ public class UserManagementRepositoryAdapter implements UserManagementRepository
   private final Logger log = LoggerFactory.getLogger(UserManagementRepositoryAdapter.class);
   private final UserRepository userRepository;
   private final AuthorityRepository authorityRepository;
+  private final RequestAuthorityRepository requestAuthorityRepository;
 
   private final UserMapper userMapper;
 
   public UserManagementRepositoryAdapter(
       UserRepository userRepository,
       AuthorityRepository authorityRepository,
+      RequestAuthorityRepository requestAuthorityRepository,
       UserMapper userMapper) {
     this.userRepository = userRepository;
     this.authorityRepository = authorityRepository;
+    this.requestAuthorityRepository = requestAuthorityRepository;
     this.userMapper = userMapper;
   }
 
@@ -105,5 +112,26 @@ public class UserManagementRepositoryAdapter implements UserManagementRepository
   @Override
   public List<Authority> findAllAuthorities() {
     return authorityRepository.findAll().stream().map(userMapper::fromEntity).toList();
+  }
+
+  /**
+   *
+   * @inheritDoc
+   */
+  @Override
+  public RequestAuthority requestRole(Long userId, String authorityName) {
+    UserEntity user =
+        userRepository
+            .findById(userId)
+            .orElseThrow(
+                () -> new IllegalStateException("User with id" + userId + "does not exist"));
+    AuthorityEntity authority =
+        authorityRepository
+            .findById(authorityName)
+            .orElseThrow(
+                () -> new IllegalStateException("Authority " + authorityName + "does not exist"));
+    RequestAuthorityEntity requestAuthorityEntity = new RequestAuthorityEntity(user, authority);
+    requestAuthorityRepository.save(requestAuthorityEntity);
+    return RequestAuthority.builder().userId(userId).authorityName(authorityName).build();
   }
 }

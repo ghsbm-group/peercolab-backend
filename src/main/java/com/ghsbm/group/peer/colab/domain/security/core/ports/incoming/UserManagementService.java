@@ -21,7 +21,7 @@ public interface UserManagementService {
   void requestPasswordReset(String mail);
 
   @Transactional
-  void registerUser(User userDTO, String password);
+  void registerUser(User userDTO, String password, Boolean requestAuthority);
 
   @Transactional
   User createUser(User userDTO);
@@ -61,4 +61,8 @@ public interface UserManagementService {
 
   @Transactional
   Optional<User> findOneById(Long id);
+
+  /** Used when the logged-in user requests a certain authority (more precisely, STUDENT_ADMIN) */
+  @Transactional
+  void requestAuthorityCurrentUser();
 }

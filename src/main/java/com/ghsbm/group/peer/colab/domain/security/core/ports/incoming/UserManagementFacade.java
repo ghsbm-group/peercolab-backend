@@ -28,6 +28,8 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import static com.ghsbm.group.peer.colab.infrastructure.AuthoritiesConstants.USER_MUST_BE_LOGGED_IN;
+
 /** Service class for managing users. */
 @Service
 @Transactional
@@ -114,7 +116,7 @@ public class UserManagementFacade implements UserManagementService {
   }
 
   @Override
-  public void registerUser(User userDTO, String password) {
+  public void registerUser(User userDTO, String password, Boolean requestAuthority) {
     userManagementRepository
         .findOneByLogin(userDTO.getLogin().toLowerCase())
         .ifPresent(
@@ -155,6 +157,11 @@ public class UserManagementFacade implements UserManagementService {
     userManagementRepository.persist(newUser);
     this.clearUserCaches(newUser);
     log.debug("Created Information for User: {}", newUser);
+
+    if (requestAuthority)
+      userManagementRepository.requestRole(
+          userManagementRepository.findOneByLogin(userDTO.getLogin().toLowerCase()).get().getId(),
+          AuthoritiesConstants.STUDENT_ADMIN);
 
     // mailService.sendActivationEmail(newUser);
   }
@@ -384,12 +391,29 @@ public class UserManagementFacade implements UserManagementService {
     return userManagementRepository.findAllAuthorities().stream().map(Authority::getName).toList();
   }
 
-    @Override
-    public Optional<User> findOneById(Long id) {
-        return userManagementRepository.findUserById(id);
-    }
+  @Override
+  public Optional<User> findOneById(Long id) {
+    return userManagementRepository.findUserById(id);
+  }
 
-    private void clearUserCaches(User user) {
+  @Override
+  public void requestAuthorityCurrentUser() {
+      User currentUser = userManagementRepository
+              .findOneByLogin(
+                      SecurityUtils.getCurrentUserLogin()
+                              .orElseThrow(() -> new IllegalStateException(USER_MUST_BE_LOGGED_IN)))
+              .get();
+      if(currentUser.getAuthorities().contains(new Authority(AuthoritiesConstants.STUDENT_ADMIN)))
+      {
+          throw new IllegalStateException("The user has this authority");
+      }
+
+    userManagementRepository.requestRole(
+        currentUser.getId(),
+        AuthoritiesConstants.STUDENT_ADMIN);
+  }
+
+  private void clearUserCaches(User user) {
     Objects.requireNonNull(cacheManager.getCache(UserRepository.USERS_BY_LOGIN_CACHE))
         .evict(user.getLogin());
     if (user.getEmail() != null) {
