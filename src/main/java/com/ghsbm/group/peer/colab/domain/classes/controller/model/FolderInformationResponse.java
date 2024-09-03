@@ -3,7 +3,7 @@ package com.ghsbm.group.peer.colab.domain.classes.controller.model;
 import lombok.Builder;
 import lombok.Data;
 
-import java.time.LocalDateTime;
+import java.time.ZonedDateTime;
 
 @Builder
 @Data
@@ -13,5 +13,5 @@ public class FolderInformationResponse {
   private Long topics;
   private String messageBoard;
   private String username;
-  private LocalDateTime lastMessagePostedTime;
+  private ZonedDateTime lastMessagePostedTime;
 }

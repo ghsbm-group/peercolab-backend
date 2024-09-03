@@ -60,6 +60,7 @@ public class AccountController {
     if (isPasswordLengthInvalid(registerUserRequest.getPassword())) {
       throw new InvalidPasswordException();
     }
+
     userManagementService.registerUser(
         userDtoMapper.from(registerUserRequest),
         registerUserRequest.getPassword(),

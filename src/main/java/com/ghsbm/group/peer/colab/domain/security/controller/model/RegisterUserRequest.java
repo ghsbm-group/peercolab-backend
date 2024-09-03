@@ -18,7 +18,8 @@ public class RegisterUserRequest extends AdminUserDTO {
   @Size(min = PASSWORD_MIN_LENGTH, max = PASSWORD_MAX_LENGTH)
   private String password;
 
-  private Boolean requestAuthority;
+
+  private Boolean requestAuthority=false;
 
   @Override
   public String toString() {
