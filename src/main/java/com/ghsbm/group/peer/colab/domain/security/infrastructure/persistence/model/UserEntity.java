@@ -2,6 +2,7 @@ package com.ghsbm.group.peer.colab.domain.security.infrastructure.persistence.mo
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.ghsbm.group.peer.colab.application.config.Constants;
+import com.ghsbm.group.peer.colab.domain.security.core.model.AuthProvider;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotNull;
@@ -78,6 +79,12 @@ public class UserEntity extends AbstractAuditingEntity<Long> implements Serializ
 
   @Column(name = "reset_date")
   private Instant resetDate = null;
+
+  @NotNull
+  @Enumerated(EnumType.STRING)
+  private AuthProvider provider;
+
+  private String providerId;
 
   @JsonIgnore
   @ManyToMany
@@ -192,6 +199,22 @@ public class UserEntity extends AbstractAuditingEntity<Long> implements Serializ
 
   public void setAuthorities(Set<AuthorityEntity> authorities) {
     this.authorities = authorities;
+  }
+
+  public AuthProvider getProvider() {
+    return provider;
+  }
+
+  public void setProvider(AuthProvider provider) {
+    this.provider = provider;
+  }
+
+  public String getProviderId() {
+    return providerId;
+  }
+
+  public void setProviderId(String providerId) {
+    this.providerId = providerId;
   }
 
   @Override

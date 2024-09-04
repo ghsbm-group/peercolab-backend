@@ -1,5 +1,7 @@
 package com.ghsbm.group.peer.colab.domain.security.core.ports.incoming;
 
+import static com.ghsbm.group.peer.colab.infrastructure.AuthoritiesConstants.USER_MUST_BE_LOGGED_IN;
+
 import com.ghsbm.group.peer.colab.application.config.Constants;
 import com.ghsbm.group.peer.colab.domain.security.controller.model.dto.AdminUserDTO;
 import com.ghsbm.group.peer.colab.domain.security.controller.model.dto.UserDTO;
@@ -27,8 +29,6 @@ import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
-import static com.ghsbm.group.peer.colab.infrastructure.AuthoritiesConstants.USER_MUST_BE_LOGGED_IN;
 
 /** Service class for managing users. */
 @Service
@@ -147,6 +147,7 @@ public class UserManagementFacade implements UserManagementService {
     }
     newUser.setImageUrl(userDTO.getImageUrl());
     newUser.setLangKey(userDTO.getLangKey());
+    newUser.setProvider(userDTO.getProvider());
     // new user is not active
     newUser.setActivated(true);
     // new user gets registration key
