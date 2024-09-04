@@ -1,4 +1,4 @@
-package com.ghsbm.group.peer.colab.domain.security.infrastructure.oauth2.user;
+package com.ghsbm.group.peer.colab.application.config.oauth2.user;
 
 import java.util.Map;
 
@@ -15,6 +15,16 @@ public class FacebookOAuth2UserInfo extends OAuth2UserInfo {
   @Override
   public String getName() {
     return (String) attributes.get("name");
+  }
+
+  @Override
+  public String getFirstName() {
+    return (String) attributes.get("first_name");
+  }
+
+  @Override
+  public String getLastName() {
+    return (String) attributes.get("last_name");
   }
 
   @Override

@@ -1,4 +1,4 @@
-package com.ghsbm.group.peer.colab.domain.security.infrastructure.oauth2.user;
+package com.ghsbm.group.peer.colab.application.config.oauth2.user;
 
 import java.util.Map;
 
@@ -16,6 +16,10 @@ public abstract class OAuth2UserInfo {
   public abstract String getId();
 
   public abstract String getName();
+
+  public abstract String getFirstName();
+
+  public abstract String getLastName();
 
   public abstract String getEmail();
 

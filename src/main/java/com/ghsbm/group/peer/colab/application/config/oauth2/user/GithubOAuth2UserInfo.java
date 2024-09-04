@@ -1,6 +1,7 @@
-package com.ghsbm.group.peer.colab.domain.security.infrastructure.oauth2.user;
+package com.ghsbm.group.peer.colab.application.config.oauth2.user;
 
 import java.util.Map;
+import org.apache.commons.lang3.NotImplementedException;
 
 public class GithubOAuth2UserInfo extends OAuth2UserInfo {
 
@@ -16,6 +17,16 @@ public class GithubOAuth2UserInfo extends OAuth2UserInfo {
   @Override
   public String getName() {
     return (String) attributes.get("name");
+  }
+
+  @Override
+  public String getFirstName() {
+    throw new NotImplementedException();
+  }
+
+  @Override
+  public String getLastName() {
+    throw new NotImplementedException();
   }
 
   @Override

@@ -2,10 +2,10 @@ package com.ghsbm.group.peer.colab.application.config;
 
 import static com.ghsbm.group.peer.colab.infrastructure.AuthoritiesConstants.*;
 
-import com.ghsbm.group.peer.colab.domain.security.infrastructure.oauth2.CustomOAuth2UserService;
-import com.ghsbm.group.peer.colab.domain.security.infrastructure.oauth2.HttpCookieOAuth2AuthorizationRequestRepository;
-import com.ghsbm.group.peer.colab.domain.security.infrastructure.oauth2.OAuth2AuthenticationFailureHandler;
-import com.ghsbm.group.peer.colab.domain.security.infrastructure.oauth2.OAuth2AuthenticationSuccessHandler;
+import com.ghsbm.group.peer.colab.application.config.oauth2.HttpCookieOAuth2AuthorizationRequestRepository;
+import com.ghsbm.group.peer.colab.application.config.oauth2.OAuth2AuthenticationFailureHandler;
+import com.ghsbm.group.peer.colab.application.config.oauth2.OAuth2AuthenticationSuccessHandler;
+import com.ghsbm.group.peer.colab.domain.security.core.ports.incoming.CustomOAuth2UserService;
 import java.util.Arrays;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
@@ -131,8 +131,6 @@ public class SecurityConfiguration {
                     .userInfoEndpoint(u -> u.userService(customOAuth2UserService))
                     .successHandler(oAuth2AuthenticationSuccessHandler)
                     .failureHandler(oAuth2AuthenticationFailureHandler));
-    // todo is it needed? http.addFilterBefore(tokenAuthenticationFilter(),
-    // UsernamePasswordAuthenticationFilter.class);
     return http.build();
   }
 

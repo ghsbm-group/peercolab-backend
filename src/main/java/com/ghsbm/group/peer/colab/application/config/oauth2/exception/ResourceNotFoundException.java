@@ -1,4 +1,4 @@
-package com.ghsbm.group.peer.colab.domain.security.infrastructure.oauth2.exception;
+package com.ghsbm.group.peer.colab.application.config.oauth2.exception;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ResponseStatus;

@@ -1,4 +1,4 @@
-package com.ghsbm.group.peer.colab.domain.security.infrastructure.oauth2;
+package com.ghsbm.group.peer.colab.application.config.oauth2;
 
 import org.springframework.security.core.AuthenticationException;
 

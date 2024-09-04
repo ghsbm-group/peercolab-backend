@@ -27,6 +27,7 @@ public class User {
   private Instant resetDate = null;
   private Set<Authority> authorities = new HashSet<>();
   private AuthProvider provider;
+  private String providerId;
   private String createdBy;
   private Instant createdDate = Instant.now();
   private String lastModifiedBy;

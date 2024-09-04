@@ -1,7 +1,7 @@
-package com.ghsbm.group.peer.colab.domain.security.infrastructure.oauth2.user;
+package com.ghsbm.group.peer.colab.application.config.oauth2.user;
 
+import com.ghsbm.group.peer.colab.application.config.oauth2.OAuth2AuthenticationProcessingException;
 import com.ghsbm.group.peer.colab.domain.security.core.model.AuthProvider;
-import com.ghsbm.group.peer.colab.domain.security.infrastructure.oauth2.OAuth2AuthenticationProcessingException;
 import java.util.Map;
 
 public class OAuth2UserInfoFactory {

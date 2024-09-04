@@ -1,20 +1,16 @@
-package com.ghsbm.group.peer.colab.domain.security.infrastructure.oauth2;
+package com.ghsbm.group.peer.colab.infrastructure.util;
 
 import static com.ghsbm.group.peer.colab.infrastructure.SecurityUtils.AUTHORITIES_KEY;
 import static com.ghsbm.group.peer.colab.infrastructure.SecurityUtils.JWT_ALGORITHM;
 
-import com.ghsbm.group.peer.colab.application.config.PeerProperties;
 import java.time.Instant;
 import java.time.temporal.ChronoUnit;
 import java.util.stream.Collectors;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.oauth2.jwt.JwsHeader;
 import org.springframework.security.oauth2.jwt.JwtClaimsSet;
-import org.springframework.security.oauth2.jwt.JwtDecoder;
 import org.springframework.security.oauth2.jwt.JwtEncoder;
 import org.springframework.security.oauth2.jwt.JwtEncoderParameters;
 import org.springframework.stereotype.Service;
@@ -22,9 +18,7 @@ import org.springframework.stereotype.Service;
 @Service
 public class TokenProvider {
 
-  private static final Logger logger = LoggerFactory.getLogger(TokenProvider.class);
   private final JwtEncoder jwtEncoder;
-  private final JwtDecoder jwtDecoder;
 
   @Value("${peer.security.authentication.jwt.token-validity-in-seconds:0}")
   private long tokenValidityInSeconds;
@@ -32,13 +26,8 @@ public class TokenProvider {
   @Value("${peer.security.authentication.jwt.token-validity-in-seconds-for-remember-me:0}")
   private long tokenValidityInSecondsForRememberMe;
 
-  private PeerProperties peerProperties;
-
-  public TokenProvider(
-      PeerProperties peerProperties, JwtEncoder jwtEncoder, JwtDecoder jwtDecoder) {
-    this.peerProperties = peerProperties;
+  public TokenProvider(JwtEncoder jwtEncoder) {
     this.jwtEncoder = jwtEncoder;
-    this.jwtDecoder = jwtDecoder;
   }
 
   public String createToken(Authentication authentication, boolean rememberMe) {

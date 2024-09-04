@@ -1,8 +1,9 @@
-package com.ghsbm.group.peer.colab.domain.security.infrastructure.oauth2;
+package com.ghsbm.group.peer.colab.application.config.oauth2;
 
 import com.ghsbm.group.peer.colab.application.config.PeerProperties;
-import com.ghsbm.group.peer.colab.domain.security.infrastructure.oauth2.exception.BadRequestException;
+import com.ghsbm.group.peer.colab.application.config.oauth2.exception.BadRequestException;
 import com.ghsbm.group.peer.colab.infrastructure.util.CookieUtils;
+import com.ghsbm.group.peer.colab.infrastructure.util.TokenProvider;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -18,11 +19,11 @@ import org.springframework.web.util.UriComponentsBuilder;
 @Component
 public class OAuth2AuthenticationSuccessHandler extends SimpleUrlAuthenticationSuccessHandler {
 
-  private TokenProvider tokenProvider;
+  private final TokenProvider tokenProvider;
 
-  private PeerProperties peerProperties;
+  private final PeerProperties peerProperties;
 
-  private HttpCookieOAuth2AuthorizationRequestRepository
+  private final HttpCookieOAuth2AuthorizationRequestRepository
       httpCookieOAuth2AuthorizationRequestRepository;
 
   @Autowired
