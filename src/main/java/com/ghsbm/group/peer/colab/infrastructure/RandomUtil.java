@@ -26,6 +26,15 @@ public class RandomUtil {
   }
 
   /**
+   * generateRandomAlphanumericString.
+   *
+   * @return a {@link java.lang.String} object.
+   */
+  public static String generate60CharRandomAlphanumericString() {
+    return RandomStringUtils.random(60, 0, 0, true, true, null, SECURE_RANDOM);
+  }
+
+  /**
    * Generate a password.
    *
    * @return the generated password.

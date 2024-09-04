@@ -10,5 +10,5 @@ public class FileDTO {
   private Long id;
   private String name;
   private ZonedDateTime fileDate;
-    private Long folderId;
+  private Long folderId;
 }

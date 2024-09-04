@@ -5,11 +5,14 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.web.cors.CorsConfiguration;
 
 @ConfigurationProperties(prefix = "peer", ignoreUnknownFields = false)
 public class PeerProperties {
+
+  private final OAuth2 oauth2 = new OAuth2();
 
   private final Async async = new Async();
 
@@ -637,6 +640,26 @@ public class PeerProperties {
         this.subscriptionConnectionMinimumIdleSize = subscriptionConnectionMinimumIdleSize;
         return this;
       }
+    }
+  }
+
+  @Value("${cors.allowedOrigins}")
+  public String[] allowedOrigins;
+
+  public OAuth2 getOauth2() {
+    return oauth2;
+  }
+
+  public static final class OAuth2 {
+    private List<String> authorizedRedirectUris = new ArrayList<>();
+
+    public List<String> getAuthorizedRedirectUris() {
+      return authorizedRedirectUris;
+    }
+
+    public OAuth2 authorizedRedirectUris(List<String> authorizedRedirectUris) {
+      this.authorizedRedirectUris = authorizedRedirectUris;
+      return this;
     }
   }
 
