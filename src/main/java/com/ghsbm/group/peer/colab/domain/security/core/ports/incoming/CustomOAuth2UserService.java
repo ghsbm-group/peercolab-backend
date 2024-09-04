@@ -1,5 +1,6 @@
 package com.ghsbm.group.peer.colab.domain.security.core.ports.incoming;
 
+import com.ghsbm.group.peer.colab.application.config.Constants;
 import com.ghsbm.group.peer.colab.application.config.oauth2.OAuth2AuthenticationProcessingException;
 import com.ghsbm.group.peer.colab.application.config.oauth2.user.OAuth2UserInfo;
 import com.ghsbm.group.peer.colab.application.config.oauth2.user.OAuth2UserInfoFactory;
@@ -9,6 +10,7 @@ import com.ghsbm.group.peer.colab.domain.security.core.model.Authority;
 import com.ghsbm.group.peer.colab.domain.security.core.model.User;
 import com.ghsbm.group.peer.colab.domain.security.core.ports.outgoing.UserManagementRepository;
 import com.ghsbm.group.peer.colab.infrastructure.AuthoritiesConstants;
+import com.ghsbm.group.peer.colab.infrastructure.RandomUtil;
 import java.util.Optional;
 import java.util.Set;
 import org.springframework.security.authentication.InternalAuthenticationServiceException;
@@ -24,7 +26,8 @@ import org.springframework.util.StringUtils;
 @Service
 public class CustomOAuth2UserService extends DefaultOAuth2UserService {
 
-  private final UserManagementRepository userManagementRepository;
+  private final UserManagementRepository
+      userManagementRepository; // todo change this with user management facade
 
   public CustomOAuth2UserService(UserManagementRepository userManagementRepository) {
     this.userManagementRepository = userManagementRepository;
@@ -75,7 +78,10 @@ public class CustomOAuth2UserService extends DefaultOAuth2UserService {
       }
       user = updateExistingUser(user, oAuth2UserInfo);
     } else {
-      user = registerNewUser(oAuth2UserRequest, oAuth2UserInfo);
+      user =
+          registerNewUser(
+              oAuth2UserRequest,
+              oAuth2UserInfo); // todo change this with userManagementFacade.createUser
     }
 
     return UserPrincipal.create(user, oAuth2User.getAttributes());
@@ -89,14 +95,13 @@ public class CustomOAuth2UserService extends DefaultOAuth2UserService {
     user.setProviderId(oAuth2UserInfo.getId());
     user.setFirstName(oAuth2UserInfo.getName());
     user.setEmail(oAuth2UserInfo.getEmail());
-    user.setPassword(
-        "01234567890123456789012345678ran2345678901234567890123456789"); // todo make password not
+    user.setPassword(RandomUtil.generate60CharRandomAlphanumericString());
     // mandatory in the db
     user.setLogin(oAuth2UserInfo.getEmail());
     user.setImageUrl(oAuth2UserInfo.getImageUrl());
     user.setActivated(true);
     user.setAuthorities(Set.of(new Authority(AuthoritiesConstants.USER)));
-    user.setLangKey("en"); // todo check if this default does the job
+    user.setLangKey(Constants.DEFAULT_LANGUAGE);
     return userManagementRepository.persist(user);
   }
 
