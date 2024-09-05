@@ -15,5 +15,5 @@ public interface FacultyPsqlDbRepository extends JpaRepository<FacultyEntity, Lo
    * @param universityId the university id for which the faculties are retrieved.
    * @return a list of {@link FacultyEntity} based on the universityId.
    */
-  List<FacultyEntity> findByUniversityId(Long universityId);
+  List<FacultyEntity> findByUniversityIdOrderByName(Long universityId);
 }

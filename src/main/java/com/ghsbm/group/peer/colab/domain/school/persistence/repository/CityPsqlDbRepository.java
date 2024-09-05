@@ -14,5 +14,5 @@ public interface CityPsqlDbRepository extends JpaRepository<CityEntity, Long> {
    * @param countryId the country id for which the cities are retrieved.
    * @return a list of {@link CityEntity} based on the countryId.
    */
-  List<CityEntity> findByCountryId(Long countryId);
+  List<CityEntity> findByCountryIdOrderByName(Long countryId);
 }
