@@ -6,7 +6,9 @@ import com.ghsbm.group.peer.colab.application.config.Constants;
 import com.ghsbm.group.peer.colab.domain.security.controller.model.dto.AdminUserDTO;
 import com.ghsbm.group.peer.colab.domain.security.controller.model.dto.UserDTO;
 import com.ghsbm.group.peer.colab.domain.security.core.model.Authority;
+import com.ghsbm.group.peer.colab.domain.security.core.model.RequestAuthority;
 import com.ghsbm.group.peer.colab.domain.security.core.model.User;
+import com.ghsbm.group.peer.colab.domain.security.core.model.UserAuthorityRequest;
 import com.ghsbm.group.peer.colab.domain.security.core.ports.incoming.exception.EmailAlreadyUsedException;
 import com.ghsbm.group.peer.colab.domain.security.core.ports.incoming.exception.InvalidPasswordException;
 import com.ghsbm.group.peer.colab.domain.security.core.ports.incoming.exception.UsernameAlreadyUsedException;
@@ -397,21 +399,47 @@ public class UserManagementFacade implements UserManagementService {
     return userManagementRepository.findUserById(id);
   }
 
+  /**
+   * @inheritDoc
+   */
   @Override
   public void requestAuthorityCurrentUser() {
-      User currentUser = userManagementRepository
-              .findOneByLogin(
-                      SecurityUtils.getCurrentUserLogin()
-                              .orElseThrow(() -> new IllegalStateException(USER_MUST_BE_LOGGED_IN)))
-              .get();
-      if(currentUser.getAuthorities().contains(new Authority(AuthoritiesConstants.STUDENT_ADMIN)))
-      {
-          throw new IllegalStateException("The user has this authority");
-      }
+    User currentUser =
+        userManagementRepository
+            .findOneByLogin(
+                SecurityUtils.getCurrentUserLogin()
+                    .orElseThrow(() -> new IllegalStateException(USER_MUST_BE_LOGGED_IN)))
+            .get();
+    if (currentUser.getAuthorities().contains(new Authority(AuthoritiesConstants.STUDENT_ADMIN))) {
+      throw new IllegalStateException("The user has this authority");
+    }
 
-    userManagementRepository.requestRole(
-        currentUser.getId(),
-        AuthoritiesConstants.STUDENT_ADMIN);
+    userManagementRepository.requestRole(currentUser.getId(), AuthoritiesConstants.STUDENT_ADMIN);
+  }
+
+  /**
+   * @inheritDoc
+   */
+  @Override
+  public List<UserAuthorityRequest> findAllAuthorityRequests() {
+    return userRequestAuthoritiesFrom(userManagementRepository.findAllRequests());
+  }
+
+  /**
+   * @inheritDoc
+   */
+  @Override
+  public void approveAuthorityRequest(Long userId) {
+    User user =
+        userManagementRepository
+            .findUserById(userId)
+            .orElseThrow(
+                () -> new IllegalStateException("User with id" + userId + "does not exist"));
+    Set<Authority> authorities = user.getAuthorities();
+    authorities.add(new Authority(AuthoritiesConstants.STUDENT_ADMIN));
+    user.setAuthorities(authorities);
+    userManagementRepository.persist(user);
+    userManagementRepository.approveAuthorityRequest(userId);
   }
 
   private void clearUserCaches(User user) {
@@ -421,5 +449,39 @@ public class UserManagementFacade implements UserManagementService {
       Objects.requireNonNull(cacheManager.getCache(UserRepository.USERS_BY_EMAIL_CACHE))
           .evict(user.getEmail());
     }
+  }
+
+  protected List<UserAuthorityRequest> userRequestAuthoritiesFrom(
+      List<RequestAuthority> requestAuthorities) {
+    if (requestAuthorities == null) {
+      return Collections.emptyList();
+    }
+    List<UserAuthorityRequest> list =
+        new ArrayList<UserAuthorityRequest>(requestAuthorities.size());
+    for (RequestAuthority requestAuthority : requestAuthorities) {
+      list.add(toUserRequestAuthority(requestAuthority));
+    }
+    return list;
+  }
+
+  protected UserAuthorityRequest toUserRequestAuthority(RequestAuthority requestAuthority) {
+    if (requestAuthority == null) {
+      return null;
+    }
+    User user =
+        userManagementRepository
+            .findUserById(requestAuthority.getUserId())
+            .orElseThrow(
+                () ->
+                    new IllegalStateException(
+                        "User with id" + requestAuthority.getUserId() + "does not exist"));
+
+    return UserAuthorityRequest.builder()
+        .id(user.getId())
+        .login(user.getLogin())
+        .firstName(user.getFirstName())
+        .lastName(user.getLastName())
+        .email(user.getEmail())
+        .build();
   }
 }
