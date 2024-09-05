@@ -15,5 +15,5 @@ public interface UniversityPsqlDbRepository extends JpaRepository<UniversityEnti
    * @param cityId the city id for which the universities are retrieved.
    * @return a list of {@link UniversityEntity} based on the cityId.
    */
-  List<UniversityEntity> findByCityId(Long cityId);
+  List<UniversityEntity> findByCityIdOrderByName(Long cityId);
 }

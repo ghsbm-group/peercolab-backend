@@ -36,7 +36,7 @@ public class SchoolRepositoryAdapter implements SchoolRepository {
   @Override
   public List<City> findCitiesByCountry(Long countryId) {
     return universityEntitiesMapper.fromCityEntities(
-        cityPsqlDbRepository.findByCountryId(countryId));
+        cityPsqlDbRepository.findByCountryIdOrderByName(countryId));
   }
 
   /**
@@ -45,7 +45,7 @@ public class SchoolRepositoryAdapter implements SchoolRepository {
   @Override
   public List<University> findUniversitiesByCity(Long cityId) {
     return universityEntitiesMapper.fromUniversityEntities(
-        universityPsqlDbRepository.findByCityId(cityId));
+        universityPsqlDbRepository.findByCityIdOrderByName(cityId));
   }
 
   /**
@@ -54,7 +54,7 @@ public class SchoolRepositoryAdapter implements SchoolRepository {
   @Override
   public List<Faculty> findFacultiesByUniversity(Long universityId) {
     return universityEntitiesMapper.fromFacultyEntities(
-        facultyPsqlDbRepository.findByUniversityId(universityId));
+        facultyPsqlDbRepository.findByUniversityIdOrderByName(universityId));
   }
 
   /**
