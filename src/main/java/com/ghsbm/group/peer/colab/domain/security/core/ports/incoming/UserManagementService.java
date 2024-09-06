@@ -5,6 +5,8 @@ import com.ghsbm.group.peer.colab.domain.security.controller.model.dto.UserDTO;
 import com.ghsbm.group.peer.colab.domain.security.core.model.User;
 import java.util.List;
 import java.util.Optional;
+
+import com.ghsbm.group.peer.colab.domain.security.core.model.UserAuthorityRequest;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.transaction.annotation.Transactional;
@@ -65,4 +67,21 @@ public interface UserManagementService {
   /** Used when the logged-in user requests a certain authority (more precisely, STUDENT_ADMIN) */
   @Transactional
   void requestAuthorityCurrentUser();
+
+  /**
+   * Finds all the authority requests made by the users
+   *
+   * @return A list of {@link UserAuthorityRequest} that encapsulates details about the users that
+   *     requested for STUDENT ADMIN authority
+   */
+  @Transactional
+  List<UserAuthorityRequest> findAllAuthorityRequests();
+
+  /**
+   * Approving the authority for becoming a STUDENT ADMIN made by a user
+   *
+   * @param userId the user id that requested the authority
+   */
+  @Transactional
+  void approveAuthorityRequest(Long userId);
 }

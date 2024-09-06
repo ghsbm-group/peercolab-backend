@@ -50,4 +50,17 @@ public interface UserManagementRepository {
    * @return a {@link RequestAuthority} object
    */
   RequestAuthority requestRole(Long userId, String authorityName);
+
+  /**
+   * Retrieves all requests
+   * @return a list of {@link RequestAuthority}
+   */
+  List<RequestAuthority> findAllRequests();
+
+  /**
+   * Delete a {@link RequestAuthorityEntity} when approving the authority
+   *
+   * @param userId the user identifier
+   */
+  void deleteByUserId(Long userId);
 }

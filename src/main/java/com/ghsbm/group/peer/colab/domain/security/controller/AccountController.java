@@ -3,23 +3,23 @@ package com.ghsbm.group.peer.colab.domain.security.controller;
 import com.ghsbm.group.peer.colab.domain.security.controller.errors.EmailAlreadyUsedException;
 import com.ghsbm.group.peer.colab.domain.security.controller.errors.InvalidPasswordException;
 import com.ghsbm.group.peer.colab.domain.security.controller.errors.LoginAlreadyUsedException;
-import com.ghsbm.group.peer.colab.domain.security.controller.model.FinishResetPasswordRequest;
-import com.ghsbm.group.peer.colab.domain.security.controller.model.RegisterUserRequest;
-import com.ghsbm.group.peer.colab.domain.security.controller.model.UserDtoMapper;
+import com.ghsbm.group.peer.colab.domain.security.controller.model.*;
 import com.ghsbm.group.peer.colab.domain.security.controller.model.dto.AdminUserDTO;
 import com.ghsbm.group.peer.colab.domain.security.controller.model.dto.PasswordChangeDTO;
 import com.ghsbm.group.peer.colab.domain.security.core.model.User;
 import com.ghsbm.group.peer.colab.domain.security.core.ports.incoming.UserManagementService;
+import com.ghsbm.group.peer.colab.infrastructure.AuthoritiesConstants;
 import com.ghsbm.group.peer.colab.infrastructure.SecurityUtils;
 import jakarta.validation.Valid;
+
+import java.util.List;
 import java.util.Optional;
 
-import jakarta.validation.constraints.NotNull;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
-import org.springframework.security.core.parameters.P;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 /** REST controller for managing the current user's account. */
@@ -40,10 +40,15 @@ public class AccountController {
 
   private final UserDtoMapper userDtoMapper;
 
+  private final UserMapperController userMapper;
+
   public AccountController(
-      UserManagementService userManagementService, UserDtoMapper userDtoMapper) {
+      UserManagementService userManagementService,
+      UserDtoMapper userDtoMapper,
+      UserMapperController userMapper) {
     this.userManagementService = userManagementService;
     this.userDtoMapper = userDtoMapper;
+    this.userMapper = userMapper;
   }
 
   /**
@@ -174,5 +179,28 @@ public class AccountController {
     return (StringUtils.isEmpty(password)
         || password.length() < RegisterUserRequest.PASSWORD_MIN_LENGTH
         || password.length() > RegisterUserRequest.PASSWORD_MAX_LENGTH);
+  }
+
+  /**
+   * Endpoint for display all authorities requests by users
+   *
+   * @return a list of {@link UserAuthorityRequestResponse} that encapsulates details about users
+   *     that requested authority of STUDENT ADMIN
+   */
+  @GetMapping("/all-authority-requests")
+  public ResponseEntity<List<UserAuthorityRequestResponse>> retrieveMessagesByMessageboardId() {
+    return ResponseEntity.ok(
+        userMapper.userAuthorityRequestResponsesFromUserAuthorityRequest(
+            userManagementService.findAllAuthorityRequests()));
+  }
+
+  /**
+   * Endpoint for approving by the ADMIN a request for becoming a STUDENT ADMIN send by the user
+   *
+   * @param userId the user identifier
+   */
+  @PostMapping("/approve-authority")
+  public void approveAuthority(@Valid final Long userId) {
+    userManagementService.approveAuthorityRequest(userId);
   }
 }
