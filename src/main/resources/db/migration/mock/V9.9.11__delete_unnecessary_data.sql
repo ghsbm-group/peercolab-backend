@@ -1,11 +1,19 @@
+DELETE
+FROM class_configuration
+where id = 3;
+
+DELETE
+FROM department
+WHERE id = 4;
+
 --delete unnecessary faculties
 DELETE FROM faculty
 WHERE id BETWEEN 3 AND 13;
 
 --delete unnecessary universities
-DELETE FROM faculty
+DELETE
+FROM university
 WHERE id BETWEEN 3 AND 7;
-
 
 --delete unnecessary cities
 DELETE FROM city
