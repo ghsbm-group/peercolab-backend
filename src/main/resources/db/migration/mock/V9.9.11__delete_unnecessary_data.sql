@@ -1,4 +1,8 @@
 DELETE
+FROM enrolment
+where class_configuration_id = 3;
+
+DELETE
 FROM folder
 where class_configuration_id = 3;
 
