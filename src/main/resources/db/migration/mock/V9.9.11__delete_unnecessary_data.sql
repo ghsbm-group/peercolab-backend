@@ -1,4 +1,8 @@
 DELETE
+FROM folder
+where class_configuration_id = 3;
+
+DELETE
 FROM class_configuration
 where id = 3;
 
