@@ -14,6 +14,8 @@ import com.ghsbm.group.peer.colab.domain.security.core.model.User;
 import com.ghsbm.group.peer.colab.domain.security.core.ports.incoming.UserManagementService;
 import com.ghsbm.group.peer.colab.infrastructure.SecurityUtils;
 import jakarta.persistence.EntityNotFoundException;
+
+import java.time.ZonedDateTime;
 import java.util.*;
 import org.springframework.stereotype.Service;
 
@@ -49,6 +51,8 @@ public class ChatManagementFacade implements ChatManagementService {
     for (Message message : messages) {
       list.add(messageToPostedMessage(message));
     }
+    // update the date when the user access the message board last time
+    classManagementService.saveOrUpdateUserMessageboardAccess(messageboardId);
     return list;
   }
 
@@ -81,6 +85,14 @@ public class ChatManagementFacade implements ChatManagementService {
   @Override
   public PostLike likeAMessage(Long messageId) {
     return chatRepository.likeAPost(messageId);
+  }
+
+  /**
+   * @inheritDoc
+   */
+  @Override
+  public Long countMessagesAfterDate(ZonedDateTime lastAccessDate) {
+    return chatRepository.countMessagesAfterDate(lastAccessDate);
   }
 
   protected PostedMessage messageToPostedMessage(Message message) {

@@ -19,8 +19,6 @@ import lombok.Setter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import java.time.LocalDateTime;
-import java.time.ZoneId;
 import java.time.ZonedDateTime;
 import java.util.List;
 
@@ -153,5 +151,13 @@ public class ChatRepositoryAdapter implements ChatRepository {
   @Override
   public boolean currentUserLikedThePost(Long messageId, String login) {
     return postLikesPsqlDbRepository.existsByMessageIdAndUserLogin(messageId, login);
+  }
+
+  /**
+   * @inheritDoc
+   */
+  @Override
+  public Long countMessagesAfterDate(ZonedDateTime lastAccessDate) {
+    return messagePsqlDbRepository.countByPostDateAfter(lastAccessDate);
   }
 }

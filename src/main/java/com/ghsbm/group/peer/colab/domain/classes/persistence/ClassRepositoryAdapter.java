@@ -2,18 +2,19 @@ package com.ghsbm.group.peer.colab.domain.classes.persistence;
 
 import com.ghsbm.group.peer.colab.domain.classes.core.model.ClassConfiguration;
 import com.ghsbm.group.peer.colab.domain.classes.core.model.Folder;
+import com.ghsbm.group.peer.colab.domain.classes.core.model.UserMessageBoardAccess;
 import com.ghsbm.group.peer.colab.domain.classes.core.ports.outgoing.ClassRepository;
-import com.ghsbm.group.peer.colab.domain.classes.persistence.model.ClassConfigurationEntity;
-import com.ghsbm.group.peer.colab.domain.classes.persistence.model.ClassEntitiesMapper;
-import com.ghsbm.group.peer.colab.domain.classes.persistence.model.EnrolmentEntity;
-import com.ghsbm.group.peer.colab.domain.classes.persistence.model.EnrolmentId;
-import com.ghsbm.group.peer.colab.domain.classes.persistence.model.FolderEntity;
+import com.ghsbm.group.peer.colab.domain.classes.persistence.model.*;
 import com.ghsbm.group.peer.colab.domain.classes.persistence.repository.ClassPsqlDbRepository;
 import com.ghsbm.group.peer.colab.domain.classes.persistence.repository.EnrolmentPsqlDbRepository;
 import com.ghsbm.group.peer.colab.domain.classes.persistence.repository.FolderPsqlDbRespository;
+import com.ghsbm.group.peer.colab.domain.classes.persistence.repository.UserMessageBoardAccessPsqlDbRepository;
 import com.ghsbm.group.peer.colab.domain.security.infrastructure.persistence.model.UserEntity;
 import com.ghsbm.group.peer.colab.domain.security.infrastructure.persistence.repository.UserRepository;
+import com.ghsbm.group.peer.colab.infrastructure.SecurityUtils;
 import com.ghsbm.group.peer.colab.infrastructure.exception.BadRequestAlertException;
+
+import java.time.ZonedDateTime;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -24,6 +25,8 @@ import lombok.Setter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import static com.ghsbm.group.peer.colab.infrastructure.AuthoritiesConstants.USER_MUST_BE_LOGGED_IN;
+
 @Component
 @NoArgsConstructor
 @AllArgsConstructor
@@ -32,6 +35,7 @@ public class ClassRepositoryAdapter implements ClassRepository {
 
   private ClassPsqlDbRepository classPsqlDbRepository;
   private FolderPsqlDbRespository folderPsqlDbRespository;
+  private UserMessageBoardAccessPsqlDbRepository userMessageBoardAccessPsqlDbRepository;
   private UserRepository userRepository;
   private EnrolmentPsqlDbRepository enrolmentPsqlDbRepository;
   private ClassEntitiesMapper classEntitiesMapper;
@@ -40,12 +44,14 @@ public class ClassRepositoryAdapter implements ClassRepository {
   public ClassRepositoryAdapter(
       ClassPsqlDbRepository classPsqlDbRepository,
       FolderPsqlDbRespository folderPsqlDbRespository,
+      UserMessageBoardAccessPsqlDbRepository userMessageBoardAccessPsqlDbRepository,
       ClassEntitiesMapper classEntitiesMapper,
       UserRepository userRepository,
       EnrolmentPsqlDbRepository enrolmentPsqlDbRepository) {
     this.classPsqlDbRepository = classPsqlDbRepository;
     this.folderPsqlDbRespository = folderPsqlDbRespository;
     this.classEntitiesMapper = classEntitiesMapper;
+    this.userMessageBoardAccessPsqlDbRepository = userMessageBoardAccessPsqlDbRepository;
     this.enrolmentPsqlDbRepository = enrolmentPsqlDbRepository;
     this.userRepository = userRepository;
   }
@@ -250,5 +256,46 @@ public class ClassRepositoryAdapter implements ClassRepository {
   public ClassConfiguration getClassConfigurationByFolderId(Long folderId) {
     return classEntitiesMapper.classFromEntity(
         folderPsqlDbRespository.findFirstById(folderId).getClassConfiguration());
+  }
+
+  /**
+   * @inheritDoc
+   */
+  @Override
+  public UserMessageBoardAccess saveOrUpdate(Long messageboardId) {
+    ZonedDateTime lastAccesDate = ZonedDateTime.now();
+
+    UserEntity userEntity =
+        userRepository
+            .findOneByLogin(
+                SecurityUtils.getCurrentUserLogin()
+                    .orElseThrow(() -> new IllegalStateException(USER_MUST_BE_LOGGED_IN)))
+            .orElseThrow(() -> new IllegalStateException("User does not exists"));
+    FolderEntity messageBoardEntity =
+        folderPsqlDbRespository
+            .findById(messageboardId)
+            .orElseThrow(() -> new IllegalStateException("Messageboard does not exists"));
+    UserMessageboardAccessEntity userMessageboardAccessEntity =
+        new UserMessageboardAccessEntity(userEntity, messageBoardEntity, lastAccesDate);
+
+    userMessageBoardAccessPsqlDbRepository.save(userMessageboardAccessEntity);
+    return UserMessageBoardAccess.builder()
+        .userId(userEntity.getId())
+        .messageboardId(messageBoardEntity.getId())
+        .lastAccessDate(lastAccesDate)
+        .build();
+  }
+
+  /**
+   * @inheritDoc
+   */
+  @Override
+  public UserMessageBoardAccess findByUserAndMessageBoardAccess(Long messageboardId) {
+    String login =
+        SecurityUtils.getCurrentUserLogin()
+            .orElseThrow(() -> new IllegalStateException(USER_MUST_BE_LOGGED_IN));
+    return classEntitiesMapper.fromUserMeessageBoardAccesEntity(
+        userMessageBoardAccessPsqlDbRepository.findByUser_LoginAndMessageboard_Id(
+            login, messageboardId));
   }
 }

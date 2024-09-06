@@ -204,7 +204,7 @@ class ClassManagementFacade implements ClassManagementService {
    */
   @Override
   public FolderInformation retrieveFolderInformation(
-      long folderId, LatestPostedMessage latestPostedMessage) {
+      long folderId, LatestPostedMessage latestPostedMessage, Long numberOfUnreadMessages) {
     var numberOfSubfolers = classRepository.countAllSubfolders(folderId);
     var numberOfPosts = classRepository.countMessages(folderId);
     if (latestPostedMessage == null)
@@ -215,6 +215,7 @@ class ClassManagementFacade implements ClassManagementService {
         .lastMessagePostedTime(latestPostedMessage.getLastMessagePostedTime())
         .username(latestPostedMessage.getUsername())
         .posts(numberOfPosts)
+        .numberOfUnreadMessages(numberOfUnreadMessages)
         .build();
   }
 
@@ -253,5 +254,21 @@ class ClassManagementFacade implements ClassManagementService {
   @Override
   public ClassConfiguration retrieveClassConfigurationByFolderId(Long folderId) {
     return classRepository.getClassConfigurationByFolderId(folderId);
+  }
+
+  /**
+   * @inheritDoc
+   */
+  @Override
+  public UserMessageBoardAccess saveOrUpdateUserMessageboardAccess(Long messageBoardId) {
+    return classRepository.saveOrUpdate(messageBoardId);
+  }
+
+  /**
+   * @inheritDoc
+   */
+  @Override
+  public UserMessageBoardAccess findUserMessageBoardAccess(Long messageboardId) {
+    return classRepository.findByUserAndMessageBoardAccess(messageboardId);
   }
 }

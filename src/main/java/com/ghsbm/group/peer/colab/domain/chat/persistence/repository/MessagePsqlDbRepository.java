@@ -4,6 +4,7 @@ import com.ghsbm.group.peer.colab.domain.chat.persistence.model.MessageEntity;
 import org.springframework.data.domain.Page;
 import org.springframework.data.jpa.repository.JpaRepository;
 
+import java.time.ZonedDateTime;
 import java.util.List;
 import java.util.Optional;
 
@@ -32,4 +33,12 @@ public interface MessagePsqlDbRepository extends JpaRepository<MessageEntity, Lo
    * @return the number of posted messages by a user
    */
   Long countByUserId(Long userId);
+
+  /**
+   * Retrieves the number of posted messages after a specific date
+   *
+   * @param date the date after the messages are counting
+   * @return the number of messages after the specific date
+   */
+  Long countByPostDateAfter(ZonedDateTime date);
 }

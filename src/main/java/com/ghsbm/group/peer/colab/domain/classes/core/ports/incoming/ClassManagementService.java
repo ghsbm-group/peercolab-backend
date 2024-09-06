@@ -3,10 +3,7 @@ package com.ghsbm.group.peer.colab.domain.classes.core.ports.incoming;
 import java.util.List;
 
 import com.ghsbm.group.peer.colab.domain.chat.core.model.LatestPostedMessage;
-import com.ghsbm.group.peer.colab.domain.classes.core.model.ClassConfiguration;
-import com.ghsbm.group.peer.colab.domain.classes.core.model.ClassDetails;
-import com.ghsbm.group.peer.colab.domain.classes.core.model.Folder;
-import com.ghsbm.group.peer.colab.domain.classes.core.model.FolderInformation;
+import com.ghsbm.group.peer.colab.domain.classes.core.model.*;
 import org.springframework.transaction.annotation.Transactional;
 
 /**
@@ -123,7 +120,8 @@ public interface ClassManagementService {
    * @return a {@link FolderInformation} which encapsulates all the required information
    */
   @Transactional
-  FolderInformation retrieveFolderInformation(long folderId, LatestPostedMessage latestPostedMessage);
+  FolderInformation retrieveFolderInformation(
+      long folderId, LatestPostedMessage latestPostedMessage, Long numberOfUnreadMessages);
 
   /**
    * Retrieves the ids of the message board associated with a folder
@@ -145,6 +143,23 @@ public interface ClassManagementService {
 
   @Transactional
   List<Folder> getFolderPath(Long id);
+
   @Transactional
   ClassConfiguration retrieveClassConfigurationByFolderId(Long folderId);
+
+  /**
+   * Persists the UserMessageboardAccess entity or update the existing object.
+   * @param messageBoardId the id of the message board
+   * @return a {@link UserMessageBoardAccess} object
+   */
+  @Transactional
+  UserMessageBoardAccess saveOrUpdateUserMessageboardAccess(Long messageBoardId);
+
+  /**
+   * Retrieves a UserMessageBoard entity if exists
+   * @param messageboardId the id of the message board
+   * @return a {@link UserMessageBoardAccess} object
+   */
+  @Transactional
+  UserMessageBoardAccess findUserMessageBoardAccess(Long messageboardId);
 }

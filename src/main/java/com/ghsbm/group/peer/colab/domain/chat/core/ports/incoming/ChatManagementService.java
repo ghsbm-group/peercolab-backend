@@ -7,6 +7,7 @@ import com.ghsbm.group.peer.colab.domain.chat.core.model.PostedMessage;
 import com.ghsbm.group.peer.colab.domain.classes.core.ports.incoming.exception.UserIsNotEnrolledInClassConfigurationException;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.ZonedDateTime;
 import java.util.List;
 
 /**
@@ -53,4 +54,13 @@ public interface ChatManagementService {
    */
   @Transactional
   PostLike likeAMessage(Long messageId);
+
+  /**
+   * Returns the number of posted messages after a specific date
+   *
+   * @param lastAccessDate the specific date for counting the posted messages
+   * @return the number of posted messages after a specific date
+   */
+  @Transactional
+  Long countMessagesAfterDate(ZonedDateTime lastAccessDate);
 }
