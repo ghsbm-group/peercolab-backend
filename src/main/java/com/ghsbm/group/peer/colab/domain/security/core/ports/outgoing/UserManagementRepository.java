@@ -62,5 +62,5 @@ public interface UserManagementRepository {
    *
    * @param userId the user identifier
    */
-  void approveAuthorityRequest(Long userId);
+  void deleteByUserId(Long userId);
 }

@@ -146,7 +146,7 @@ public class UserManagementRepositoryAdapter implements UserManagementRepository
    * @inheritDoc
    */
   @Override
-  public void approveAuthorityRequest(Long userId) {
+  public void deleteByUserId(Long userId) {
     requestAuthorityRepository.deleteByUser_Id(userId);
   }
 }

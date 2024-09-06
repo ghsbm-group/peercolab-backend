@@ -439,7 +439,7 @@ public class UserManagementFacade implements UserManagementService {
     authorities.add(new Authority(AuthoritiesConstants.STUDENT_ADMIN));
     user.setAuthorities(authorities);
     userManagementRepository.persist(user);
-    userManagementRepository.approveAuthorityRequest(userId);
+    userManagementRepository.deleteByUserId(userId);
   }
 
   private void clearUserCaches(User user) {
