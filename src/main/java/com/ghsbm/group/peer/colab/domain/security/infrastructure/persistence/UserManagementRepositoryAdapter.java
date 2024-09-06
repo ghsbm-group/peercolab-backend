@@ -115,7 +115,6 @@ public class UserManagementRepositoryAdapter implements UserManagementRepository
   }
 
   /**
-   *
    * @inheritDoc
    */
   @Override
@@ -133,5 +132,21 @@ public class UserManagementRepositoryAdapter implements UserManagementRepository
     RequestAuthorityEntity requestAuthorityEntity = new RequestAuthorityEntity(user, authority);
     requestAuthorityRepository.save(requestAuthorityEntity);
     return RequestAuthority.builder().userId(userId).authorityName(authorityName).build();
+  }
+
+  /**
+   * @inheritDoc
+   */
+  @Override
+  public List<RequestAuthority> findAllRequests() {
+    return userMapper.fromEntities(requestAuthorityRepository.findAll());
+  }
+
+  /**
+   * @inheritDoc
+   */
+  @Override
+  public void deleteByUserId(Long userId) {
+    requestAuthorityRepository.deleteByUser_Id(userId);
   }
 }
