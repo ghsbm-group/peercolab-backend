@@ -11,6 +11,7 @@ import com.ghsbm.group.peer.colab.domain.classes.controller.model.dto.FolderDTO;
 import com.ghsbm.group.peer.colab.domain.classes.controller.model.dto.FolderInfoDTO;
 import com.ghsbm.group.peer.colab.domain.classes.core.model.ClassDetails;
 import com.ghsbm.group.peer.colab.domain.classes.core.model.FolderInformation;
+import com.ghsbm.group.peer.colab.domain.classes.core.model.UserMessageBoardAccess;
 import com.ghsbm.group.peer.colab.domain.classes.core.ports.incoming.ClassManagementService;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotNull;
@@ -281,12 +282,17 @@ public class ClassManagementController {
     LatestPostedMessage latestPostedMessage =
         chatManagementService.retrieveLatestPostedMessage(
             classManagementService.getMessageBoardsIds(folderId));
+
+    UserMessageBoardAccess access = classManagementService.findUserMessageBoardAccess(folderId);
     Long numberOfUnreadMessages =
-        chatManagementService.countMessagesAfterDate(
-            classManagementService.findUserMessageBoardAccess(folderId).getLastAccessDate());
+        classManagementService.findUserMessageBoardAccess(folderId) != null
+            ? chatManagementService.countMessagesAfterDate(
+                classManagementService.findUserMessageBoardAccess(folderId).getLastAccessDate())
+            : classManagementService.countAllMessagesByMessageBoardId(folderId);
 
     FolderInformation folderInformation =
-        classManagementService.retrieveFolderInformation(folderId, latestPostedMessage, numberOfUnreadMessages);
+        classManagementService.retrieveFolderInformation(
+            folderId, latestPostedMessage, numberOfUnreadMessages);
     return ResponseEntity.ok(
         classMapper.folderInformationResponseFromFolderInformation(folderInformation));
   }
