@@ -1,7 +1,6 @@
 package com.ghsbm.group.peer.colab.domain.classes.core.ports.incoming;
 
 import java.util.List;
-import java.util.Optional;
 
 import com.ghsbm.group.peer.colab.domain.chat.core.model.LatestPostedMessage;
 import com.ghsbm.group.peer.colab.domain.classes.core.model.*;

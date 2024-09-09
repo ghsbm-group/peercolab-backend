@@ -11,7 +11,6 @@ import com.ghsbm.group.peer.colab.domain.classes.controller.model.dto.FolderDTO;
 import com.ghsbm.group.peer.colab.domain.classes.controller.model.dto.FolderInfoDTO;
 import com.ghsbm.group.peer.colab.domain.classes.core.model.ClassDetails;
 import com.ghsbm.group.peer.colab.domain.classes.core.model.FolderInformation;
-import com.ghsbm.group.peer.colab.domain.classes.core.model.UserMessageBoardAccess;
 import com.ghsbm.group.peer.colab.domain.classes.core.ports.incoming.ClassManagementService;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotNull;
