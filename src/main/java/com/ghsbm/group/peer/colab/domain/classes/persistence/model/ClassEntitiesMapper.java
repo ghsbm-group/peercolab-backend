@@ -29,4 +29,10 @@ public abstract class ClassEntitiesMapper {
   public abstract Folder folderFromEntity(FolderEntity savedFolder);
 
   public abstract List<Enrolment> fromEnrolmentEntities(List<EnrolmentEntity> enrolmentEntities);
+
+  @Mappings({
+          @Mapping(target = "userId", source = "user.id"),
+          @Mapping(target = "messageboardId", source = "messageboard.id")
+  })
+  public abstract UserMessageBoardAccess fromUserMeessageBoardAccesEntity(UserMessageboardAccessEntity entity);
 }

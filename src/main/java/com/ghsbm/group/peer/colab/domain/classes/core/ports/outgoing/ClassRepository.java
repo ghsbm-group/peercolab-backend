@@ -2,6 +2,7 @@ package com.ghsbm.group.peer.colab.domain.classes.core.ports.outgoing;
 
 import com.ghsbm.group.peer.colab.domain.classes.core.model.ClassConfiguration;
 import com.ghsbm.group.peer.colab.domain.classes.core.model.Folder;
+import com.ghsbm.group.peer.colab.domain.classes.core.model.UserMessageBoardAccess;
 
 import java.util.List;
 import java.util.Optional;
@@ -78,6 +79,7 @@ public interface ClassRepository {
    * @return if the specific folder exists
    */
   boolean folderAlreadyExists(Folder folder);
+
   boolean classDoesNotExists(Long classConfigurationId);
 
   /**
@@ -148,4 +150,20 @@ public interface ClassRepository {
 
   ClassConfiguration getClassConfigurationByFolderId(Long folderId);
 
+  /**
+   * Save in db the last time the logged-in user access a message board or update the existing
+   * entity with a new date
+   *
+   * @param messageboardId the identifier of the message board
+   * @return a {@link UserMessageBoardAccess} object
+   */
+  UserMessageBoardAccess saveOrUpdateUserAccessTime(Long messageboardId);
+
+  /**
+   * Returns a {@link UserMessageBoardAccess} object based on message board id and logged-in user.
+   *
+   * @param messageboardId the identifier of the message board
+   * @return a {@link UserMessageBoardAccess} object
+   */
+  UserMessageBoardAccess findByUserAndMessageBoardAccess(Long messageboardId);
 }

@@ -4,6 +4,7 @@ import com.ghsbm.group.peer.colab.domain.chat.core.model.LatestPostedMessage;
 import com.ghsbm.group.peer.colab.domain.chat.core.model.Message;
 import com.ghsbm.group.peer.colab.domain.chat.core.model.PostLike;
 
+import java.time.ZonedDateTime;
 import java.util.List;
 
 /**
@@ -79,4 +80,12 @@ public interface ChatRepository {
    * @return If the user like the message.
    */
   boolean currentUserLikedThePost(Long messageId, String login);
+
+  /**
+   * Returns the number of posted messages after a specific date
+   *
+   * @param lastAccessDate the date after the messages are counting
+   * @return the number of posted messages
+   */
+  Long countMessagesAfterDate(ZonedDateTime lastAccessDate);
 }

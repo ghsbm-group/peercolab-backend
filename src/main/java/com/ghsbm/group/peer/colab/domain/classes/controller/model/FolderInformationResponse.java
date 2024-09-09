@@ -14,4 +14,5 @@ public class FolderInformationResponse {
   private String messageBoard;
   private String username;
   private ZonedDateTime lastMessagePostedTime;
+  private Long numberOfUnreadMessages;
 }
