@@ -3,7 +3,6 @@ package com.ghsbm.group.peer.colab.domain.classes.persistence.model;
 import com.ghsbm.group.peer.colab.domain.classes.core.model.*;
 import com.ghsbm.group.peer.colab.domain.classes.core.model.ClassConfiguration;
 import java.util.List;
-import java.util.Optional;
 
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
