@@ -283,7 +283,6 @@ public class ClassManagementController {
         chatManagementService.retrieveLatestPostedMessage(
             classManagementService.getMessageBoardsIds(folderId));
 
-    UserMessageBoardAccess access = classManagementService.findUserMessageBoardAccess(folderId);
     Long numberOfUnreadMessages =
         classManagementService.findUserMessageBoardAccess(folderId) != null
             ? chatManagementService.countMessagesAfterDate(

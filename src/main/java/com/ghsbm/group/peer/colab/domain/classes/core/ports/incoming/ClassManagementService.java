@@ -150,6 +150,7 @@ public interface ClassManagementService {
 
   /**
    * Persists the UserMessageboardAccess entity or update the existing object.
+   *
    * @param messageBoardId the id of the message board
    * @return a {@link UserMessageBoardAccess} object
    */
@@ -158,6 +159,7 @@ public interface ClassManagementService {
 
   /**
    * Retrieves a UserMessageBoard entity if exists
+   *
    * @param messageboardId the id of the message board
    * @return a {@link UserMessageBoardAccess} object
    */
