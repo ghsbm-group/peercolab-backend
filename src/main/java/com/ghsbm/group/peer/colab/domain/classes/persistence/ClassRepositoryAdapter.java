@@ -262,7 +262,7 @@ public class ClassRepositoryAdapter implements ClassRepository {
    * @inheritDoc
    */
   @Override
-  public UserMessageBoardAccess saveOrUpdate(Long messageboardId) {
+  public UserMessageBoardAccess saveOrUpdateUserAccessTime(Long messageboardId) {
     ZonedDateTime lastAccesDate = ZonedDateTime.now();
 
     UserEntity userEntity =

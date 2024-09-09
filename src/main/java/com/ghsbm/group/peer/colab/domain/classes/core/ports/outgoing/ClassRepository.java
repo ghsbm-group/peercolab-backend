@@ -157,7 +157,7 @@ public interface ClassRepository {
    * @param messageboardId the identifier of the message board
    * @return a {@link UserMessageBoardAccess} object
    */
-  UserMessageBoardAccess saveOrUpdate(Long messageboardId);
+  UserMessageBoardAccess saveOrUpdateUserAccessTime(Long messageboardId);
 
   /**
    * Returns a {@link UserMessageBoardAccess} object based on message board id and logged-in user.

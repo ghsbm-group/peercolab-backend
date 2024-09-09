@@ -261,7 +261,7 @@ class ClassManagementFacade implements ClassManagementService {
    */
   @Override
   public UserMessageBoardAccess saveOrUpdateUserMessageboardAccess(Long messageBoardId) {
-    return classRepository.saveOrUpdate(messageBoardId);
+    return classRepository.saveOrUpdateUserAccessTime(messageBoardId);
   }
 
   /**
