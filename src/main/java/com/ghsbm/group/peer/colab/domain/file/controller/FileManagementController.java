@@ -68,7 +68,7 @@ public class FileManagementController {
     return ResponseEntity.ok(ListFilesResponse.builder().files(fileMapper.map(fileInfos)).build());
   }
 
-  @GetMapping(value = "{fileId}/")
+  @GetMapping(value = "{fileId}")
   public byte[] download(@PathVariable("fileId") Long fileId, HttpServletResponse response) {
     File file = fileManagementService.download(fileId);
     if (!SecurityUtils.hasCurrentUserAnyOfAuthorities(ADMIN)
