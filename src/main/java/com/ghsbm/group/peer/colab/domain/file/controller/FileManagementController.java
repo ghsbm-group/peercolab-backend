@@ -77,6 +77,7 @@ public class FileManagementController {
     }
     response.setHeader(
         "Content-Disposition", "attachment; filename=" + file.getFileInfo().getName());
+    response.setHeader("Access-Control-Expose-Headers", "*");
     return file.getFile();
   }
 }
