@@ -281,12 +281,16 @@ public class ClassManagementController {
     LatestPostedMessage latestPostedMessage =
         chatManagementService.retrieveLatestPostedMessage(
             classManagementService.getMessageBoardsIds(folderId));
+
     Long numberOfUnreadMessages =
-        chatManagementService.countMessagesAfterDate(
-            classManagementService.findUserMessageBoardAccess(folderId).getLastAccessDate());
+        classManagementService.findUserMessageBoardAccess(folderId) != null
+            ? chatManagementService.countMessagesAfterDate(
+                classManagementService.findUserMessageBoardAccess(folderId).getLastAccessDate())
+            : classManagementService.countAllMessagesByMessageBoardId(folderId);
 
     FolderInformation folderInformation =
-        classManagementService.retrieveFolderInformation(folderId, latestPostedMessage, numberOfUnreadMessages);
+        classManagementService.retrieveFolderInformation(
+            folderId, latestPostedMessage, numberOfUnreadMessages);
     return ResponseEntity.ok(
         classMapper.folderInformationResponseFromFolderInformation(folderInformation));
   }

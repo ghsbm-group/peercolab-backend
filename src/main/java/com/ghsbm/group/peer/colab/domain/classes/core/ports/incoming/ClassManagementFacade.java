@@ -11,10 +11,9 @@ import com.ghsbm.group.peer.colab.domain.classes.core.ports.incoming.exception.F
 import com.ghsbm.group.peer.colab.domain.classes.core.ports.outgoing.ClassRepository;
 import com.ghsbm.group.peer.colab.infrastructure.RandomUtil;
 import com.ghsbm.group.peer.colab.infrastructure.SecurityUtils;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.Objects;
+
+import java.util.*;
+
 import org.springframework.context.MessageSource;
 import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.stereotype.Service;
@@ -270,5 +269,10 @@ class ClassManagementFacade implements ClassManagementService {
   @Override
   public UserMessageBoardAccess findUserMessageBoardAccess(Long messageboardId) {
     return classRepository.findByUserAndMessageBoardAccess(messageboardId);
+  }
+
+  @Override
+  public Long countAllMessagesByMessageBoardId(Long folderId) {
+    return classRepository.countMessages(folderId);
   }
 }
