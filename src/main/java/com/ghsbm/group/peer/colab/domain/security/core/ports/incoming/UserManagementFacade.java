@@ -1,5 +1,6 @@
 package com.ghsbm.group.peer.colab.domain.security.core.ports.incoming;
 
+import static com.ghsbm.group.peer.colab.domain.security.core.model.AuthProvider.local;
 import static com.ghsbm.group.peer.colab.infrastructure.AuthoritiesConstants.USER_MUST_BE_LOGGED_IN;
 
 import com.ghsbm.group.peer.colab.application.config.Constants;
@@ -149,7 +150,7 @@ public class UserManagementFacade implements UserManagementService {
     }
     newUser.setImageUrl(userDTO.getImageUrl());
     newUser.setLangKey(userDTO.getLangKey());
-    newUser.setProvider(userDTO.getProvider());
+    newUser.setProvider(local);
     // new user is not active
     newUser.setActivated(true);
     // new user gets registration key
