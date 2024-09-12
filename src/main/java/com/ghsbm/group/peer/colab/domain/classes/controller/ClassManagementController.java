@@ -170,7 +170,7 @@ public class ClassManagementController {
     Objects.requireNonNull(classConfigurationId);
     return ResponseEntity.ok(
         classMapper.foldersDTOFrom(
-            classManagementService.retrieveRootFolderByClassConfigurationId(classConfigurationId)));
+            classManagementService.retrieveRootFolderByClassConfigurationId(classConfigurationId, false)));
   }
 
   /**

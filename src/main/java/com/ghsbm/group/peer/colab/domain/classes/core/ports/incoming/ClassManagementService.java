@@ -28,7 +28,8 @@ public interface ClassManagementService {
    * @param classConfigurationId the class configuration id for which the folders are retrieved.
    * @return a list of {@link Folder} associated with the provided class configuration id.
    */
-  List<Folder> retrieveRootFolderByClassConfigurationId(Long classConfigurationId);
+  List<Folder> retrieveRootFolderByClassConfigurationId(
+          Long classConfigurationId, boolean onEnrollmentClass);
 
   /**
    * Retrieves the subfolders associated with a folder or subfolder

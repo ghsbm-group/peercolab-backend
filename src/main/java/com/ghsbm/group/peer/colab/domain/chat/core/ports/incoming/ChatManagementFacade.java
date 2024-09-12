@@ -84,6 +84,8 @@ public class ChatManagementFacade implements ChatManagementService {
    */
   @Override
   public PostLike likeAMessage(Long messageId) {
+
+    Objects.requireNonNull(messageId);
     return chatRepository.likeAPost(messageId);
   }
 

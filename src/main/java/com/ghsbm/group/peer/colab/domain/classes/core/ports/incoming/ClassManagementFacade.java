@@ -8,6 +8,7 @@ import com.ghsbm.group.peer.colab.domain.classes.core.model.*;
 import com.ghsbm.group.peer.colab.domain.classes.core.ports.incoming.exception.ClassConfigurationAlreadyExistsException;
 import com.ghsbm.group.peer.colab.domain.classes.core.ports.incoming.exception.ClassConfigurationDoesNotExistsException;
 import com.ghsbm.group.peer.colab.domain.classes.core.ports.incoming.exception.FolderAlreadyExistsException;
+import com.ghsbm.group.peer.colab.domain.classes.core.ports.incoming.exception.UserIsNotEnrolledInClassConfigurationException;
 import com.ghsbm.group.peer.colab.domain.classes.core.ports.outgoing.ClassRepository;
 import com.ghsbm.group.peer.colab.infrastructure.RandomUtil;
 import com.ghsbm.group.peer.colab.infrastructure.SecurityUtils;
@@ -42,7 +43,14 @@ class ClassManagementFacade implements ClassManagementService {
    * @inheritDoc
    */
   @Override
-  public List<Folder> retrieveRootFolderByClassConfigurationId(Long classConfigurationId) {
+  public List<Folder> retrieveRootFolderByClassConfigurationId(
+      Long classConfigurationId, boolean onEnrollmentClass) {
+    String currentUser =
+        SecurityUtils.getCurrentUserLogin()
+            .orElseThrow(() -> new IllegalStateException(USER_MUST_BE_LOGGED_IN));
+    if (!classRepository.isEnrolled(currentUser, classConfigurationId) && !onEnrollmentClass) {
+      throw new UserIsNotEnrolledInClassConfigurationException();
+    }
     return classRepository.findRootFoldersByClassConfiguration(classConfigurationId);
   }
 
@@ -51,6 +59,14 @@ class ClassManagementFacade implements ClassManagementService {
    */
   @Override
   public List<Folder> retrieveFolderByParentId(Long parentId) {
+    Long classConfigurationId = classRepository.getClassConfigurationByFolderId(parentId).getId();
+    String currentUser =
+        SecurityUtils.getCurrentUserLogin()
+            .orElseThrow(() -> new IllegalStateException(USER_MUST_BE_LOGGED_IN));
+
+    if (!classRepository.isEnrolled(currentUser, classConfigurationId)) {
+      throw new UserIsNotEnrolledInClassConfigurationException();
+    }
     return classRepository.findFoldersByParentId(parentId);
   }
 
@@ -170,7 +186,7 @@ class ClassManagementFacade implements ClassManagementService {
         .classConfiguration(classConfiguration)
         .classStructure(
             ClassStructure.builder()
-                .folders(retrieveRootFolderByClassConfigurationId(classConfiguration.getId()))
+                .folders(retrieveRootFolderByClassConfigurationId(classConfiguration.getId(), true))
                 .build())
         .enrolmentKey(enrolmentKey)
         .build();

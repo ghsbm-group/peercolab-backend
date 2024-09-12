@@ -41,4 +41,5 @@ public interface MessagePsqlDbRepository extends JpaRepository<MessageEntity, Lo
    * @return the number of messages after the specific date
    */
   Long countByPostDateAfter(ZonedDateTime date);
+
 }

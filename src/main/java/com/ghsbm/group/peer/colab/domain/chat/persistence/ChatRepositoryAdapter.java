@@ -12,6 +12,7 @@ import com.ghsbm.group.peer.colab.domain.chat.persistence.repository.PostLikesPs
 import com.ghsbm.group.peer.colab.domain.classes.core.ports.outgoing.ClassRepository;
 import com.ghsbm.group.peer.colab.domain.security.infrastructure.persistence.model.UserEntity;
 import com.ghsbm.group.peer.colab.domain.security.infrastructure.persistence.repository.UserRepository;
+import com.ghsbm.group.peer.colab.infrastructure.AuthoritiesConstants;
 import com.ghsbm.group.peer.colab.infrastructure.SecurityUtils;
 import com.ghsbm.group.peer.colab.infrastructure.exception.BadRequestAlertException;
 import lombok.NoArgsConstructor;
@@ -63,7 +64,9 @@ public class ChatRepositoryAdapter implements ChatRepository {
    */
   @Override
   public Message create(Message message) {
-    String userLogin = SecurityUtils.getCurrentUserLogin().get();
+    String userLogin = SecurityUtils.getCurrentUserLogin().orElseThrow(
+            () ->
+                    new IllegalStateException(AuthoritiesConstants.USER_MUST_BE_LOGGED_IN));
     Long userId = userRepository.findOneByLogin(userLogin).get().getId();
 
     final var messageEntity =
@@ -102,7 +105,9 @@ public class ChatRepositoryAdapter implements ChatRepository {
   @Override
   public PostLike likeAPost(Long messageId) {
 
-    String userLogin = SecurityUtils.getCurrentUserLogin().get();
+    String userLogin = SecurityUtils.getCurrentUserLogin().orElseThrow(
+            () ->
+                    new IllegalStateException(AuthoritiesConstants.USER_MUST_BE_LOGGED_IN));
     UserEntity userEntity =
         userRepository
             .findOneByLogin(userLogin)
