@@ -199,7 +199,7 @@ class ClassManagementFacadeTest {
     when(classRepository.isEnrolled(ADMIN, CLASS_CONFIGURATION_ID)).thenReturn(true);
     when(classRepository.findRootFoldersByClassConfiguration(CLASS_CONFIGURATION_ID))
             .thenReturn(expectedReturnValue);
-    List<Folder> response = victim.retrieveRootFolderByClassConfigurationId(CLASS_CONFIGURATION_ID, false);
+    List<Folder> response = victim.retrieveRootFolderByClassConfigurationId(CLASS_CONFIGURATION_ID);
 
     assertEquals(expectedReturnValue, response);
   }

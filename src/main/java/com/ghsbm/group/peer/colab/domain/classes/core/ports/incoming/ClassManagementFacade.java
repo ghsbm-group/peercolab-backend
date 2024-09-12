@@ -43,14 +43,22 @@ class ClassManagementFacade implements ClassManagementService {
    * @inheritDoc
    */
   @Override
-  public List<Folder> retrieveRootFolderByClassConfigurationId(
-      Long classConfigurationId, boolean onEnrollmentClass) {
+  public List<Folder> retrieveRootFolderByClassConfigurationId(Long classConfigurationId) {
     String currentUser =
         SecurityUtils.getCurrentUserLogin()
             .orElseThrow(() -> new IllegalStateException(USER_MUST_BE_LOGGED_IN));
-    if (!classRepository.isEnrolled(currentUser, classConfigurationId) && !onEnrollmentClass) {
+    if (!classRepository.isEnrolled(currentUser, classConfigurationId)) {
       throw new UserIsNotEnrolledInClassConfigurationException();
     }
+    return classRepository.findRootFoldersByClassConfiguration(classConfigurationId);
+  }
+
+  /**
+   * @inheritDoc
+   */
+  @Override
+  public List<Folder> retrieveRootFolderByClassConfigurationIdEnrollmentClass(
+      Long classConfigurationId) {
     return classRepository.findRootFoldersByClassConfiguration(classConfigurationId);
   }
 
@@ -186,7 +194,9 @@ class ClassManagementFacade implements ClassManagementService {
         .classConfiguration(classConfiguration)
         .classStructure(
             ClassStructure.builder()
-                .folders(retrieveRootFolderByClassConfigurationId(classConfiguration.getId(), true))
+                .folders(
+                    retrieveRootFolderByClassConfigurationIdEnrollmentClass(
+                        classConfiguration.getId()))
                 .build())
         .enrolmentKey(enrolmentKey)
         .build();
