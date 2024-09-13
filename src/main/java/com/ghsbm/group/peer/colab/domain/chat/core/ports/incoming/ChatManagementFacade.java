@@ -111,13 +111,12 @@ public class ChatManagementFacade implements ChatManagementService {
             .orElseThrow(
                 () ->
                     new EntityNotFoundException("User not found with ID: " + message.getUserId()));
-
     return PostedMessage.builder()
         .id(message.getId())
         .content(message.getContent())
         .userId(message.getUserId())
         .postDate(message.getPostDate())
-        .login(user.getLogin())
+        .login(user.isActivated() ? user.getLogin() : "UniHub user")
         .numberOfLikes(chatRepository.numberOfLikesOnAMessage(message.getId()))
         .roleUser(getUserAuthority(user.getAuthorities()))
         .numberOfPostsUser(chatRepository.numberOfPostsByUser(message.getUserId()))

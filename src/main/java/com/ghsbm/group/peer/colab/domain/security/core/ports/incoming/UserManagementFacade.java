@@ -15,6 +15,7 @@ import com.ghsbm.group.peer.colab.domain.security.core.ports.incoming.exception.
 import com.ghsbm.group.peer.colab.domain.security.core.ports.incoming.exception.UsernameAlreadyUsedException;
 import com.ghsbm.group.peer.colab.domain.security.core.ports.outgoing.MailService;
 import com.ghsbm.group.peer.colab.domain.security.core.ports.outgoing.UserManagementRepository;
+import com.ghsbm.group.peer.colab.domain.security.infrastructure.persistence.model.UserEntity;
 import com.ghsbm.group.peer.colab.domain.security.infrastructure.persistence.repository.UserRepository;
 import com.ghsbm.group.peer.colab.infrastructure.AuthoritiesConstants;
 import com.ghsbm.group.peer.colab.infrastructure.RandomUtil;
@@ -441,6 +442,30 @@ public class UserManagementFacade implements UserManagementService {
     user.setAuthorities(authorities);
     userManagementRepository.persist(user);
     userManagementRepository.deleteByUserId(userId);
+  }
+
+  /**
+   * @inheritDoc
+   */
+  @Override
+  public void deleteAccount() {
+
+    String login =
+        SecurityUtils.getCurrentUserLogin()
+            .orElseThrow(() -> new IllegalStateException(USER_MUST_BE_LOGGED_IN));
+    User user =
+        userManagementRepository
+            .findOneByLogin(login)
+            .orElseThrow(
+                () -> new IllegalStateException("user with login " + login + "does not exists"));
+    user.setLogin("anonymous" + user.getId());
+    user.setEmail("anonymous" + user.getId() + "@localhost.com");
+    user.setFirstName("anonymous");
+    user.setLastName("anonymous");
+    String encryptedPassword = passwordEncoder.encode("aNo!nnY@mou#sUn$iHu%b" + user.getId());
+    user.setPassword(encryptedPassword);
+    user.setActivated(false);
+    updateUser(user);
   }
 
   private void clearUserCaches(User user) {

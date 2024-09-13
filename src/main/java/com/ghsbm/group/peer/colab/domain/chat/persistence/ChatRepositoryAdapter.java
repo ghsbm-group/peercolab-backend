@@ -10,6 +10,7 @@ import com.ghsbm.group.peer.colab.domain.chat.persistence.model.PostLikesEntity;
 import com.ghsbm.group.peer.colab.domain.chat.persistence.repository.MessagePsqlDbRepository;
 import com.ghsbm.group.peer.colab.domain.chat.persistence.repository.PostLikesPsqlDbRepository;
 import com.ghsbm.group.peer.colab.domain.classes.core.ports.outgoing.ClassRepository;
+import com.ghsbm.group.peer.colab.domain.security.core.model.User;
 import com.ghsbm.group.peer.colab.domain.security.infrastructure.persistence.model.UserEntity;
 import com.ghsbm.group.peer.colab.domain.security.infrastructure.persistence.repository.UserRepository;
 import com.ghsbm.group.peer.colab.infrastructure.AuthoritiesConstants;
@@ -64,9 +65,10 @@ public class ChatRepositoryAdapter implements ChatRepository {
    */
   @Override
   public Message create(Message message) {
-    String userLogin = SecurityUtils.getCurrentUserLogin().orElseThrow(
-            () ->
-                    new IllegalStateException(AuthoritiesConstants.USER_MUST_BE_LOGGED_IN));
+    String userLogin =
+        SecurityUtils.getCurrentUserLogin()
+            .orElseThrow(
+                () -> new IllegalStateException(AuthoritiesConstants.USER_MUST_BE_LOGGED_IN));
     Long userId = userRepository.findOneByLogin(userLogin).get().getId();
 
     final var messageEntity =
@@ -92,9 +94,16 @@ public class ChatRepositoryAdapter implements ChatRepository {
     if (lastMessage == null) {
       return null;
     }
+    UserEntity user =
+        userRepository
+            .findById(lastMessage.getUserId())
+            .orElseThrow(
+                () ->
+                    new IllegalStateException(
+                        "User with id " + lastMessage.getUserId() + "does not exists"));
     return LatestPostedMessage.builder()
         .messageBoard(classRepository.findFolderById(lastMessage.getMessageboardId()).getName())
-        .username(userRepository.findById(lastMessage.getUserId()).get().getLogin())
+        .username(user.isActivated() ? user.getLogin() : "UniHub user")
         .lastMessagePostedTime(lastMessage.getPostDate())
         .build();
   }
@@ -105,9 +114,10 @@ public class ChatRepositoryAdapter implements ChatRepository {
   @Override
   public PostLike likeAPost(Long messageId) {
 
-    String userLogin = SecurityUtils.getCurrentUserLogin().orElseThrow(
-            () ->
-                    new IllegalStateException(AuthoritiesConstants.USER_MUST_BE_LOGGED_IN));
+    String userLogin =
+        SecurityUtils.getCurrentUserLogin()
+            .orElseThrow(
+                () -> new IllegalStateException(AuthoritiesConstants.USER_MUST_BE_LOGGED_IN));
     UserEntity userEntity =
         userRepository
             .findOneByLogin(userLogin)
