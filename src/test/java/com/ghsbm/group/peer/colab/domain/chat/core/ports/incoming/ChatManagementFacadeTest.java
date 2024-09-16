@@ -5,7 +5,9 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
 
+import com.ghsbm.group.peer.colab.domain.chat.core.model.LatestPostedMessage;
 import com.ghsbm.group.peer.colab.domain.chat.core.model.Message;
+import com.ghsbm.group.peer.colab.domain.chat.core.model.PostLike;
 import com.ghsbm.group.peer.colab.domain.chat.core.model.PostedMessage;
 import com.ghsbm.group.peer.colab.domain.chat.core.ports.outgoing.ChatRepository;
 import com.ghsbm.group.peer.colab.domain.classes.core.model.ClassConfiguration;
@@ -18,7 +20,6 @@ import com.ghsbm.group.peer.colab.domain.security.core.model.Authority;
 import com.ghsbm.group.peer.colab.domain.security.core.model.User;
 import com.ghsbm.group.peer.colab.domain.security.core.ports.incoming.UserManagementService;
 import com.ghsbm.group.peer.colab.infrastructure.AuthoritiesConstants;
-import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
 import java.util.*;
@@ -33,7 +34,9 @@ public class ChatManagementFacadeTest {
 
   public static final long CLASS_CONFIGURATION_ID = 1L;
   public static final long FOLDER_ID = 1L;
+  public static final long FOLDER1_ID = 2L;
   public static final long MESSAGE_ID = 1L;
+  public static final long MESSAGE1_ID = 2L;
   public static final long USER_ID = 1L;
   public static final String ENROLMENT_KEY = "EnrolmentKey";
   public static final String ADMIN = "ADMIN";
@@ -54,6 +57,16 @@ public class ChatManagementFacadeTest {
 
   private static Message buildValidMessage() {
     return Message.builder().content(CONTENT).messageboardId(FOLDER_ID).userId(USER_ID).build();
+  }
+
+  private static Message buildValidMessage(long folderId, long id, ZonedDateTime postDate) {
+    return Message.builder()
+        .id(id)
+        .content(CONTENT)
+        .messageboardId(folderId)
+        .postDate(postDate)
+        .userId(USER_ID)
+        .build();
   }
 
   private static PostedMessage buildValidPostedMessage() {
@@ -124,19 +137,22 @@ public class ChatManagementFacadeTest {
   @Test
   void retrieveMessagesByMessageboardIdShouldReturnAValidList() {
     SecurityTestUtils.mockAdminUser();
-    when(userManagementService.getUserWithAuthoritiesByLogin(LOGIN)).thenReturn(
+    when(userManagementService.getUserWithAuthoritiesByLogin(LOGIN))
+        .thenReturn(
             Optional.of(
-                    User.builder()
-                            .id(USER_ID)
-                            .login(LOGIN)
-                            .authorities(Set.of(new Authority(AuthoritiesConstants.ADMIN)))
-                            .build()));
+                User.builder()
+                    .id(USER_ID)
+                    .login(LOGIN)
+                    .activated(true)
+                    .authorities(Set.of(new Authority(AuthoritiesConstants.ADMIN)))
+                    .build()));
     when(userManagementService.findOneById(any()))
         .thenReturn(
             Optional.of(
                 User.builder()
                     .id(USER_ID)
                     .login(LOGIN)
+                    .activated(true)
                     .authorities(Set.of(new Authority(AuthoritiesConstants.ADMIN)))
                     .build()));
     when(classRepository.enrol(ADMIN, ENROLMENT_KEY))
@@ -165,5 +181,49 @@ public class ChatManagementFacadeTest {
     List<PostedMessage> list = victim.retrieveMessagesByMessageboardId(FOLDER_ID);
 
     assertEquals(postedMessages, list);
+  }
+
+  @Test
+  void likeAMessageShouldHaveTheIdsSet() {
+    Message createdMessage = buildValidMessage();
+    when(chatRepository.create(createdMessage))
+        .thenReturn(
+            Message.builder()
+                .id(MESSAGE_ID)
+                .messageboardId(FOLDER_ID)
+                .content(CONTENT)
+                .postDate(ZonedDateTime.now())
+                .build());
+    PostLike toBeCreated = PostLike.builder().messageId(MESSAGE_ID).userId(USER_ID).build();
+    when(chatRepository.likeAPost(MESSAGE_ID)).thenReturn(toBeCreated);
+
+    PostLike createdPostLike = victim.likeAMessage(MESSAGE_ID);
+    assertEquals(MESSAGE_ID, createdPostLike.getMessageId());
+    assertEquals(FOLDER_ID, createdPostLike.getUserId());
+  }
+
+  @Test
+  void likeAPostShouldReturnNullPointerException() {
+    assertThrows(NullPointerException.class, () -> victim.likeAMessage(null));
+  }
+
+  @Test
+  void retrieveLatestPostedMessageShouldReturnTheCorrectMessage() {
+    Message firstMessage = buildValidMessage(MESSAGE_ID, FOLDER_ID, ZonedDateTime.now());
+    Message secondMessage =
+        buildValidMessage(MESSAGE1_ID, FOLDER1_ID, ZonedDateTime.now().plusHours(2));
+    List<Long> messageBoardIds =
+        List.of(firstMessage.getMessageboardId(), secondMessage.getMessageboardId());
+    LatestPostedMessage created =
+        LatestPostedMessage.builder()
+            .lastMessagePostedTime(secondMessage.getPostDate())
+            .username(LOGIN)
+            .build();
+    when(chatRepository.retrieveLatestPostedMessage(messageBoardIds)).thenReturn(created);
+
+    LatestPostedMessage toBeCreated = victim.retrieveLatestPostedMessage(messageBoardIds);
+
+    assertEquals(created.getLastMessagePostedTime(), toBeCreated.getLastMessagePostedTime());
+    assertEquals(created.getUsername(), toBeCreated.getUsername());
   }
 }

@@ -25,6 +25,7 @@ import org.hibernate.annotations.CacheConcurrencyStrategy;
 public class UserEntity extends AbstractAuditingEntity<Long> implements Serializable {
 
   private static final long serialVersionUID = 1L;
+  private static final String UNI_HUB_USER = "UniHub user";
 
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -106,6 +107,10 @@ public class UserEntity extends AbstractAuditingEntity<Long> implements Serializ
 
   public String getLogin() {
     return login;
+  }
+
+  public String getUserName() {
+    return this.isActivated() ? this.getLogin() : UNI_HUB_USER;
   }
 
   // Lowercase the login before saving it in database

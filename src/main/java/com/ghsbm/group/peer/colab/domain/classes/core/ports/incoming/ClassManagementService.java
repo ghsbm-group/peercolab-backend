@@ -23,12 +23,21 @@ public interface ClassManagementService {
 
   /**
    * Retrieves the folders associated with a class configuration and which are not subfolders, i.e.
-   * parentId is null
+   * parentId is null If the user is not enrolled in the class, then an exception will be thrown
    *
    * @param classConfigurationId the class configuration id for which the folders are retrieved.
    * @return a list of {@link Folder} associated with the provided class configuration id.
    */
   List<Folder> retrieveRootFolderByClassConfigurationId(Long classConfigurationId);
+
+  /**
+   * Retrieves the folders associated with a class configuration and which are not subfolders, i.e.
+   * parentId is null
+   *
+   * @param classConfigurationId the class configuration id for which the folders are retrieved.
+   * @return a list of {@link Folder} associated with the provided class configuration id.
+   */
+  List<Folder> retrieveRootFolderByClassConfigurationIdEnrollmentClass(Long classConfigurationId);
 
   /**
    * Retrieves the subfolders associated with a folder or subfolder

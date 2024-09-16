@@ -123,12 +123,12 @@ public class UserManagementRepositoryAdapter implements UserManagementRepository
         userRepository
             .findById(userId)
             .orElseThrow(
-                () -> new IllegalStateException("User with id" + userId + "does not exist"));
+                () -> new IllegalStateException("User with id" + userId + " does not exist"));
     AuthorityEntity authority =
         authorityRepository
             .findById(authorityName)
             .orElseThrow(
-                () -> new IllegalStateException("Authority " + authorityName + "does not exist"));
+                () -> new IllegalStateException("Authority " + authorityName + " does not exist"));
     RequestAuthorityEntity requestAuthorityEntity = new RequestAuthorityEntity(user, authority);
     requestAuthorityRepository.save(requestAuthorityEntity);
     return RequestAuthority.builder().userId(userId).authorityName(authorityName).build();

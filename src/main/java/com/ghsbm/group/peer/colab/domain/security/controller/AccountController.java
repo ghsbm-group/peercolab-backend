@@ -203,4 +203,10 @@ public class AccountController {
   public void approveAuthority(@Valid final Long userId) {
     userManagementService.approveAuthorityRequest(userId);
   }
+
+  @PostMapping("/delete-account")
+  public void deleteAccount()
+  {
+    userManagementService.deleteAccount();
+  }
 }

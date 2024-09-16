@@ -13,6 +13,12 @@ import com.ghsbm.group.peer.colab.domain.classes.core.ports.incoming.exception.F
 import com.ghsbm.group.peer.colab.domain.classes.core.ports.outgoing.ClassRepository;
 import com.ghsbm.group.peer.colab.domain.infrastructure.SecurityTestUtils;
 import java.util.List;
+import java.util.Optional;
+import java.util.Set;
+
+import com.ghsbm.group.peer.colab.domain.security.core.model.Authority;
+import com.ghsbm.group.peer.colab.domain.security.core.model.User;
+import com.ghsbm.group.peer.colab.infrastructure.AuthoritiesConstants;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
@@ -182,9 +188,17 @@ class ClassManagementFacadeTest {
   @Test
   void retrieveRootFoldersByClassConfigurationIdShouldReturnValidList() {
     List<Folder> expectedReturnValue = List.of(buildValidFolder());
-    when(classRepository.findRootFoldersByClassConfiguration(CLASS_CONFIGURATION_ID))
-        .thenReturn(expectedReturnValue);
 
+    SecurityTestUtils.mockAdminUser();
+    when(classRepository.findFoldersByParentId(FOLDER_ID)).thenReturn(expectedReturnValue);
+    when(classRepository.getClassConfigurationByFolderId(FOLDER_ID)).thenReturn(ClassConfiguration.builder()
+            .name(CLASS_NAME)
+            .departmentId(DEPARTMENT_ID)
+            .id(CLASS_CONFIGURATION_ID)
+            .build());
+    when(classRepository.isEnrolled(ADMIN, CLASS_CONFIGURATION_ID)).thenReturn(true);
+    when(classRepository.findRootFoldersByClassConfiguration(CLASS_CONFIGURATION_ID))
+            .thenReturn(expectedReturnValue);
     List<Folder> response = victim.retrieveRootFolderByClassConfigurationId(CLASS_CONFIGURATION_ID);
 
     assertEquals(expectedReturnValue, response);
@@ -193,7 +207,14 @@ class ClassManagementFacadeTest {
   @Test
   void retrieveFoldersByParentIdShouldReturnValidList() {
     List<Folder> expectedReturnValue = List.of(buildValidSubfolder());
+    SecurityTestUtils.mockAdminUser();
     when(classRepository.findFoldersByParentId(FOLDER_ID)).thenReturn(expectedReturnValue);
+    when(classRepository.getClassConfigurationByFolderId(FOLDER_ID)).thenReturn(ClassConfiguration.builder()
+                    .name(CLASS_NAME)
+                    .departmentId(DEPARTMENT_ID)
+                    .id(CLASS_CONFIGURATION_ID)
+                    .build());
+    when(classRepository.isEnrolled(ADMIN, CLASS_CONFIGURATION_ID)).thenReturn(true);
 
     List<Folder> response = victim.retrieveFolderByParentId(FOLDER_ID);
 
@@ -220,7 +241,6 @@ class ClassManagementFacadeTest {
     Folder initialFolder = buildValidFolderWithIdSet();
     when(classRepository.findFolderById(folderWithNewName.getId())).thenReturn(initialFolder);
     when(classRepository.folderAlreadyExists(folderWithNewName)).thenReturn(true);
-
     assertThrows(FolderAlreadyExistsException.class, () -> victim.renameFolder(folderWithNewName));
   }
 
