@@ -299,6 +299,6 @@ public class ExceptionTranslator extends ResponseEntityExceptionHandler {
         "com.",
         "io.",
         "de.",
-        "com.ghsbmgroup.Peer Colab");
+        "com.ghsbmgroup.peer.colab.");
   }
 }

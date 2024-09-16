@@ -191,7 +191,7 @@
       </dependency>
     </dependencies>
   </dependencyManagement>
-  <description>Peer colab backend project</description>
+  <description>Unihub backend project</description>
   <groupId>com.ghsbm.group.peer.colab</groupId>
   <modelVersion>4.0.0</modelVersion>
   <name>backend</name>
