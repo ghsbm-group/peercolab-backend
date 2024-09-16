@@ -8,13 +8,10 @@ import com.ghsbm.group.peer.colab.domain.security.controller.model.dto.AdminUser
 import com.ghsbm.group.peer.colab.domain.security.controller.model.dto.PasswordChangeDTO;
 import com.ghsbm.group.peer.colab.domain.security.core.model.User;
 import com.ghsbm.group.peer.colab.domain.security.core.ports.incoming.UserManagementService;
-import com.ghsbm.group.peer.colab.infrastructure.AuthoritiesConstants;
 import com.ghsbm.group.peer.colab.infrastructure.SecurityUtils;
 import jakarta.validation.Valid;
-
 import java.util.List;
 import java.util.Optional;
-
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -208,5 +205,10 @@ public class AccountController {
   public void deleteAccount()
   {
     userManagementService.deleteAccount();
+  }
+
+  @PostMapping("/request-data")
+  public void requestData() {
+    userManagementService.requestData();
   }
 }

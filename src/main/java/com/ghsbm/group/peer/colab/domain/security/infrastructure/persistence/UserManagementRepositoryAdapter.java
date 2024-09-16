@@ -5,13 +5,16 @@ import com.ghsbm.group.peer.colab.domain.security.core.model.RequestAuthority;
 import com.ghsbm.group.peer.colab.domain.security.core.model.User;
 import com.ghsbm.group.peer.colab.domain.security.core.ports.outgoing.UserManagementRepository;
 import com.ghsbm.group.peer.colab.domain.security.infrastructure.persistence.model.AuthorityEntity;
+import com.ghsbm.group.peer.colab.domain.security.infrastructure.persistence.model.DataRequestEntity;
 import com.ghsbm.group.peer.colab.domain.security.infrastructure.persistence.model.RequestAuthorityEntity;
 import com.ghsbm.group.peer.colab.domain.security.infrastructure.persistence.model.UserEntity;
 import com.ghsbm.group.peer.colab.domain.security.infrastructure.persistence.model.UserMapper;
 import com.ghsbm.group.peer.colab.domain.security.infrastructure.persistence.repository.AuthorityRepository;
+import com.ghsbm.group.peer.colab.domain.security.infrastructure.persistence.repository.DataRequestRepository;
 import com.ghsbm.group.peer.colab.domain.security.infrastructure.persistence.repository.RequestAuthorityRepository;
 import com.ghsbm.group.peer.colab.domain.security.infrastructure.persistence.repository.UserRepository;
 import java.time.Instant;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 import org.slf4j.Logger;
@@ -27,6 +30,7 @@ public class UserManagementRepositoryAdapter implements UserManagementRepository
   private final UserRepository userRepository;
   private final AuthorityRepository authorityRepository;
   private final RequestAuthorityRepository requestAuthorityRepository;
+  private final DataRequestRepository dataRequestRepository;
 
   private final UserMapper userMapper;
 
@@ -34,10 +38,12 @@ public class UserManagementRepositoryAdapter implements UserManagementRepository
       UserRepository userRepository,
       AuthorityRepository authorityRepository,
       RequestAuthorityRepository requestAuthorityRepository,
+      DataRequestRepository dataRequestRepository,
       UserMapper userMapper) {
     this.userRepository = userRepository;
     this.authorityRepository = authorityRepository;
     this.requestAuthorityRepository = requestAuthorityRepository;
+    this.dataRequestRepository = dataRequestRepository;
     this.userMapper = userMapper;
   }
 
@@ -148,5 +154,14 @@ public class UserManagementRepositoryAdapter implements UserManagementRepository
   @Override
   public void deleteByUserId(Long userId) {
     requestAuthorityRepository.deleteByUser_Id(userId);
+  }
+
+  @Override
+  public void saveRequestForData(User user) {
+    dataRequestRepository.save(
+        DataRequestEntity.builder()
+            .user(userMapper.fromDomain(user))
+            .requestTime(LocalDateTime.now())
+            .build());
   }
 }

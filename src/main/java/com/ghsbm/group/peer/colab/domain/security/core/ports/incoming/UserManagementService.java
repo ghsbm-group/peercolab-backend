@@ -3,10 +3,9 @@ package com.ghsbm.group.peer.colab.domain.security.core.ports.incoming;
 import com.ghsbm.group.peer.colab.domain.security.controller.model.dto.AdminUserDTO;
 import com.ghsbm.group.peer.colab.domain.security.controller.model.dto.UserDTO;
 import com.ghsbm.group.peer.colab.domain.security.core.model.User;
+import com.ghsbm.group.peer.colab.domain.security.core.model.UserAuthorityRequest;
 import java.util.List;
 import java.util.Optional;
-
-import com.ghsbm.group.peer.colab.domain.security.core.model.UserAuthorityRequest;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.transaction.annotation.Transactional;
@@ -88,4 +87,8 @@ public interface UserManagementService {
   /** "Delete" an account by a logged-in user by changing the credentials */
   @Transactional
   void deleteAccount();
+
+  /** will save an entry in the db which indicates that the user has requested it's data. */
+  @Transactional
+  void requestData();
 }

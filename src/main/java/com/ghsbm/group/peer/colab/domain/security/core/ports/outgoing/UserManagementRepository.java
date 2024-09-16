@@ -63,4 +63,11 @@ public interface UserManagementRepository {
    * @param userId the user identifier
    */
   void deleteByUserId(Long userId);
+
+  /**
+   * Save an entry in the db which indicates that the user has requested it's data.
+   *
+   * @param user the user which made the request.
+   */
+  void saveRequestForData(User user);
 }
