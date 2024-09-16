@@ -107,7 +107,7 @@ public class CustomOAuth2UserService extends DefaultOAuth2UserService {
 
   private User updateExistingUser(User existingUser, OAuth2UserInfo oAuth2UserInfo) {
     existingUser.setFirstName(oAuth2UserInfo.getFirstName());
-    existingUser.setFirstName(oAuth2UserInfo.getLastName());
+    existingUser.setLastName(oAuth2UserInfo.getLastName());
     existingUser.setImageUrl(oAuth2UserInfo.getImageUrl());
     return userManagementRepository.persist(existingUser);
   }
