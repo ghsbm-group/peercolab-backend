@@ -297,4 +297,9 @@ public class ClassRepositoryAdapter implements ClassRepository {
         userMessageBoardAccessPsqlDbRepository.findByUser_LoginAndMessageboard_Id(
             login, messageboardId));
   }
+
+  @Override
+  public void deleteFolder(Long folderId) {
+    folderPsqlDbRespository.deleteById(folderId);
+  }
 }

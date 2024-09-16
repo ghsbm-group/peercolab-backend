@@ -3,7 +3,6 @@ package com.ghsbm.group.peer.colab.domain.classes.core.ports.outgoing;
 import com.ghsbm.group.peer.colab.domain.classes.core.model.ClassConfiguration;
 import com.ghsbm.group.peer.colab.domain.classes.core.model.Folder;
 import com.ghsbm.group.peer.colab.domain.classes.core.model.UserMessageBoardAccess;
-
 import java.util.List;
 import java.util.Optional;
 
@@ -166,4 +165,11 @@ public interface ClassRepository {
    * @return a {@link UserMessageBoardAccess} object
    */
   UserMessageBoardAccess findByUserAndMessageBoardAccess(Long messageboardId);
+
+  /**
+   * deletes a folder
+   *
+   * @param folderId The id of the folder to be deleted.
+   */
+  void deleteFolder(Long folderId);
 }

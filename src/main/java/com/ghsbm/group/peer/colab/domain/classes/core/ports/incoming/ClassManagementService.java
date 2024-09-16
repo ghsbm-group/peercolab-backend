@@ -1,9 +1,7 @@
 package com.ghsbm.group.peer.colab.domain.classes.core.ports.incoming;
 
-import java.util.List;
-
-import com.ghsbm.group.peer.colab.domain.chat.core.model.LatestPostedMessage;
 import com.ghsbm.group.peer.colab.domain.classes.core.model.*;
+import java.util.List;
 import org.springframework.transaction.annotation.Transactional;
 
 /**
@@ -129,8 +127,7 @@ public interface ClassManagementService {
    * @return a {@link FolderInformation} which encapsulates all the required information
    */
   @Transactional
-  FolderInformation retrieveFolderInformation(
-      long folderId, LatestPostedMessage latestPostedMessage, Long numberOfUnreadMessages);
+  FolderInformation retrieveFolderInformation(long folderId);
 
   /**
    * Retrieves the ids of the message board associated with a folder
@@ -176,4 +173,7 @@ public interface ClassManagementService {
 
   @Transactional
   Long countAllMessagesByMessageBoardId(Long folderId);
+
+  @Transactional
+  void deleteFolder(Long folderId);
 }

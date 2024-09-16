@@ -3,7 +3,6 @@ package com.ghsbm.group.peer.colab.domain.classes.core.ports.incoming;
 import static com.ghsbm.group.peer.colab.infrastructure.AuthoritiesConstants.STUDENT_ADMIN;
 import static com.ghsbm.group.peer.colab.infrastructure.AuthoritiesConstants.USER_MUST_BE_LOGGED_IN;
 
-import com.ghsbm.group.peer.colab.domain.chat.core.model.LatestPostedMessage;
 import com.ghsbm.group.peer.colab.domain.classes.core.model.*;
 import com.ghsbm.group.peer.colab.domain.classes.core.ports.incoming.exception.ClassConfigurationAlreadyExistsException;
 import com.ghsbm.group.peer.colab.domain.classes.core.ports.incoming.exception.ClassConfigurationDoesNotExistsException;
@@ -12,9 +11,8 @@ import com.ghsbm.group.peer.colab.domain.classes.core.ports.incoming.exception.U
 import com.ghsbm.group.peer.colab.domain.classes.core.ports.outgoing.ClassRepository;
 import com.ghsbm.group.peer.colab.infrastructure.RandomUtil;
 import com.ghsbm.group.peer.colab.infrastructure.SecurityUtils;
-
+import com.ghsbm.group.peer.colab.infrastructure.exception.BadRequestAlertException;
 import java.util.*;
-
 import org.springframework.context.MessageSource;
 import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.stereotype.Service;
@@ -228,20 +226,10 @@ class ClassManagementFacade implements ClassManagementService {
    * @inheritDoc
    */
   @Override
-  public FolderInformation retrieveFolderInformation(
-      long folderId, LatestPostedMessage latestPostedMessage, Long numberOfUnreadMessages) {
+  public FolderInformation retrieveFolderInformation(long folderId) {
     var numberOfSubfolers = classRepository.countAllSubfolders(folderId);
     var numberOfPosts = classRepository.countMessages(folderId);
-    if (latestPostedMessage == null)
-      return FolderInformation.builder().topics(numberOfSubfolers).posts(numberOfPosts).build();
-    return FolderInformation.builder()
-        .topics(numberOfSubfolers)
-        .messageBoard(latestPostedMessage.getMessageBoard())
-        .lastMessagePostedTime(latestPostedMessage.getLastMessagePostedTime())
-        .username(latestPostedMessage.getUsername())
-        .posts(numberOfPosts)
-        .numberOfUnreadMessages(numberOfUnreadMessages)
-        .build();
+    return FolderInformation.builder().topics(numberOfSubfolers).posts(numberOfPosts).build();
   }
 
   /**
@@ -300,5 +288,17 @@ class ClassManagementFacade implements ClassManagementService {
   @Override
   public Long countAllMessagesByMessageBoardId(Long folderId) {
     return classRepository.countMessages(folderId);
+  }
+
+  @Override
+  public void deleteFolder(Long folderId) {
+    var numberOfSubfolders = classRepository.countAllSubfolders(folderId);
+    var numberOfPosts = classRepository.countMessages(folderId);
+    if (numberOfPosts > 0 || numberOfSubfolders > 0) {
+      throw new BadRequestAlertException(
+          "Trying to delete a non empty folder", "Folder", "Folder_deletion");
+    }
+
+    classRepository.deleteFolder(folderId);
   }
 }

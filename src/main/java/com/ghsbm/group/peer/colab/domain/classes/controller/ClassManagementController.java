@@ -1,8 +1,8 @@
 package com.ghsbm.group.peer.colab.domain.classes.controller;
 
 import com.ghsbm.group.peer.colab.domain.chat.controller.model.ChatMapper;
-import com.ghsbm.group.peer.colab.domain.chat.controller.model.CreateMessageResponse;
 import com.ghsbm.group.peer.colab.domain.chat.controller.model.CreateMessageRequest;
+import com.ghsbm.group.peer.colab.domain.chat.controller.model.CreateMessageResponse;
 import com.ghsbm.group.peer.colab.domain.chat.core.model.LatestPostedMessage;
 import com.ghsbm.group.peer.colab.domain.chat.core.ports.incoming.ChatManagementService;
 import com.ghsbm.group.peer.colab.domain.classes.controller.model.*;
@@ -16,6 +16,7 @@ import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotNull;
 import java.util.List;
 import java.util.Objects;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -289,8 +290,13 @@ public class ClassManagementController {
             : classManagementService.countAllMessagesByMessageBoardId(folderId);
 
     FolderInformation folderInformation =
-        classManagementService.retrieveFolderInformation(
-            folderId, latestPostedMessage, numberOfUnreadMessages);
+        classManagementService.retrieveFolderInformation(folderId);
+    if (!Objects.isNull(latestPostedMessage)) {
+      folderInformation.setMessageBoard(latestPostedMessage.getMessageBoard());
+      folderInformation.setLastMessagePostedTime(latestPostedMessage.getLastMessagePostedTime());
+      folderInformation.setUsername(latestPostedMessage.getUsername());
+    }
+    folderInformation.setNumberOfUnreadMessages(numberOfUnreadMessages);
     return ResponseEntity.ok(
         classMapper.folderInformationResponseFromFolderInformation(folderInformation));
   }
@@ -306,5 +312,16 @@ public class ClassManagementController {
     return ResponseEntity.ok(
         classMapper.enrolledClassesResponseFromClassConfiguration(
             classManagementService.getEnrolledClassOfCurrentUser()));
+  }
+
+  /**
+   * Deletes a folder or a message board if it's empty.
+   *
+   * @param folderId The folder identifier returns A 200 ok response if successful.
+   */
+  @DeleteMapping("/folder")
+  @ResponseStatus(HttpStatus.OK)
+  public void deleteFolder(@NotNull final Long folderId) {
+    classManagementService.deleteFolder(folderId);
   }
 }
