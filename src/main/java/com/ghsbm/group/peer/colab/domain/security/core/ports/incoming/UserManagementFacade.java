@@ -435,7 +435,7 @@ public class UserManagementFacade implements UserManagementService {
         userManagementRepository
             .findUserById(userId)
             .orElseThrow(
-                () -> new IllegalStateException("User with id" + userId + "does not exist"));
+                () -> new IllegalStateException("User with id" + userId + " does not exist"));
     Set<Authority> authorities = user.getAuthorities();
     authorities.add(new Authority(AuthoritiesConstants.STUDENT_ADMIN));
     user.setAuthorities(authorities);
@@ -456,7 +456,7 @@ public class UserManagementFacade implements UserManagementService {
         userManagementRepository
             .findOneByLogin(login)
             .orElseThrow(
-                () -> new IllegalStateException("user with login " + login + "does not exists"));
+                () -> new IllegalStateException("user with login " + login + " does not exists"));
     user.setLogin(AuthoritiesConstants.DELETED_USER_NAME + user.getId());
     user.setEmail(AuthoritiesConstants.DELETED_USER_NAME + user.getId() + "@localhost.com");
     user.setFirstName(AuthoritiesConstants.DELETED_USER_NAME);
@@ -499,7 +499,7 @@ public class UserManagementFacade implements UserManagementService {
             .orElseThrow(
                 () ->
                     new IllegalStateException(
-                        "User with id" + requestAuthority.getUserId() + "does not exist"));
+                        "User with id" + requestAuthority.getUserId() + " does not exist"));
 
     return UserAuthorityRequest.builder()
         .id(user.getId())

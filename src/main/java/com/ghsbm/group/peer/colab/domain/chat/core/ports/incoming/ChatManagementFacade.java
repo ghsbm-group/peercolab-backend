@@ -14,7 +14,6 @@ import com.ghsbm.group.peer.colab.domain.security.core.model.User;
 import com.ghsbm.group.peer.colab.domain.security.core.ports.incoming.UserManagementService;
 import com.ghsbm.group.peer.colab.infrastructure.SecurityUtils;
 import jakarta.persistence.EntityNotFoundException;
-
 import java.time.ZonedDateTime;
 import java.util.*;
 import org.springframework.stereotype.Service;
@@ -116,7 +115,7 @@ public class ChatManagementFacade implements ChatManagementService {
         .content(message.getContent())
         .userId(message.getUserId())
         .postDate(message.getPostDate())
-        .login(user.isActivated() ? user.getLogin() : "UniHub user")
+        .login(user.getUserName())
         .numberOfLikes(chatRepository.numberOfLikesOnAMessage(message.getId()))
         .roleUser(getUserAuthority(user.getAuthorities()))
         .numberOfPostsUser(chatRepository.numberOfPostsByUser(message.getUserId()))

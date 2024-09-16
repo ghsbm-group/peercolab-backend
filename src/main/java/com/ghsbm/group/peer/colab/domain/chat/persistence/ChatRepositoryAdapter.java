@@ -10,19 +10,17 @@ import com.ghsbm.group.peer.colab.domain.chat.persistence.model.PostLikesEntity;
 import com.ghsbm.group.peer.colab.domain.chat.persistence.repository.MessagePsqlDbRepository;
 import com.ghsbm.group.peer.colab.domain.chat.persistence.repository.PostLikesPsqlDbRepository;
 import com.ghsbm.group.peer.colab.domain.classes.core.ports.outgoing.ClassRepository;
-import com.ghsbm.group.peer.colab.domain.security.core.model.User;
 import com.ghsbm.group.peer.colab.domain.security.infrastructure.persistence.model.UserEntity;
 import com.ghsbm.group.peer.colab.domain.security.infrastructure.persistence.repository.UserRepository;
 import com.ghsbm.group.peer.colab.infrastructure.AuthoritiesConstants;
 import com.ghsbm.group.peer.colab.infrastructure.SecurityUtils;
 import com.ghsbm.group.peer.colab.infrastructure.exception.BadRequestAlertException;
+import java.time.ZonedDateTime;
+import java.util.List;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-
-import java.time.ZonedDateTime;
-import java.util.List;
 
 /** Implementation of the message repository interface. Reads and persists data into a db. */
 @Component
@@ -100,10 +98,10 @@ public class ChatRepositoryAdapter implements ChatRepository {
             .orElseThrow(
                 () ->
                     new IllegalStateException(
-                        "User with id " + lastMessage.getUserId() + "does not exists"));
+                        "User with id " + lastMessage.getUserId() + " does not exists"));
     return LatestPostedMessage.builder()
         .messageBoard(classRepository.findFolderById(lastMessage.getMessageboardId()).getName())
-        .username(user.isActivated() ? user.getLogin() : "UniHub user")
+        .username(user.getUserName())
         .lastMessagePostedTime(lastMessage.getPostDate())
         .build();
   }
@@ -123,7 +121,8 @@ public class ChatRepositoryAdapter implements ChatRepository {
             .findOneByLogin(userLogin)
             .orElseThrow(
                 () ->
-                    new IllegalStateException("User with username" + userLogin + "does not exist"));
+                    new IllegalStateException(
+                        "User with username " + userLogin + " does not exist"));
     MessageEntity messageEntity =
         messagePsqlDbRepository
             .findById(messageId)

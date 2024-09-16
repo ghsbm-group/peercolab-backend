@@ -20,7 +20,6 @@ import com.ghsbm.group.peer.colab.domain.security.core.model.Authority;
 import com.ghsbm.group.peer.colab.domain.security.core.model.User;
 import com.ghsbm.group.peer.colab.domain.security.core.ports.incoming.UserManagementService;
 import com.ghsbm.group.peer.colab.infrastructure.AuthoritiesConstants;
-import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
 import java.util.*;
@@ -144,6 +143,7 @@ public class ChatManagementFacadeTest {
                 User.builder()
                     .id(USER_ID)
                     .login(LOGIN)
+                    .activated(true)
                     .authorities(Set.of(new Authority(AuthoritiesConstants.ADMIN)))
                     .build()));
     when(userManagementService.findOneById(any()))
@@ -152,6 +152,7 @@ public class ChatManagementFacadeTest {
                 User.builder()
                     .id(USER_ID)
                     .login(LOGIN)
+                    .activated(true)
                     .authorities(Set.of(new Authority(AuthoritiesConstants.ADMIN)))
                     .build()));
     when(classRepository.enrol(ADMIN, ENROLMENT_KEY))

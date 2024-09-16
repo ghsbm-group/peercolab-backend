@@ -1,5 +1,7 @@
 package com.ghsbm.group.peer.colab.domain.classes.persistence;
 
+import static com.ghsbm.group.peer.colab.infrastructure.AuthoritiesConstants.USER_MUST_BE_LOGGED_IN;
+
 import com.ghsbm.group.peer.colab.domain.classes.core.model.ClassConfiguration;
 import com.ghsbm.group.peer.colab.domain.classes.core.model.Folder;
 import com.ghsbm.group.peer.colab.domain.classes.core.model.UserMessageBoardAccess;
@@ -13,19 +15,15 @@ import com.ghsbm.group.peer.colab.domain.security.infrastructure.persistence.mod
 import com.ghsbm.group.peer.colab.domain.security.infrastructure.persistence.repository.UserRepository;
 import com.ghsbm.group.peer.colab.infrastructure.SecurityUtils;
 import com.ghsbm.group.peer.colab.infrastructure.exception.BadRequestAlertException;
-
 import java.time.ZonedDateTime;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
-
 import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-
-import static com.ghsbm.group.peer.colab.infrastructure.AuthoritiesConstants.USER_MUST_BE_LOGGED_IN;
 
 @Component
 @NoArgsConstructor
@@ -179,7 +177,8 @@ public class ClassRepositoryAdapter implements ClassRepository {
             .findOneByLogin(userLogin)
             .orElseThrow(
                 () ->
-                    new IllegalStateException("User with username" + userLogin + "does not exist"));
+                    new IllegalStateException(
+                        "User with username " + userLogin + " does not exist"));
     ClassConfigurationEntity classConfigurationEntity =
         classPsqlDbRepository
             .findByEnrolmentKey(enrolmentKey)

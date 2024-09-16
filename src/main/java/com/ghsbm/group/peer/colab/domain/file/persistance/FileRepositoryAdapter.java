@@ -43,7 +43,8 @@ public class FileRepositoryAdapter implements FileRepository {
             .findOneByLogin(userLogin)
             .orElseThrow(
                 () ->
-                    new IllegalStateException("User with username" + userLogin + "does not exist"));
+                    new IllegalStateException(
+                        "User with username " + userLogin + " does not exist"));
     FileEntity fileEntity =
         FileEntity.builder()
             .name(fileInfo.getName())

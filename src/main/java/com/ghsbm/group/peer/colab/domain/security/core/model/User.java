@@ -15,6 +15,7 @@ import lombok.NoArgsConstructor;
 public class User {
   private Long id;
   private String login;
+  private String userName;
   private String password;
   private String firstName;
   private String lastName;
@@ -32,4 +33,8 @@ public class User {
   private Instant createdDate = Instant.now();
   private String lastModifiedBy;
   private Instant lastModifiedDate = Instant.now();
+
+  public String getUserName() {
+    return userName != null ? userName : login;
+  }
 }
