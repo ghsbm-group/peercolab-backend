@@ -302,4 +302,9 @@ public class ClassRepositoryAdapter implements ClassRepository {
   public void deleteFolder(Long folderId) {
     folderPsqlDbRespository.deleteById(folderId);
   }
+
+  @Override
+  public void changeClassName(Long classId, String name) {
+    classPsqlDbRepository.updateNameById(classId, name);
+  }
 }

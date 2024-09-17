@@ -172,4 +172,12 @@ public interface ClassRepository {
    * @param folderId The id of the folder to be deleted.
    */
   void deleteFolder(Long folderId);
+
+  /**
+   * Updates a classes name.
+   *
+   * @param classId the class id for which the update is performed.
+   * @param name the new name for that class.
+   */
+  void changeClassName(Long classId, String name);
 }

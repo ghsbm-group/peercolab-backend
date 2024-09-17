@@ -9,6 +9,7 @@ import com.ghsbm.group.peer.colab.domain.classes.core.ports.incoming.exception.C
 import com.ghsbm.group.peer.colab.domain.classes.core.ports.incoming.exception.FolderAlreadyExistsException;
 import com.ghsbm.group.peer.colab.domain.classes.core.ports.incoming.exception.UserIsNotEnrolledInClassConfigurationException;
 import com.ghsbm.group.peer.colab.domain.classes.core.ports.outgoing.ClassRepository;
+import com.ghsbm.group.peer.colab.infrastructure.AuthoritiesConstants;
 import com.ghsbm.group.peer.colab.infrastructure.RandomUtil;
 import com.ghsbm.group.peer.colab.infrastructure.SecurityUtils;
 import com.ghsbm.group.peer.colab.infrastructure.exception.BadRequestAlertException;
@@ -42,13 +43,18 @@ class ClassManagementFacade implements ClassManagementService {
    */
   @Override
   public List<Folder> retrieveRootFolderByClassConfigurationId(Long classConfigurationId) {
+    validateUserEnrolment(classConfigurationId);
+    return classRepository.findRootFoldersByClassConfiguration(classConfigurationId);
+  }
+
+  private void validateUserEnrolment(Long classConfigurationId) {
     String currentUser =
         SecurityUtils.getCurrentUserLogin()
             .orElseThrow(() -> new IllegalStateException(USER_MUST_BE_LOGGED_IN));
-    if (!classRepository.isEnrolled(currentUser, classConfigurationId)) {
+    if (SecurityUtils.hasCurrentUserNoneOfAuthorities(AuthoritiesConstants.ADMIN)
+        && !classRepository.isEnrolled(currentUser, classConfigurationId)) {
       throw new UserIsNotEnrolledInClassConfigurationException();
     }
-    return classRepository.findRootFoldersByClassConfiguration(classConfigurationId);
   }
 
   /**
@@ -66,13 +72,7 @@ class ClassManagementFacade implements ClassManagementService {
   @Override
   public List<Folder> retrieveFolderByParentId(Long parentId) {
     Long classConfigurationId = classRepository.getClassConfigurationByFolderId(parentId).getId();
-    String currentUser =
-        SecurityUtils.getCurrentUserLogin()
-            .orElseThrow(() -> new IllegalStateException(USER_MUST_BE_LOGGED_IN));
-
-    if (!classRepository.isEnrolled(currentUser, classConfigurationId)) {
-      throw new UserIsNotEnrolledInClassConfigurationException();
-    }
+    validateUserEnrolment(classConfigurationId);
     return classRepository.findFoldersByParentId(parentId);
   }
 
@@ -292,6 +292,8 @@ class ClassManagementFacade implements ClassManagementService {
 
   @Override
   public void deleteFolder(Long folderId) {
+    Long classId = classRepository.getClassConfigurationByFolderId(folderId).getId();
+    validateUserEnrolment(classId);
     var numberOfSubfolders = classRepository.countAllSubfolders(folderId);
     var numberOfPosts = classRepository.countMessages(folderId);
     if (numberOfPosts > 0 || numberOfSubfolders > 0) {
@@ -300,5 +302,11 @@ class ClassManagementFacade implements ClassManagementService {
     }
 
     classRepository.deleteFolder(folderId);
+  }
+
+  @Override
+  public void changeClassName(Long classId, String name) {
+    validateUserEnrolment(classId);
+    classRepository.changeClassName(classId, name);
   }
 }

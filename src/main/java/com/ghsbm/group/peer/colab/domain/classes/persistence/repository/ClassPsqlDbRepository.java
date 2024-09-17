@@ -4,7 +4,9 @@ import com.ghsbm.group.peer.colab.domain.classes.persistence.model.ClassConfigur
 import java.util.List;
 import java.util.Optional;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 
 /** JPA repository for {@link ClassConfigurationEntity} */
 public interface ClassPsqlDbRepository extends JpaRepository<ClassConfigurationEntity, Long> {
@@ -34,6 +36,10 @@ public interface ClassPsqlDbRepository extends JpaRepository<ClassConfigurationE
    * @param classConfigurationId
    * @return
    */
-  @Query("Select c.enrolmentKey from ClassConfigurationEntity c where c.id = :classConfigurationId")
+  @Query("SELECT c.enrolmentKey FROM ClassConfigurationEntity c WHERE c.id = :classConfigurationId")
   Optional<String> findEnrolmentKeyById(Long classConfigurationId);
+
+  @Query("UPDATE ClassConfigurationEntity c SET c.name = :name WHERE c.id = :classId")
+  @Modifying()
+  void updateNameById(@Param("classId") Long classId, @Param("name") String name);
 }

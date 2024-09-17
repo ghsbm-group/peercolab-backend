@@ -176,4 +176,7 @@ public interface ClassManagementService {
 
   @Transactional
   void deleteFolder(Long folderId);
+
+  @Transactional
+  void changeClassName(Long classId, String name);
 }

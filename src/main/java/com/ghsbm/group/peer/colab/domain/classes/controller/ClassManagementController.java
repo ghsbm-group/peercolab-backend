@@ -71,6 +71,22 @@ public class ClassManagementController {
   }
 
   /**
+   * Endpoint for creating a new Class.
+   *
+   * <p>Calling this api will create a new class and a folder structure based on the class
+   * configuration passed as a parameter.
+   *
+   * @param editClassRequest {@link CreateClassRequest} encapsulates the class configuration
+   *     parameters. returns a 200 ok response on success.
+   */
+  @PostMapping("/edit")
+  @ResponseStatus(HttpStatus.OK)
+  public void editClass(@Valid @RequestBody final EditClassRequest editClassRequest) {
+    classManagementService.changeClassName(
+        editClassRequest.getClassId(), editClassRequest.getName());
+  }
+
+  /**
    * Endpoint for creating a new Folder.
    *
    * <p>Calling this api will create a new folder, a subfolder(depending on the existence of the
