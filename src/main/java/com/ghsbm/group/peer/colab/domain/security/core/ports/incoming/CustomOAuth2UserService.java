@@ -100,7 +100,7 @@ public class CustomOAuth2UserService extends DefaultOAuth2UserService {
     user.setLogin(oAuth2UserInfo.getEmail());
     user.setImageUrl(oAuth2UserInfo.getImageUrl());
     user.setActivated(true);
-    user.setAuthorities(Set.of(new Authority(AuthoritiesConstants.USER)));
+    user.setAuthorities(Set.of(new Authority(AuthoritiesConstants.STUDENT)));
     user.setLangKey(Constants.DEFAULT_LANGUAGE);
     return userManagementRepository.persist(user);
   }

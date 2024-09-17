@@ -156,7 +156,9 @@ public class UserManagementFacade implements UserManagementService {
     // new user gets registration key
     // newUser.setActivationKey(RandomUtil.generateActivationKey());
     Set<Authority> authorities = new HashSet<>();
-    userManagementRepository.findAuthority(AuthoritiesConstants.USER).ifPresent(authorities::add);
+    userManagementRepository
+        .findAuthority(AuthoritiesConstants.STUDENT)
+        .ifPresent(authorities::add);
     newUser.setAuthorities(authorities);
     userManagementRepository.persist(newUser);
     this.clearUserCaches(newUser);
