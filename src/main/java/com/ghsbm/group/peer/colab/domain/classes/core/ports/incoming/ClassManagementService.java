@@ -171,12 +171,31 @@ public interface ClassManagementService {
   @Transactional
   UserMessageBoardAccess findUserMessageBoardAccess(Long messageboardId);
 
+  /**
+   * Counts all messages in the chats present in a folder and it's subfolders.
+   *
+   * @param folderId the folder id for which the count is performed
+   * @return The number of total messages within that folder.
+   */
   @Transactional
   Long countAllMessagesByMessageBoardId(Long folderId);
 
+  /**
+   * Deletes a 'leaf' folder or message board if they are empty. Also checks whether the current is
+   * user is an admin or it's enrolled in that class.
+   *
+   * @param folderId identifies the folder or message board to be deleted.
+   */
   @Transactional
   void deleteFolder(Long folderId);
 
+  /**
+   * Changes the name of a class. Also checks whether the current is user is an admin or it's
+   * enrolled in that class.
+   *
+   * @param classId The identifier of the class to be updated.
+   * @param name The new name for that class.
+   */
   @Transactional
   void changeClassName(Long classId, String name);
 }
