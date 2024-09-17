@@ -113,7 +113,7 @@ public class SecurityConfiguration {
                     .requestMatchers(mvc.pattern("file/**"))
                     .hasAnyAuthority(STUDENT_ADMIN, ADMIN, STUDENT)
                     .requestMatchers(mvc.pattern(HttpMethod.GET, "schools/**"))
-                    .permitAll()
+                    .authenticated()
                     .requestMatchers(mvc.pattern(HttpMethod.GET, "/oauth2/**"))
                     .permitAll())
         .sessionManagement(
