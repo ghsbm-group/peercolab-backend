@@ -91,4 +91,11 @@ public interface UserManagementService {
   /** will save an entry in the db which indicates that the user has requested it's data. */
   @Transactional
   void requestData();
+
+  /**
+   * Verifies if the current user has already requested his data in the last 48h.
+   *
+   * @return true if it did.
+   */
+  boolean requestedData();
 }

@@ -8,8 +8,8 @@ import lombok.Data;
 @Builder
 @Data
 public class EnrolledClassesResponse {
-    private Long id;
-    private String name;
+  private Long id;
+  private String name;
   private ClassDTO classInfo;
   private ClassParentDetailsDTO classParentDetails;
 }

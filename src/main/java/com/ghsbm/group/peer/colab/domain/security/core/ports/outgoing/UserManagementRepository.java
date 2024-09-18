@@ -70,4 +70,12 @@ public interface UserManagementRepository {
    * @param user the user which made the request.
    */
   void saveRequestForData(User user);
+
+  /**
+   * Checks whether the user has requested his data in the last 48h.
+   *
+   * @param user the user for which the check is performed.
+   * @return true if he did.
+   */
+  boolean hasRequestedDate(User user);
 }

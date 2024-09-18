@@ -15,6 +15,7 @@ import com.ghsbm.group.peer.colab.domain.security.infrastructure.persistence.rep
 import com.ghsbm.group.peer.colab.domain.security.infrastructure.persistence.repository.UserRepository;
 import java.time.Instant;
 import java.time.LocalDateTime;
+import java.time.temporal.ChronoUnit;
 import java.util.List;
 import java.util.Optional;
 import org.slf4j.Logger;
@@ -163,5 +164,19 @@ public class UserManagementRepositoryAdapter implements UserManagementRepository
             .user(userMapper.fromDomain(user))
             .requestTime(LocalDateTime.now())
             .build());
+  }
+
+  @Override
+  public boolean hasRequestedDate(User user) {
+    return dataRequestRepository
+        .findFirstByUserIdOrderByRequestTime(user.getId())
+        .map(d -> isWithinLast48Hours(d.getRequestTime()))
+        .orElse(false);
+  }
+
+  public boolean isWithinLast48Hours(LocalDateTime dateTime) {
+    LocalDateTime now = LocalDateTime.now();
+    long hoursBetween = ChronoUnit.HOURS.between(dateTime, now);
+    return hoursBetween >= 0 && hoursBetween < 48;
   }
 }

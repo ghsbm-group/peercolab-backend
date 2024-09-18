@@ -483,6 +483,19 @@ public class UserManagementFacade implements UserManagementService {
     userManagementRepository.saveRequestForData(user);
   }
 
+  @Override
+  public boolean requestedData() {
+    String login =
+        SecurityUtils.getCurrentUserLogin()
+            .orElseThrow(() -> new IllegalStateException(USER_MUST_BE_LOGGED_IN));
+    User user =
+        userManagementRepository
+            .findOneByLogin(login)
+            .orElseThrow(
+                () -> new IllegalStateException("user with login " + login + " does not exists"));
+    return userManagementRepository.hasRequestedDate(user);
+  }
+
   private void clearUserCaches(User user) {
     Objects.requireNonNull(cacheManager.getCache(UserRepository.USERS_BY_LOGIN_CACHE))
         .evict(user.getLogin());

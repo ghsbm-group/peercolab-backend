@@ -211,4 +211,9 @@ public class AccountController {
   public void requestData() {
     userManagementService.requestData();
   }
+
+  @GetMapping("/already-requested-data")
+  public boolean requestedData() {
+    return userManagementService.requestedData();
+  }
 }
