@@ -71,4 +71,12 @@ public interface SchoolRepository {
    * @return A {@link Department} with the id set.
    */
   Department create(Department department);
+
+  /**
+   * Returns info about the university, faculty, city and country of this depratment.
+   *
+   * @param departmentId the department for which the info is retrieved.
+   * @return a {@Link ClassParentDetails} object containing all the info.
+   */
+  ClassParentDetails getDetailsByDepartmentId(Long departmentId);
 }

@@ -7,4 +7,7 @@ import lombok.Data;
 public class ClassDTO {
   private Long id;
   private String name;
+  private Integer startYear;
+  private Integer noOfStudyYears;
+  private Integer noOfSemestersPerYear;
 }

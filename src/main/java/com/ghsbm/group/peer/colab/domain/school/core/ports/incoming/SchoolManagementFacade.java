@@ -85,4 +85,10 @@ public class SchoolManagementFacade implements SchoolManagementService {
     Objects.requireNonNull(department.getName());
     return universityRepository.create(department);
   }
+
+  @Override
+  public ClassParentDetails retrieveClassDetailsByDepartmentId(Long departmentId) {
+    Objects.requireNonNull(departmentId);
+    return universityRepository.getDetailsByDepartmentId(departmentId);
+  }
 }

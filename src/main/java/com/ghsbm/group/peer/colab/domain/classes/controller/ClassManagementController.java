@@ -7,13 +7,18 @@ import com.ghsbm.group.peer.colab.domain.chat.core.model.LatestPostedMessage;
 import com.ghsbm.group.peer.colab.domain.chat.core.ports.incoming.ChatManagementService;
 import com.ghsbm.group.peer.colab.domain.classes.controller.model.*;
 import com.ghsbm.group.peer.colab.domain.classes.controller.model.dto.ClassDTO;
+import com.ghsbm.group.peer.colab.domain.classes.controller.model.dto.ClassParentDetailsDTO;
 import com.ghsbm.group.peer.colab.domain.classes.controller.model.dto.FolderDTO;
 import com.ghsbm.group.peer.colab.domain.classes.controller.model.dto.FolderInfoDTO;
+import com.ghsbm.group.peer.colab.domain.classes.core.model.ClassConfiguration;
 import com.ghsbm.group.peer.colab.domain.classes.core.model.ClassDetails;
 import com.ghsbm.group.peer.colab.domain.classes.core.model.FolderInformation;
 import com.ghsbm.group.peer.colab.domain.classes.core.ports.incoming.ClassManagementService;
+import com.ghsbm.group.peer.colab.domain.school.core.model.ClassParentDetails;
+import com.ghsbm.group.peer.colab.domain.school.core.ports.incoming.SchoolManagementService;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotNull;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import org.springframework.http.HttpStatus;
@@ -30,16 +35,19 @@ import org.springframework.web.bind.annotation.*;
 public class ClassManagementController {
 
   private final ClassManagementService classManagementService;
+  private final SchoolManagementService schoolManagementService;
   private final ClassMapper classMapper;
   private final ChatMapper chatMapper;
   private final ChatManagementService chatManagementService;
 
   public ClassManagementController(
       ClassManagementService classManagementService,
+      SchoolManagementService schoolManagementService,
       ClassMapper classMapper,
       ChatMapper chatMapper,
       ChatManagementService chatManagementService) {
     this.classManagementService = classManagementService;
+    this.schoolManagementService = schoolManagementService;
     this.classMapper = classMapper;
     this.chatMapper = chatMapper;
     this.chatManagementService = chatManagementService;
@@ -325,9 +333,27 @@ public class ClassManagementController {
    */
   @GetMapping("/enrolled-classes")
   public ResponseEntity<List<EnrolledClassesResponse>> getEnrolledClassesOfCurrentUser() {
-    return ResponseEntity.ok(
-        classMapper.enrolledClassesResponseFromClassConfiguration(
-            classManagementService.getEnrolledClassOfCurrentUser()));
+    List<ClassConfiguration> enrolledClassOfCurrentUser =
+        classManagementService.getEnrolledClassOfCurrentUser();
+    List<EnrolledClassesResponse> enrolledClassesResponseList = new ArrayList<>();
+
+    for (ClassConfiguration classConfiguration : enrolledClassOfCurrentUser) {
+      ClassParentDetails classParentDetails =
+          schoolManagementService.retrieveClassDetailsByDepartmentId(
+              classConfiguration.getDepartmentId());
+      ClassDTO classDTO = classMapper.classDTOFromClassConfiguration(classConfiguration);
+      ClassParentDetailsDTO classDetailsDTO =
+          classMapper.classDetailsDTOFromClassParentDetails(classParentDetails);
+      enrolledClassesResponseList.add(
+          EnrolledClassesResponse.builder()
+              .id(classDTO.getId())
+              .name(classDTO.getName())
+              .classInfo(classDTO)
+              .classParentDetails(classDetailsDTO)
+              .build());
+    }
+
+    return ResponseEntity.ok(enrolledClassesResponseList);
   }
 
   /**

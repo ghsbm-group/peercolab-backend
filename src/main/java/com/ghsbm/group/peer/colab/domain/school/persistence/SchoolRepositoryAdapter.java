@@ -5,30 +5,35 @@ import com.ghsbm.group.peer.colab.domain.school.core.ports.outgoing.SchoolReposi
 import com.ghsbm.group.peer.colab.domain.school.persistence.model.*;
 import com.ghsbm.group.peer.colab.domain.school.persistence.repository.*;
 import java.util.List;
-import lombok.AllArgsConstructor;
-import lombok.NoArgsConstructor;
 import lombok.Setter;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 /** Implementation of the school repository interface. Reads and persists data into a db. */
 @Component
-@NoArgsConstructor
-@AllArgsConstructor
 @Setter
 public class SchoolRepositoryAdapter implements SchoolRepository {
 
-  @Autowired private CountryPsqlDbRepository countryPsqlDbRepository;
+  private final CountryPsqlDbRepository countryPsqlDbRepository;
+  private final CityPsqlDbRepository cityPsqlDbRepository;
+  private final UniversityPsqlDbRepository universityPsqlDbRepository;
+  private final FacultyPsqlDbRepository facultyPsqlDbRepository;
+  private final DepartmentPsqlDbRepository departmentPsqlDbRepository;
+  private final UniversityEntitiesMapper universityEntitiesMapper;
 
-  @Autowired private CityPsqlDbRepository cityPsqlDbRepository;
-
-  @Autowired private UniversityPsqlDbRepository universityPsqlDbRepository;
-
-  @Autowired private FacultyPsqlDbRepository facultyPsqlDbRepository;
-
-  @Autowired private DepartmentPsqlDbRepository departmentPsqlDbRepository;
-
-  @Autowired private UniversityEntitiesMapper universityEntitiesMapper;
+  public SchoolRepositoryAdapter(
+      CountryPsqlDbRepository countryPsqlDbRepository,
+      CityPsqlDbRepository cityPsqlDbRepository,
+      UniversityPsqlDbRepository universityPsqlDbRepository,
+      FacultyPsqlDbRepository facultyPsqlDbRepository,
+      DepartmentPsqlDbRepository departmentPsqlDbRepository,
+      UniversityEntitiesMapper universityEntitiesMapper) {
+    this.countryPsqlDbRepository = countryPsqlDbRepository;
+    this.cityPsqlDbRepository = cityPsqlDbRepository;
+    this.universityPsqlDbRepository = universityPsqlDbRepository;
+    this.facultyPsqlDbRepository = facultyPsqlDbRepository;
+    this.departmentPsqlDbRepository = departmentPsqlDbRepository;
+    this.universityEntitiesMapper = universityEntitiesMapper;
+  }
 
   /**
    * @inheritDoc
@@ -105,11 +110,27 @@ public class SchoolRepositoryAdapter implements SchoolRepository {
     return universityEntitiesMapper.departmentFromEntity(savedDepartment);
   }
 
+  @Override
+  public ClassParentDetails getDetailsByDepartmentId(Long departmentId) {
+    DepartmentEntity departmentEntity = departmentPsqlDbRepository.getReferenceById(departmentId);
+    FacultyEntity faculty = departmentEntity.getFaculty();
+    UniversityEntity university = faculty.getUniversity();
+    CityEntity city = university.getCity();
+    CountryEntity country = city.getCountry();
+    return ClassParentDetails.builder()
+        .department(universityEntitiesMapper.departmentFromEntity(departmentEntity))
+        .faculty(universityEntitiesMapper.facultyFromEntity(faculty))
+        .university(universityEntitiesMapper.fromUniversityEntity(university))
+        .country(universityEntitiesMapper.fromCountryEntity(country))
+        .city(universityEntitiesMapper.fromCityEntity(city))
+        .build();
+  }
+
   /**
    * @inheritDoc
    */
   @Override
   public List<Country> findAllCountries() {
-    return universityEntitiesMapper.fromCountryEntity(countryPsqlDbRepository.findAll());
+    return universityEntitiesMapper.fromCountryEntites(countryPsqlDbRepository.findAll());
   }
 }

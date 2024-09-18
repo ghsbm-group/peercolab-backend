@@ -13,9 +13,13 @@ import org.mapstruct.Mapping;
 @Mapper(componentModel = "spring")
 public abstract class UniversityEntitiesMapper {
 
-  public abstract List<Country> fromCountryEntity(List<CountryEntity> all);
+  public abstract List<Country> fromCountryEntites(List<CountryEntity> all);
+
+  public abstract Country fromCountryEntity(CountryEntity country);
 
   public abstract List<City> fromCityEntities(List<CityEntity> cities);
+
+  public abstract City fromCityEntity(CityEntity city);
 
   public abstract List<University> fromUniversityEntities(List<UniversityEntity> universities);
 

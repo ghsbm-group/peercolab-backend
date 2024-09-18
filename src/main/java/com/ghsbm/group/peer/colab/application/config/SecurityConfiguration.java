@@ -100,8 +100,6 @@ public class SecurityConfiguration {
                     .hasAnyAuthority(STUDENT, STUDENT_ADMIN, ADMIN)
                     .requestMatchers(mvc.pattern(HttpMethod.GET, "chat/**"))
                     .hasAnyAuthority(STUDENT, STUDENT_ADMIN, ADMIN)
-                    .requestMatchers(mvc.pattern(HttpMethod.POST, "classes/enrol"))
-                    .hasAuthority(STUDENT)
                     .requestMatchers(mvc.pattern(HttpMethod.POST, "classes/**"))
                     .hasAnyAuthority(ADMIN, STUDENT_ADMIN)
                     .requestMatchers(mvc.pattern(HttpMethod.GET, "classes/enrolment-key"))

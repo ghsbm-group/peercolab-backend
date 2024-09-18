@@ -72,4 +72,6 @@ public interface SchoolManagementService {
    */
   @Transactional
   Department createDepartment(Department department);
+
+  ClassParentDetails retrieveClassDetailsByDepartmentId(Long departmentId);
 }
