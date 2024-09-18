@@ -152,9 +152,9 @@ public class UserManagementFacade implements UserManagementService {
     newUser.setLangKey(userDTO.getLangKey());
     newUser.setProvider(local);
     // new user is not active
-    newUser.setActivated(true);
+    newUser.setActivated(false);
     // new user gets registration key
-    // newUser.setActivationKey(RandomUtil.generateActivationKey());
+    newUser.setActivationKey(RandomUtil.generateActivationKey());
     Set<Authority> authorities = new HashSet<>();
     userManagementRepository
         .findAuthority(AuthoritiesConstants.STUDENT)
@@ -169,7 +169,7 @@ public class UserManagementFacade implements UserManagementService {
           userManagementRepository.findOneByLogin(userDTO.getLogin().toLowerCase()).get().getId(),
           AuthoritiesConstants.STUDENT_ADMIN);
 
-    // mailService.sendActivationEmail(newUser);
+    mailService.sendActivationEmail(newUser);
   }
 
   private boolean removeNonActivatedUser(User existingUser) {
