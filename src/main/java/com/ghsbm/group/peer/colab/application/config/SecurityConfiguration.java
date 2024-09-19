@@ -110,6 +110,8 @@ public class SecurityConfiguration {
                     .hasAnyAuthority(ADMIN, STUDENT_ADMIN)
                     .requestMatchers(mvc.pattern("file/**"))
                     .hasAnyAuthority(STUDENT_ADMIN, ADMIN, STUDENT)
+                    .requestMatchers(mvc.pattern(HttpMethod.POST, "classes/enrol"))
+                    .permitAll()
                     .requestMatchers(mvc.pattern(HttpMethod.GET, "schools/**"))
                     .authenticated()
                     .requestMatchers(mvc.pattern(HttpMethod.GET, "/oauth2/**"))
