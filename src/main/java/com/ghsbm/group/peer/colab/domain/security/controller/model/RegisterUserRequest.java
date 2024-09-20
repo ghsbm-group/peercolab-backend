@@ -20,6 +20,7 @@ public class RegisterUserRequest extends AdminUserDTO {
 
 
   private Boolean requestAuthority=false;
+  private String enrolmentKey;
 
   @Override
   public String toString() {

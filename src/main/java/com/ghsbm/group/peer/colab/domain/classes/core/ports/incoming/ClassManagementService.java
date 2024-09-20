@@ -1,6 +1,7 @@
 package com.ghsbm.group.peer.colab.domain.classes.core.ports.incoming;
 
 import com.ghsbm.group.peer.colab.domain.classes.core.model.*;
+import com.ghsbm.group.peer.colab.domain.security.core.model.User;
 import java.util.List;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -198,4 +199,13 @@ public interface ClassManagementService {
    */
   @Transactional
   void changeClassName(Long classId, String name);
+
+  /**
+   * Enrols the current logged-in user into the class defined by this enrolmentKey.
+   *
+   * @param user the user to be enroled in the class
+   * @param enrolmentKey the key used to find the class in which the user will be enrolled.
+   */
+  @Transactional
+  void enrolStudent(String enrolmentKey, User user);
 }

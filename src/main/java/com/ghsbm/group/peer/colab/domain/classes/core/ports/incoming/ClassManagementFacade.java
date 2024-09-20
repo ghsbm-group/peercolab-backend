@@ -9,6 +9,7 @@ import com.ghsbm.group.peer.colab.domain.classes.core.ports.incoming.exception.C
 import com.ghsbm.group.peer.colab.domain.classes.core.ports.incoming.exception.FolderAlreadyExistsException;
 import com.ghsbm.group.peer.colab.domain.classes.core.ports.incoming.exception.UserIsNotEnrolledInClassConfigurationException;
 import com.ghsbm.group.peer.colab.domain.classes.core.ports.outgoing.ClassRepository;
+import com.ghsbm.group.peer.colab.domain.security.core.model.User;
 import com.ghsbm.group.peer.colab.infrastructure.AuthoritiesConstants;
 import com.ghsbm.group.peer.colab.infrastructure.RandomUtil;
 import com.ghsbm.group.peer.colab.infrastructure.SecurityUtils;
@@ -20,7 +21,7 @@ import org.springframework.stereotype.Service;
 
 /** Service that contains the core business logic. */
 @Service
-class ClassManagementFacade implements ClassManagementService {
+public class ClassManagementFacade implements ClassManagementService {
 
   private final ClassRepository classRepository;
   private final MessageSource messageSource;
@@ -198,6 +199,12 @@ class ClassManagementFacade implements ClassManagementService {
                 .build())
         .enrolmentKey(enrolmentKey)
         .build();
+  }
+
+  @Override
+  public void enrolStudent(String enrolmentKey, User user) {
+    String userLogin = user.getLogin();
+    classRepository.enrol(userLogin, enrolmentKey);
   }
 
   /**

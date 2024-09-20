@@ -22,7 +22,7 @@ public interface UserManagementService {
   void requestPasswordReset(String mail);
 
   @Transactional
-  void registerUser(User userDTO, String password, Boolean requestAuthority);
+  User registerUser(User userDTO, String password, Boolean requestAuthority);
 
   @Transactional
   User createUser(User userDTO);

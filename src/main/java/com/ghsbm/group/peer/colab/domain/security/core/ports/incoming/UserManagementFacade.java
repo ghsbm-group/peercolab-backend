@@ -119,7 +119,7 @@ public class UserManagementFacade implements UserManagementService {
   }
 
   @Override
-  public void registerUser(User userDTO, String password, Boolean requestAuthority) {
+  public User registerUser(User userDTO, String password, Boolean requestAuthority) {
     userManagementRepository
         .findOneByLogin(userDTO.getLogin().toLowerCase())
         .ifPresent(
@@ -170,6 +170,7 @@ public class UserManagementFacade implements UserManagementService {
           AuthoritiesConstants.STUDENT_ADMIN);
 
     mailService.sendActivationEmail(newUser);
+    return newUser;
   }
 
   private boolean removeNonActivatedUser(User existingUser) {

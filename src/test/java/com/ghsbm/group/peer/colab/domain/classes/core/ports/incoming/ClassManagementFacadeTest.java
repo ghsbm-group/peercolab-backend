@@ -13,12 +13,6 @@ import com.ghsbm.group.peer.colab.domain.classes.core.ports.incoming.exception.F
 import com.ghsbm.group.peer.colab.domain.classes.core.ports.outgoing.ClassRepository;
 import com.ghsbm.group.peer.colab.domain.infrastructure.SecurityTestUtils;
 import java.util.List;
-import java.util.Optional;
-import java.util.Set;
-
-import com.ghsbm.group.peer.colab.domain.security.core.model.Authority;
-import com.ghsbm.group.peer.colab.domain.security.core.model.User;
-import com.ghsbm.group.peer.colab.infrastructure.AuthoritiesConstants;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;

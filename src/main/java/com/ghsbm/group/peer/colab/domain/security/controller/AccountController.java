@@ -1,5 +1,6 @@
 package com.ghsbm.group.peer.colab.domain.security.controller;
 
+import com.ghsbm.group.peer.colab.domain.classes.core.ports.incoming.ClassManagementFacade;
 import com.ghsbm.group.peer.colab.domain.security.controller.errors.EmailAlreadyUsedException;
 import com.ghsbm.group.peer.colab.domain.security.controller.errors.InvalidPasswordException;
 import com.ghsbm.group.peer.colab.domain.security.controller.errors.LoginAlreadyUsedException;
@@ -39,13 +40,17 @@ public class AccountController {
 
   private final UserMapperController userMapper;
 
+  private final ClassManagementFacade classManagementFacade;
+
   public AccountController(
       UserManagementService userManagementService,
       UserDtoMapper userDtoMapper,
-      UserMapperController userMapper) {
+      UserMapperController userMapper,
+      ClassManagementFacade classManagementFacade) {
     this.userManagementService = userManagementService;
     this.userDtoMapper = userDtoMapper;
     this.userMapper = userMapper;
+    this.classManagementFacade = classManagementFacade;
   }
 
   /**
@@ -63,10 +68,12 @@ public class AccountController {
       throw new InvalidPasswordException();
     }
 
-    userManagementService.registerUser(
-        userDtoMapper.from(registerUserRequest),
-        registerUserRequest.getPassword(),
-        registerUserRequest.getRequestAuthority());
+    User user =
+        userManagementService.registerUser(
+            userDtoMapper.from(registerUserRequest),
+            registerUserRequest.getPassword(),
+            registerUserRequest.getRequestAuthority());
+    classManagementFacade.enrolStudent(registerUserRequest.getEnrolmentKey(), user);
   }
 
   /**
