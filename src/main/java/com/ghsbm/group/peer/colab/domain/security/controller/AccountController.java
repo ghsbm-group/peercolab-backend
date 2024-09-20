@@ -73,7 +73,9 @@ public class AccountController {
             userDtoMapper.from(registerUserRequest),
             registerUserRequest.getPassword(),
             registerUserRequest.getRequestAuthority());
-    classManagementFacade.enrolStudent(registerUserRequest.getEnrolmentKey(), user);
+    if (StringUtils.isNotBlank(registerUserRequest.getEnrolmentKey())) {
+      classManagementFacade.enrolStudent(registerUserRequest.getEnrolmentKey(), user);
+    }
   }
 
   /**
@@ -209,8 +211,7 @@ public class AccountController {
   }
 
   @PostMapping("/delete-account")
-  public void deleteAccount()
-  {
+  public void deleteAccount() {
     userManagementService.deleteAccount();
   }
 
