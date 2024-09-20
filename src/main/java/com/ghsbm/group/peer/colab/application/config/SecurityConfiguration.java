@@ -104,6 +104,8 @@ public class SecurityConfiguration {
                     .authenticated()
                     .requestMatchers(mvc.pattern(HttpMethod.POST, "classes/**"))
                     .hasAnyAuthority(ADMIN, STUDENT_ADMIN)
+                    .requestMatchers(mvc.pattern(HttpMethod.DELETE, "classes/**"))
+                    .hasAnyAuthority(ADMIN, STUDENT_ADMIN)
                     .requestMatchers(mvc.pattern(HttpMethod.GET, "classes/enrolment-key"))
                     .hasAnyAuthority(ADMIN, STUDENT_ADMIN)
                     .requestMatchers(mvc.pattern(HttpMethod.GET, "classes/**"))
