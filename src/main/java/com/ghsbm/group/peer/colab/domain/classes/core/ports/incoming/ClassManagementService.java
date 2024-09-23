@@ -208,4 +208,6 @@ public interface ClassManagementService {
    */
   @Transactional
   void enrolStudent(String enrolmentKey, User user);
+
+  ClassConfiguration retrieveClassConfigurationByClassId(Long classId);
 }

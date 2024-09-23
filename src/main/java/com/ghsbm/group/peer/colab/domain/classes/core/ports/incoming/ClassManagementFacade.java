@@ -207,6 +207,11 @@ public class ClassManagementFacade implements ClassManagementService {
     classRepository.enrol(userLogin, enrolmentKey);
   }
 
+  @Override
+  public ClassConfiguration retrieveClassConfigurationByClassId(Long classId) {
+    return classRepository.getClassConfigurationByClassId(classId);
+  }
+
   /**
    * @inheritDoc
    */

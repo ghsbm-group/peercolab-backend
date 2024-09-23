@@ -180,4 +180,6 @@ public interface ClassRepository {
    * @param name the new name for that class.
    */
   void changeClassName(Long classId, String name);
+
+  ClassConfiguration getClassConfigurationByClassId(Long classId);
 }

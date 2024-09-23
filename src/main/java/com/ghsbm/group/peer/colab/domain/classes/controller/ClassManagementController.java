@@ -233,6 +233,17 @@ public class ClassManagementController {
             .build());
   }
 
+  @GetMapping("/path/root")
+  public ResponseEntity<PathResponse> retrieveClassInfo(final Long classId) {
+    Objects.requireNonNull(classId);
+    return ResponseEntity.ok(
+        PathResponse.builder()
+            .classDTO(
+                classMapper.classDTOFromClassConfiguration(
+                    classManagementService.retrieveClassConfigurationByClassId(classId)))
+            .build());
+  }
+
   /**
    * Endpoint for renaming a folder.
    *

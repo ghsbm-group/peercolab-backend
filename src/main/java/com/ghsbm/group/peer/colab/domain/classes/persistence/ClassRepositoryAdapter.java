@@ -307,4 +307,9 @@ public class ClassRepositoryAdapter implements ClassRepository {
   public void changeClassName(Long classId, String name) {
     classPsqlDbRepository.updateNameById(classId, name);
   }
+
+  @Override
+  public ClassConfiguration getClassConfigurationByClassId(Long classId) {
+    return classEntitiesMapper.classFromEntity(classPsqlDbRepository.getReferenceById(classId));
+  }
 }
