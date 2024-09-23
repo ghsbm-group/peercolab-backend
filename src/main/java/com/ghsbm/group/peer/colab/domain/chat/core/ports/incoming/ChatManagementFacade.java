@@ -128,6 +128,6 @@ public class ChatManagementFacade implements ChatManagementService {
     if (authorities.contains(new Authority(ADMIN))) return "ADMIN";
     else if (authorities.contains(new Authority(STUDENT_ADMIN))) return "STUDENT ADMIN";
 
-    return "USER";
+    return "STUDENT";
   }
 }
