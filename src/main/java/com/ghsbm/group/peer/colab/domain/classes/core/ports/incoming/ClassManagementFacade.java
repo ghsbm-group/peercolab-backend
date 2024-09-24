@@ -308,7 +308,7 @@ public class ClassManagementFacade implements ClassManagementService {
     validateUserEnrolment(classId);
     var numberOfSubfolders = classRepository.countAllSubfolders(folderId);
     var numberOfPosts = classRepository.countMessages(folderId);
-    if (numberOfPosts > 0 || numberOfSubfolders > 0) {
+    if (numberOfPosts > 1 || numberOfSubfolders > 0) {
       throw new BadRequestAlertException(
           "Trying to delete a non empty folder", "Folder", "Folder_deletion");
     }
