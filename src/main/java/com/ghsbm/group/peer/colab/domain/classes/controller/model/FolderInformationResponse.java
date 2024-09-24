@@ -1,9 +1,8 @@
 package com.ghsbm.group.peer.colab.domain.classes.controller.model;
 
+import java.time.ZonedDateTime;
 import lombok.Builder;
 import lombok.Data;
-
-import java.time.ZonedDateTime;
 
 @Builder
 @Data
@@ -15,4 +14,5 @@ public class FolderInformationResponse {
   private String username;
   private ZonedDateTime lastMessagePostedTime;
   private Long numberOfUnreadMessages;
+  private boolean hasAnyMessageBoard;
 }

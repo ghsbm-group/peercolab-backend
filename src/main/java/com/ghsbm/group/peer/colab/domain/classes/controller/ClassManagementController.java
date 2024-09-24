@@ -314,10 +314,9 @@ public class ClassManagementController {
   @GetMapping("/folder-information")
   public ResponseEntity<FolderInformationResponse> retrieveFolderInformation(
       @NotNull final Long folderId) {
+    List<Long> messageBoardsIds = classManagementService.getMessageBoardsIds(folderId);
     LatestPostedMessage latestPostedMessage =
-        chatManagementService.retrieveLatestPostedMessage(
-            classManagementService.getMessageBoardsIds(folderId));
-
+        chatManagementService.retrieveLatestPostedMessage(messageBoardsIds);
     Long numberOfUnreadMessages =
         classManagementService.findUserMessageBoardAccess(folderId) != null
             ? chatManagementService.countMessagesAfterDate(
@@ -331,6 +330,8 @@ public class ClassManagementController {
       folderInformation.setLastMessagePostedTime(latestPostedMessage.getLastMessagePostedTime());
       folderInformation.setUsername(latestPostedMessage.getUsername());
     }
+    folderInformation.setHasAnyMessageBoard(
+        messageBoardsIds != null && !messageBoardsIds.isEmpty());
     folderInformation.setNumberOfUnreadMessages(numberOfUnreadMessages);
     return ResponseEntity.ok(
         classMapper.folderInformationResponseFromFolderInformation(folderInformation));
