@@ -16,4 +16,6 @@ public interface UserMessageBoardAccessPsqlDbRepository
    */
   UserMessageboardAccessEntity findByUser_LoginAndMessageboard_Id(
       String login, Long messageBoardId);
+
+  void deleteByMessageboard_Id(Long folderId);
 }

@@ -4,6 +4,7 @@ import com.ghsbm.group.peer.colab.domain.chat.controller.model.ChatMapper;
 import com.ghsbm.group.peer.colab.domain.chat.controller.model.CreateMessageRequest;
 import com.ghsbm.group.peer.colab.domain.chat.controller.model.CreateMessageResponse;
 import com.ghsbm.group.peer.colab.domain.chat.core.model.LatestPostedMessage;
+import com.ghsbm.group.peer.colab.domain.chat.core.model.Message;
 import com.ghsbm.group.peer.colab.domain.chat.core.ports.incoming.ChatManagementService;
 import com.ghsbm.group.peer.colab.domain.classes.controller.model.*;
 import com.ghsbm.group.peer.colab.domain.classes.controller.model.dto.ClassDTO;
@@ -21,6 +22,7 @@ import jakarta.validation.constraints.NotNull;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -141,14 +143,17 @@ public class ClassManagementController {
         classManagementService.createMessageBoard(
             classMapper.fromCreateFolderInfoDTORequest(
                 createMessageBoardRequest.getFolderInfoDTO()));
+    var message = Message.builder().build();
+    if (StringUtils.isNotBlank(createMessageBoardRequest.getFirstMessage())) {
     CreateMessageRequest createMessageRequest =
         CreateMessageRequest.builder()
             .content(createMessageBoardRequest.getFirstMessage())
             .messageboardId(folder.getId())
             .build();
-    final var message =
-        chatManagementService.createMessage(
-            chatMapper.fromCreateMessageRequest(createMessageRequest));
+      message =
+          chatManagementService.createMessage(
+              chatMapper.fromCreateMessageRequest(createMessageRequest));
+    }
     return ResponseEntity.ok(
         CreateMessageBoardResponse.builder()
             .folderDTO(

@@ -300,6 +300,7 @@ public class ClassRepositoryAdapter implements ClassRepository {
 
   @Override
   public void deleteFolder(Long folderId) {
+    userMessageBoardAccessPsqlDbRepository.deleteByMessageboard_Id(folderId);
     folderPsqlDbRespository.deleteById(folderId);
   }
 
