@@ -13,6 +13,6 @@ VALUES (2, 'user', '$2a$10$VEjxo0jq2YG9Rbk2HmX9S.k1uZBGYUHdUcid3g/vfiEl7lwWgOH/K
 INSERT INTO user_authority (user_id, authority_name)
 VALUES (1, 'ROLE_ADMIN');
 INSERT INTO user_authority (user_id, authority_name)
-VALUES (1, 'ROLE_USER');
+VALUES (1, 'ROLE_STUDENT');
 INSERT INTO user_authority (user_id, authority_name)
-VALUES (2, 'ROLE_USER');
+VALUES (2, 'ROLE_STUDENT');
