@@ -11,6 +11,7 @@ import com.ghsbm.group.peer.colab.domain.school.core.model.ClassParentDetails;
 import java.util.List;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
+import org.mapstruct.Mappings;
 
 /**
  * {@link Mapper} Contains methods for transforming core domain objects into dto's and back.
@@ -60,7 +61,7 @@ public interface ClassMapper {
    * @param renameFolderRequest encapsulates the requests paramameters.
    * @return a {@link Folder} object build on the request parameter.
    */
-  @Mapping(source = "newName", target = "name")
+  @Mappings({@Mapping(target = "id", source = "id"), @Mapping(source = "newName", target = "name")})
   Folder fromRenameFolderRequest(RenameFolderRequest renameFolderRequest);
 
   /**
