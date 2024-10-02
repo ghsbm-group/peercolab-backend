@@ -7,4 +7,4 @@ VALUES (3, 'studentadmin', '$2a$10$QK/zIIa2reG0lZXfbFmLI.hG2I2uEx86PcYian2EUatA6
 INSERT INTO user_authority (user_id, authority_name)
 VALUES (3, 'ROLE_STUDENT_ADMIN');
 INSERT INTO user_authority (user_id, authority_name)
-VALUES (3, 'ROLE_USER');
+VALUES (3, 'ROLE_STUDENT');
