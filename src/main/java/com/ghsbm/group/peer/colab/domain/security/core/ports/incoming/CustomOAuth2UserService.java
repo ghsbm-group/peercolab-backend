@@ -93,7 +93,8 @@ public class CustomOAuth2UserService extends DefaultOAuth2UserService {
     user.setProvider(
         AuthProvider.valueOf(oAuth2UserRequest.getClientRegistration().getRegistrationId()));
     user.setProviderId(oAuth2UserInfo.getId());
-    user.setFirstName(oAuth2UserInfo.getName());
+    user.setFirstName(oAuth2UserInfo.getFirstName());
+    user.setLastName(oAuth2UserInfo.getLastName());
     user.setEmail(oAuth2UserInfo.getEmail());
     user.setPassword(RandomUtil.generate60CharRandomAlphanumericString());
     // mandatory in the db
