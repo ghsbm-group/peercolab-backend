@@ -3,7 +3,7 @@ package com.ghsbm.group.peer.colab.domain.chat.core.ports.outgoing;
 import com.ghsbm.group.peer.colab.domain.chat.core.model.LatestPostedMessage;
 import com.ghsbm.group.peer.colab.domain.chat.core.model.Message;
 import com.ghsbm.group.peer.colab.domain.chat.core.model.PostLike;
-import com.ghsbm.group.peer.colab.domain.chat.core.model.UserToAdminMessages;
+import com.ghsbm.group.peer.colab.domain.chat.core.model.ContactUsMessages;
 
 import java.time.ZonedDateTime;
 import java.util.List;
@@ -90,7 +90,7 @@ public interface ChatRepository {
    */
   Long countMessagesAfterDate(ZonedDateTime lastAccessDate);
 
-  public UserToAdminMessages create(UserToAdminMessages userToAdminMessages);
+  public ContactUsMessages create(ContactUsMessages contactUsMessages);
 
-  public List<UserToAdminMessages> retrieveMessageFromUsers();
+  public List<ContactUsMessages> retrieveMessageFromUsers();
 }

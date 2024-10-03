@@ -21,14 +21,14 @@ public class UserActionsController {
         this.userActionMapper = userActionMapper;
     }
 
-    @PostMapping
-    public ResponseEntity<UserToAdminMessagesResponse> sendMessageToAdmin(
-            @Valid @RequestBody final UserToAdminMessagesRequest sendMessageToAdmin) {
+    @PostMapping("/contact-us")
+    public ResponseEntity<ContactUsMessagesResponse> sendMessageToAdmin(
+            @Valid @RequestBody final ContactUsMessagesRequest sendMessageToAdmin) {
 
         final var messageToAdmin =
                 chatManagementService.sendMessageToAdmin(userActionMapper.fromUserToAdminMessageRequest(sendMessageToAdmin));
         return ResponseEntity.ok(
-                UserToAdminMessagesResponse.builder()
+                ContactUsMessagesResponse.builder()
                         .id(messageToAdmin.getId())
                         .email(messageToAdmin.getUserEmail())
                         .subject(messageToAdmin.getSubject())
@@ -37,7 +37,7 @@ public class UserActionsController {
         );
     }
     @GetMapping("/messages")
-    public ResponseEntity<List<UserToAdminMessagesResponse>> getMessages()
+    public ResponseEntity<List<ContactUsMessagesResponse>> getMessages()
     {
         return ResponseEntity.ok(
                 userActionMapper.fromUserToAdminMessagesList(chatManagementService.retrieveMessagesFromUsers())

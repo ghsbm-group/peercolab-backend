@@ -13,8 +13,8 @@ import lombok.NoArgsConstructor;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-@Table(name = "user_to_admin_messages")
-public class UserToAdminMessagesEntity {
+@Table(name = "contact_us_messages")
+public class ContactUsMessagesEntity {
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   private Long id;

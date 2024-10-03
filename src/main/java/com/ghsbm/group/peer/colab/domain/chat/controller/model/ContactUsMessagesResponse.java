@@ -5,7 +5,7 @@ import lombok.Data;
 
 @Data
 @Builder
-public class UserToAdminMessagesResponse {
+public class ContactUsMessagesResponse {
 
   private Long id;
   private String email;

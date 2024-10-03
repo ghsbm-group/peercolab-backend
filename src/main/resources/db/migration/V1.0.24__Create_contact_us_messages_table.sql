@@ -1,4 +1,4 @@
-create table user_to_admin_messages
+create table contact_us_messages
 (
     id            SERIAL PRIMARY KEY,
     user_email    VARCHAR(191)   NOT NULL,

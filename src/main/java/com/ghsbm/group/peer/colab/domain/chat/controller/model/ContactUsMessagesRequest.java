@@ -8,7 +8,7 @@ import lombok.Data;
 
 @Data
 @Builder
-public class UserToAdminMessagesRequest {
+public class ContactUsMessagesRequest {
 
   @NotNull @Email private String userEmail;
 

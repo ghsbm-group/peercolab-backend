@@ -94,15 +94,15 @@ public class ChatManagementFacade implements ChatManagementService {
   }
 
   @Override
-  public UserToAdminMessages sendMessageToAdmin(UserToAdminMessages userToAdminMessages) {
-    Objects.requireNonNull(userToAdminMessages.getUserEmail());
-    Objects.requireNonNull(userToAdminMessages.getSubject());
-    Objects.requireNonNull(userToAdminMessages.getContent());
-    return chatRepository.create(userToAdminMessages);
+  public ContactUsMessages sendMessageToAdmin(ContactUsMessages contactUsMessages) {
+    Objects.requireNonNull(contactUsMessages.getUserEmail());
+    Objects.requireNonNull(contactUsMessages.getSubject());
+    Objects.requireNonNull(contactUsMessages.getContent());
+    return chatRepository.create(contactUsMessages);
   }
 
   @Override
-  public List<UserToAdminMessages> retrieveMessagesFromUsers() {
+  public List<ContactUsMessages> retrieveMessagesFromUsers() {
     return chatRepository.retrieveMessageFromUsers();
   }
 

@@ -1,6 +1,6 @@
 package com.ghsbm.group.peer.colab.domain.chat.controller.model;
 
-import com.ghsbm.group.peer.colab.domain.chat.core.model.UserToAdminMessages;
+import com.ghsbm.group.peer.colab.domain.chat.core.model.ContactUsMessages;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 
@@ -9,12 +9,12 @@ import java.util.List;
 @Mapper(componentModel = "spring")
 public interface UserActionMapper {
 
-  UserToAdminMessages fromUserToAdminMessageRequest(
-      UserToAdminMessagesRequest userToAdminMessagesRequest);
+  ContactUsMessages fromUserToAdminMessageRequest(
+      ContactUsMessagesRequest contactUsMessagesRequest);
 
   @Mapping(source = "userEmail", target = "email")
-  UserToAdminMessagesResponse fromUserToAdminMessages(UserToAdminMessages userToAdminMessages);
+  ContactUsMessagesResponse fromUserToAdminMessages(ContactUsMessages contactUsMessages);
 
-  List<UserToAdminMessagesResponse> fromUserToAdminMessagesList(
-      List<UserToAdminMessages> userToAdminMessages);
+  List<ContactUsMessagesResponse> fromUserToAdminMessagesList(
+      List<ContactUsMessages> contactUsMessages);
 }

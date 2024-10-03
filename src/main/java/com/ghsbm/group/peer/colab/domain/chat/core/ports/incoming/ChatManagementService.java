@@ -62,8 +62,8 @@ public interface ChatManagementService {
   Long countMessagesAfterDate(ZonedDateTime lastAccessDate);
 
   @Transactional
-  UserToAdminMessages sendMessageToAdmin(UserToAdminMessages userToAdminMessages);
+  ContactUsMessages sendMessageToAdmin(ContactUsMessages contactUsMessages);
 
   @Transactional
-  List<UserToAdminMessages> retrieveMessagesFromUsers();
+  List<ContactUsMessages> retrieveMessagesFromUsers();
 }
