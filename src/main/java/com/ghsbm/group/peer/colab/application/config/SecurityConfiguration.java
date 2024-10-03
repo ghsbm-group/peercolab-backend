@@ -70,7 +70,7 @@ public class SecurityConfiguration {
                     .permitAll()
                     .requestMatchers(mvc.pattern("/api/register"))
                     .permitAll()
-                    .requestMatchers(mvc.pattern("/user-actions"))
+                    .requestMatchers(mvc.pattern("/user-actions/contact-us"))
                     .permitAll()
                     .requestMatchers(mvc.pattern("/api/activate"))
                     .permitAll()
