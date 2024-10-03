@@ -2,10 +2,7 @@ package com.ghsbm.group.peer.colab.domain.chat.core.ports.incoming;
 
 import static com.ghsbm.group.peer.colab.infrastructure.AuthoritiesConstants.*;
 
-import com.ghsbm.group.peer.colab.domain.chat.core.model.LatestPostedMessage;
-import com.ghsbm.group.peer.colab.domain.chat.core.model.Message;
-import com.ghsbm.group.peer.colab.domain.chat.core.model.PostLike;
-import com.ghsbm.group.peer.colab.domain.chat.core.model.PostedMessage;
+import com.ghsbm.group.peer.colab.domain.chat.core.model.*;
 import com.ghsbm.group.peer.colab.domain.chat.core.ports.outgoing.ChatRepository;
 import com.ghsbm.group.peer.colab.domain.classes.core.ports.incoming.ClassManagementService;
 import com.ghsbm.group.peer.colab.domain.classes.core.ports.incoming.exception.UserIsNotEnrolledInClassConfigurationException;
@@ -94,6 +91,19 @@ public class ChatManagementFacade implements ChatManagementService {
   @Override
   public Long countMessagesAfterDate(ZonedDateTime lastAccessDate) {
     return chatRepository.countMessagesAfterDate(lastAccessDate);
+  }
+
+  @Override
+  public UserToAdminMessages sendMessageToAdmin(UserToAdminMessages userToAdminMessages) {
+    Objects.requireNonNull(userToAdminMessages.getUserEmail());
+    Objects.requireNonNull(userToAdminMessages.getSubject());
+    Objects.requireNonNull(userToAdminMessages.getContent());
+    return chatRepository.create(userToAdminMessages);
+  }
+
+  @Override
+  public List<UserToAdminMessages> retrieveMessagesFromUsers() {
+    return chatRepository.retrieveMessageFromUsers();
   }
 
   protected PostedMessage messageToPostedMessage(Message message) {

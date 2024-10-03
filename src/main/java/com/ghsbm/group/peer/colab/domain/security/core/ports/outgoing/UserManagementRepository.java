@@ -3,10 +3,12 @@ package com.ghsbm.group.peer.colab.domain.security.core.ports.outgoing;
 import com.ghsbm.group.peer.colab.domain.security.core.model.Authority;
 import com.ghsbm.group.peer.colab.domain.security.core.model.RequestAuthority;
 import com.ghsbm.group.peer.colab.domain.security.core.model.User;
+import com.ghsbm.group.peer.colab.domain.chat.core.model.UserToAdminMessages;
 import com.ghsbm.group.peer.colab.domain.security.infrastructure.persistence.model.RequestAuthorityEntity;
 import java.time.Instant;
 import java.util.List;
 import java.util.Optional;
+
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.transaction.annotation.Transactional;

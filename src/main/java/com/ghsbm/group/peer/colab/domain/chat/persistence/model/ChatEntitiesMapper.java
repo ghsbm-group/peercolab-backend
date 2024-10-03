@@ -1,6 +1,7 @@
 package com.ghsbm.group.peer.colab.domain.chat.persistence.model;
 
 import com.ghsbm.group.peer.colab.domain.chat.core.model.Message;
+import com.ghsbm.group.peer.colab.domain.chat.core.model.UserToAdminMessages;
 import org.mapstruct.Mapper;
 
 import java.util.List;
@@ -15,4 +16,10 @@ public abstract class ChatEntitiesMapper {
   public abstract List<Message> fromMessageEntities(List<MessageEntity> messages);
 
   public abstract Message messageFromEntity(MessageEntity savedMessage);
+
+  public abstract UserToAdminMessages fromEntity(
+      UserToAdminMessagesEntity userToAdminMessagesEntity);
+
+  public abstract List<UserToAdminMessages> fromEntities(
+      List<UserToAdminMessagesEntity> userToAdminMessagesEntities);
 }

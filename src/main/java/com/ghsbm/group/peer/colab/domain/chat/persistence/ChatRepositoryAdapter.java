@@ -3,12 +3,15 @@ package com.ghsbm.group.peer.colab.domain.chat.persistence;
 import com.ghsbm.group.peer.colab.domain.chat.core.model.LatestPostedMessage;
 import com.ghsbm.group.peer.colab.domain.chat.core.model.Message;
 import com.ghsbm.group.peer.colab.domain.chat.core.model.PostLike;
+import com.ghsbm.group.peer.colab.domain.chat.core.model.UserToAdminMessages;
 import com.ghsbm.group.peer.colab.domain.chat.core.ports.outgoing.ChatRepository;
 import com.ghsbm.group.peer.colab.domain.chat.persistence.model.ChatEntitiesMapper;
 import com.ghsbm.group.peer.colab.domain.chat.persistence.model.MessageEntity;
 import com.ghsbm.group.peer.colab.domain.chat.persistence.model.PostLikesEntity;
+import com.ghsbm.group.peer.colab.domain.chat.persistence.model.UserToAdminMessagesEntity;
 import com.ghsbm.group.peer.colab.domain.chat.persistence.repository.MessagePsqlDbRepository;
 import com.ghsbm.group.peer.colab.domain.chat.persistence.repository.PostLikesPsqlDbRepository;
+import com.ghsbm.group.peer.colab.domain.chat.persistence.repository.UserToAdminMessagesRepository;
 import com.ghsbm.group.peer.colab.domain.classes.core.ports.outgoing.ClassRepository;
 import com.ghsbm.group.peer.colab.domain.security.infrastructure.persistence.model.UserEntity;
 import com.ghsbm.group.peer.colab.domain.security.infrastructure.persistence.repository.UserRepository;
@@ -33,6 +36,7 @@ public class ChatRepositoryAdapter implements ChatRepository {
   private UserRepository userRepository;
   private ClassRepository classRepository;
   private ChatEntitiesMapper chatEntitiesMapper;
+  private UserToAdminMessagesRepository userToAdminMessagesRepository;
 
   @Autowired
   public ChatRepositoryAdapter(
@@ -40,12 +44,14 @@ public class ChatRepositoryAdapter implements ChatRepository {
       PostLikesPsqlDbRepository postLikesPsqlDbRepository,
       ChatEntitiesMapper chatEntitiesMapper,
       UserRepository userRepository,
-      ClassRepository classRepository) {
+      ClassRepository classRepository,
+      UserToAdminMessagesRepository userToAdminMessagesRepository) {
     this.messagePsqlDbRepository = messagePsqlDbRepository;
     this.chatEntitiesMapper = chatEntitiesMapper;
     this.userRepository = userRepository;
     this.classRepository = classRepository;
     this.postLikesPsqlDbRepository = postLikesPsqlDbRepository;
+    this.userToAdminMessagesRepository = userToAdminMessagesRepository;
   }
 
   /**
@@ -173,5 +179,23 @@ public class ChatRepositoryAdapter implements ChatRepository {
   @Override
   public Long countMessagesAfterDate(ZonedDateTime lastAccessDate) {
     return messagePsqlDbRepository.countByPostDateAfter(lastAccessDate);
+  }
+
+  @Override
+  public UserToAdminMessages create(UserToAdminMessages userToAdminMessages) {
+
+    final var userToAdminMessage =
+        UserToAdminMessagesEntity.builder()
+            .userEmail(userToAdminMessages.getUserEmail())
+            .subject(userToAdminMessages.getSubject())
+            .content(userToAdminMessages.getContent())
+            .build();
+    final var savedUserToAdminMessages = userToAdminMessagesRepository.save(userToAdminMessage);
+    return chatEntitiesMapper.fromEntity(savedUserToAdminMessages);
+  }
+
+  @Override
+  public List<UserToAdminMessages> retrieveMessageFromUsers() {
+    return chatEntitiesMapper.fromEntities(userToAdminMessagesRepository.findAll());
   }
 }
