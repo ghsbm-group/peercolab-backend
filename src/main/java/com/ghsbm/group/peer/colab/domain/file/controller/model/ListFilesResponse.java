@@ -7,5 +7,5 @@ import lombok.Data;
 @Data
 @Builder
 public class ListFilesResponse {
-  private List<FileDTO> files;
+  private List<ListFileDTO> files;
 }

@@ -12,11 +12,15 @@ import com.ghsbm.group.peer.colab.domain.file.core.model.File;
 import com.ghsbm.group.peer.colab.domain.file.core.ports.incoming.FileManagementService;
 import com.ghsbm.group.peer.colab.infrastructure.SecurityUtils;
 import jakarta.servlet.http.HttpServletResponse;
+import jakarta.validation.constraints.NotNull;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+@Slf4j
 @RestController
 @RequestMapping("/file")
 public class FileManagementController {
@@ -64,8 +68,8 @@ public class FileManagementController {
       throw new UserIsNotEnrolledInClassConfigurationException();
     }
     final var fileInfos = fileManagementService.listFiles(folderId);
-
-    return ResponseEntity.ok(ListFilesResponse.builder().files(fileMapper.map(fileInfos)).build());
+    return ResponseEntity.ok(
+        ListFilesResponse.builder().files(fileMapper.mapList(fileInfos)).build());
   }
 
   @GetMapping(value = "{fileId}")
@@ -79,5 +83,11 @@ public class FileManagementController {
         "Content-Disposition", "attachment; filename=" + file.getFileInfo().getName());
     response.setHeader("Access-Control-Expose-Headers", "*");
     return file.getFile();
+  }
+
+  @DeleteMapping("/delete")
+  @ResponseStatus(HttpStatus.OK)
+  public void deleteFolder(@NotNull final Long fileId) {
+    fileManagementService.deleetFile(fileId);
   }
 }
