@@ -6,7 +6,7 @@ import com.ghsbm.group.peer.colab.domain.classes.core.ports.incoming.ClassManage
 import com.ghsbm.group.peer.colab.domain.classes.core.ports.incoming.exception.UserIsNotEnrolledInClassConfigurationException;
 import com.ghsbm.group.peer.colab.domain.file.controller.model.FileDTO;
 import com.ghsbm.group.peer.colab.domain.file.controller.model.FileMapper;
-import com.ghsbm.group.peer.colab.domain.file.controller.model.ListFilesResponse;
+import com.ghsbm.group.peer.colab.domain.file.controller.model.FileDetailsResponse;
 import com.ghsbm.group.peer.colab.domain.file.controller.model.UploadFileResponse;
 import com.ghsbm.group.peer.colab.domain.file.core.model.File;
 import com.ghsbm.group.peer.colab.domain.file.core.ports.incoming.FileManagementService;
@@ -62,14 +62,14 @@ public class FileManagementController {
   }
 
   @RequestMapping(path = "/list/{folderId}", method = RequestMethod.GET)
-  public ResponseEntity<ListFilesResponse> listFiles(@PathVariable Long folderId) {
+  public ResponseEntity<FileDetailsResponse> listFiles(@PathVariable Long folderId) {
     if (!SecurityUtils.hasCurrentUserAnyOfAuthorities(ADMIN)
         && !classManagementService.userIsEnrolled(folderId)) {
       throw new UserIsNotEnrolledInClassConfigurationException();
     }
     final var fileInfos = fileManagementService.listFiles(folderId);
     return ResponseEntity.ok(
-        ListFilesResponse.builder().files(fileMapper.mapList(fileInfos)).build());
+        FileDetailsResponse.builder().files(fileMapper.mapList(fileInfos)).build());
   }
 
   @GetMapping(value = "{fileId}")

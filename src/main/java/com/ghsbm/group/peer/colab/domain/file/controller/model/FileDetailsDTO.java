@@ -7,7 +7,7 @@ import java.time.ZonedDateTime;
 
 @Data
 @Builder
-public class ListFileDTO {
+public class FileDetailsDTO {
   private Long id;
   private String name;
   private ZonedDateTime fileDate;

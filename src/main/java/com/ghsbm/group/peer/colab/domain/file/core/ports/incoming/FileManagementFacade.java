@@ -7,6 +7,7 @@ import com.ghsbm.group.peer.colab.domain.file.core.ports.outgoing.StorageService
 import java.time.ZonedDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import com.ghsbm.group.peer.colab.domain.security.core.model.User;
 import com.ghsbm.group.peer.colab.domain.security.core.ports.incoming.UserManagementService;
@@ -77,16 +78,10 @@ public class FileManagementFacade implements FileManagementService {
         userManagementService
             .getUserWithAuthoritiesByLogin(username)
             .orElseThrow(() -> new EntityNotFoundException("User not found"));
-    List<FileInfo> list = new ArrayList<FileInfo>();
-    for (FileInfo fileInfo : files) {
-      if (fileInfo.getUser() == user.getId()) {
-        fileInfo.setIsFileUploadedByLoggedInUser(Boolean.TRUE);
-      } else {
-        fileInfo.setIsFileUploadedByLoggedInUser(Boolean.FALSE);
-      }
-      list.add(fileInfo);
-    }
-
-    return list;
+    return files.stream()
+        .peek(
+            fileInfo ->
+                fileInfo.setIsFileUploadedByLoggedInUser(fileInfo.getUser() == user.getId()))
+        .collect(Collectors.toList());
   }
 }

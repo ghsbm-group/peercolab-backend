@@ -6,6 +6,6 @@ import lombok.Data;
 
 @Data
 @Builder
-public class ListFilesResponse {
-  private List<ListFileDTO> files;
+public class FileDetailsResponse {
+  private List<FileDetailsDTO> files;
 }

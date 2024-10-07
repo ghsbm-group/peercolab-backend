@@ -14,7 +14,7 @@ public interface FileMapper {
 
   List<FileDTO> map(List<FileInfo> fileInfoInfos);
 
-  ListFileDTO mapList(FileInfo fileInfoInfos);
+  FileDetailsDTO mapList(FileInfo fileInfoInfos);
 
-  List<ListFileDTO> mapList(List<FileInfo> fileInfoInfos);
+  List<FileDetailsDTO> mapList(List<FileInfo> fileInfoInfos);
 }
