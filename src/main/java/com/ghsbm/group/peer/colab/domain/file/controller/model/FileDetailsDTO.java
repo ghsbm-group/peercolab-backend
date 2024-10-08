@@ -1,18 +1,16 @@
-package com.ghsbm.group.peer.colab.domain.file.core.model;
-
-import java.time.ZonedDateTime;
+package com.ghsbm.group.peer.colab.domain.file.controller.model;
 
 import lombok.Builder;
 import lombok.Data;
 
+import java.time.ZonedDateTime;
+
 @Data
 @Builder
-public class FileInfo {
+public class FileDetailsDTO {
   private Long id;
   private String name;
-  private String path;
-  private Long folderId;
   private ZonedDateTime fileDate;
+  private Long folderId;
   private Boolean isFileUploadedByLoggedInUser;
-  private Long user;
 }

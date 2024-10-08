@@ -14,4 +14,6 @@ public interface FileManagementService {
   List<FileInfo> listFiles(Long folderId);
 
   File download(Long fileId);
+
+  void deleetFile(Long fileId);
 }

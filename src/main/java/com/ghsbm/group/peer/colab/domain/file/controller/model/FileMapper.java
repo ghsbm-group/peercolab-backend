@@ -13,4 +13,8 @@ import org.mapstruct.Mapper;
 public interface FileMapper {
 
   List<FileDTO> map(List<FileInfo> fileInfoInfos);
+
+  FileDetailsDTO mapList(FileInfo fileInfoInfos);
+
+  List<FileDetailsDTO> mapList(List<FileInfo> fileInfoInfos);
 }

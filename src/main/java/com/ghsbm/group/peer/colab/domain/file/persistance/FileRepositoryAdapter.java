@@ -67,4 +67,9 @@ public class FileRepositoryAdapter implements FileRepository {
   public FileInfo getById(Long fileId) {
     return fileEntitiesMapper.fileFromEntity(filePsqlDbRepository.getReferenceById(fileId));
   }
+
+  @Override
+  public void deleteFile(Long fileId) {
+    filePsqlDbRepository.deleteById(fileId);
+  }
 }
