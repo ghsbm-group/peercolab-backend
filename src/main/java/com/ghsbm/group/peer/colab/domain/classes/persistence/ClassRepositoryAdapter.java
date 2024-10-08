@@ -147,9 +147,10 @@ public class ClassRepositoryAdapter implements ClassRepository {
   @Override
   public boolean folderAlreadyExists(Folder folder) {
 
-    if (folder.getParentId() == null)
+    if (folder.getParentId() == null) {
       return folderPsqlDbRespository.existsByNameAndAndClassConfigurationId(
           folder.getName(), folder.getClassConfigurationId());
+    }
     return folderPsqlDbRespository.existsByNameAndAndClassConfigurationIdAndParentId(
         folder.getName(), folder.getClassConfigurationId(), folder.getParentId());
   }
