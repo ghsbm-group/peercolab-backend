@@ -170,6 +170,9 @@ public class ClassManagementFacade implements ClassManagementService {
    */
   @Override
   public Folder renameFolder(Folder folder) {
+    if (folder.getId() == null) {
+      throw new IllegalArgumentException("Folder ID cannot be null");
+    }
     Folder folderWithNewNameSet = classRepository.findFolderById(folder.getId());
     folderWithNewNameSet.setName(folder.getName());
 

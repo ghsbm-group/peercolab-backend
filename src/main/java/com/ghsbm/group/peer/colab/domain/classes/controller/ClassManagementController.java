@@ -145,11 +145,11 @@ public class ClassManagementController {
                 createMessageBoardRequest.getFolderInfoDTO()));
     var message = Message.builder().build();
     if (StringUtils.isNotBlank(createMessageBoardRequest.getFirstMessage())) {
-    CreateMessageRequest createMessageRequest =
-        CreateMessageRequest.builder()
-            .content(createMessageBoardRequest.getFirstMessage())
-            .messageboardId(folder.getId())
-            .build();
+      CreateMessageRequest createMessageRequest =
+          CreateMessageRequest.builder()
+              .content(createMessageBoardRequest.getFirstMessage())
+              .messageboardId(folder.getId())
+              .build();
       message =
           chatManagementService.createMessage(
               chatMapper.fromCreateMessageRequest(createMessageRequest));
@@ -262,7 +262,6 @@ public class ClassManagementController {
   @PostMapping("/rename-folder")
   public ResponseEntity<RenameFolderResponse> renameFolder(
       @Valid @RequestBody final RenameFolderRequest renameFolderRequest) {
-
     final var folder =
         classManagementService.renameFolder(
             classMapper.fromRenameFolderRequest(renameFolderRequest));

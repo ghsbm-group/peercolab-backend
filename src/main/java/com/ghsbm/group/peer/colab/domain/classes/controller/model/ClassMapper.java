@@ -58,7 +58,7 @@ public interface ClassMapper {
    * Builds a {@link Folder} core domain object based on a {@link RenameFolderRequest} instance that
    * contains the mandatory parameters for renaming a folder.
    *
-   * @param renameFolderRequest encapsulates the requests paramameters.
+   * @param renameFolderRequest encapsulates the requests parameters.
    * @return a {@link Folder} object build on the request parameter.
    */
   @Mappings({@Mapping(target = "id", source = "id"), @Mapping(source = "newName", target = "name")})
@@ -73,7 +73,9 @@ public interface ClassMapper {
    */
   FolderInformationResponse folderInformationResponseFromFolderInformation(
       FolderInformation folderInformation);
-  List<EnrolledClassesResponse> enrolledClassesResponseFromClassConfiguration(List<ClassConfiguration> classConfigurations);
+
+  List<EnrolledClassesResponse> enrolledClassesResponseFromClassConfiguration(
+      List<ClassConfiguration> classConfigurations);
 
   ClassDTO classDTOFromClassConfiguration(ClassConfiguration classConfiguration);
 
