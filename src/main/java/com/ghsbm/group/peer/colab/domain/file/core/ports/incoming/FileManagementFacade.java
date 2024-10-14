@@ -51,7 +51,7 @@ public class FileManagementFacade implements FileManagementService {
   @Override
   public List<FileInfo> listFiles(Long folderId) {
 
-    return uploadByLoggedInUser(fileRepository.listFiles(folderId));
+    return isUploadByLoggedInUser(fileRepository.listFiles(folderId));
   }
 
   @Override
@@ -70,7 +70,7 @@ public class FileManagementFacade implements FileManagementService {
     return "folder_id_" + folderId + "/" + originalFilename;
   }
 
-  protected List<FileInfo> uploadByLoggedInUser(List<FileInfo> files) {
+  protected List<FileInfo> isUploadByLoggedInUser(List<FileInfo> files) {
     String username =
         SecurityUtils.getCurrentUserLogin()
             .orElseThrow(() -> new IllegalStateException("User not logged in"));

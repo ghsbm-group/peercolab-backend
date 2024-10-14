@@ -66,4 +66,8 @@ public interface ChatManagementService {
 
   @Transactional
   List<ContactUsMessages> retrieveMessagesFromUsers();
+
+  @Transactional
+  Long numberOfTotalMessages(Long messageBoardId);
+
 }

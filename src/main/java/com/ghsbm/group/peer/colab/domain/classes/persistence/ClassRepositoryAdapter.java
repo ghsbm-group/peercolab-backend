@@ -2,6 +2,8 @@ package com.ghsbm.group.peer.colab.domain.classes.persistence;
 
 import static com.ghsbm.group.peer.colab.infrastructure.AuthoritiesConstants.USER_MUST_BE_LOGGED_IN;
 
+import com.ghsbm.group.peer.colab.domain.chat.core.ports.incoming.ChatManagementService;
+import com.ghsbm.group.peer.colab.domain.chat.persistence.ChatRepositoryAdapter;
 import com.ghsbm.group.peer.colab.domain.classes.core.model.ClassConfiguration;
 import com.ghsbm.group.peer.colab.domain.classes.core.model.Folder;
 import com.ghsbm.group.peer.colab.domain.classes.core.model.UserMessageBoardAccess;
@@ -37,6 +39,7 @@ public class ClassRepositoryAdapter implements ClassRepository {
   private UserRepository userRepository;
   private EnrolmentPsqlDbRepository enrolmentPsqlDbRepository;
   private ClassEntitiesMapper classEntitiesMapper;
+  private ChatManagementService chatManagementService;
 
   @Autowired
   public ClassRepositoryAdapter(
@@ -45,13 +48,15 @@ public class ClassRepositoryAdapter implements ClassRepository {
       UserMessageBoardAccessPsqlDbRepository userMessageBoardAccessPsqlDbRepository,
       ClassEntitiesMapper classEntitiesMapper,
       UserRepository userRepository,
-      EnrolmentPsqlDbRepository enrolmentPsqlDbRepository) {
+      EnrolmentPsqlDbRepository enrolmentPsqlDbRepository,
+      ChatManagementService chatManagementService) {
     this.classPsqlDbRepository = classPsqlDbRepository;
     this.folderPsqlDbRespository = folderPsqlDbRespository;
     this.classEntitiesMapper = classEntitiesMapper;
     this.userMessageBoardAccessPsqlDbRepository = userMessageBoardAccessPsqlDbRepository;
     this.enrolmentPsqlDbRepository = enrolmentPsqlDbRepository;
     this.userRepository = userRepository;
+    this.chatManagementService = chatManagementService;
   }
 
   /**
@@ -238,6 +243,11 @@ public class ClassRepositoryAdapter implements ClassRepository {
   @Override
   public long countMessages(long folderId) {
     return folderPsqlDbRespository.countMessages(folderId);
+  }
+
+  @Override
+  public Long countAllMessagesByMessageBoardId(Long messageBoardId) {
+    return chatManagementService.numberOfTotalMessages(messageBoardId);
   }
 
   /**

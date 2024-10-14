@@ -137,6 +137,7 @@ public interface ClassRepository {
    * @return the number of posted messages
    */
   long countMessages(long folderId);
+  Long countAllMessagesByMessageBoardId(Long messageBoardId);
 
   /**
    * Retrieves a list of {@link ClassConfiguration} in which a user was enrolled depending on the

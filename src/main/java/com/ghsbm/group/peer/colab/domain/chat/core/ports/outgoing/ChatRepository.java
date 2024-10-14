@@ -93,4 +93,6 @@ public interface ChatRepository {
   public ContactUsMessages create(ContactUsMessages contactUsMessages);
 
   public List<ContactUsMessages> retrieveMessageFromUsers();
+
+  public Long countAllMessagesByMessageBoardId(Long messageboardId);
 }

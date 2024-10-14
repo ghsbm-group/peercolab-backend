@@ -5,7 +5,7 @@
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
   </head>
   <body>
-    <p th:text="#{email.activation.greeting(${user.login})}">Dear</p>
+    <p th:text="#{email.activation.greeting(${user.getFirstName()})}">Dear</p>
     <p th:text="#{email.activation.text1}">Your Unihub account has been created, please click on the
       URL below to activate it:</p>
     <p>

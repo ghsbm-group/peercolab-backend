@@ -12,35 +12,36 @@ import java.util.List;
 @RequestMapping("/user-actions")
 public class UserActionsController {
 
-    private final ChatManagementService chatManagementService;
+  private final ChatManagementService chatManagementService;
 
-    private final UserActionMapper userActionMapper;
+  private final UserActionMapper userActionMapper;
 
-    public UserActionsController(ChatManagementService chatManagementService, UserActionMapper userActionMapper) {
-        this.chatManagementService = chatManagementService;
-        this.userActionMapper = userActionMapper;
-    }
+  public UserActionsController(
+      ChatManagementService chatManagementService, UserActionMapper userActionMapper) {
+    this.chatManagementService = chatManagementService;
+    this.userActionMapper = userActionMapper;
+  }
 
-    @PostMapping("/contact-us")
-    public ResponseEntity<ContactUsMessagesResponse> sendMessageToAdmin(
-            @Valid @RequestBody final ContactUsMessagesRequest sendMessageToAdmin) {
+  @PostMapping("/contact-us")
+  public ResponseEntity<ContactUsMessagesResponse> sendMessageToAdmin(
+      @Valid @RequestBody final ContactUsMessagesRequest sendMessageToAdmin) {
 
-        final var messageToAdmin =
-                chatManagementService.sendMessageToAdmin(userActionMapper.fromUserToAdminMessageRequest(sendMessageToAdmin));
-        return ResponseEntity.ok(
-                ContactUsMessagesResponse.builder()
-                        .id(messageToAdmin.getId())
-                        .email(messageToAdmin.getUserEmail())
-                        .subject(messageToAdmin.getSubject())
-                        .content(messageToAdmin.getContent())
-                        .build()
-        );
-    }
-    @GetMapping("/messages")
-    public ResponseEntity<List<ContactUsMessagesResponse>> getMessages()
-    {
-        return ResponseEntity.ok(
-                userActionMapper.fromUserToAdminMessagesList(chatManagementService.retrieveMessagesFromUsers())
-        );
-    }
+    final var messageToAdmin =
+        chatManagementService.sendMessageToAdmin(
+            userActionMapper.fromUserToAdminMessageRequest(sendMessageToAdmin));
+    return ResponseEntity.ok(
+        ContactUsMessagesResponse.builder()
+            .id(messageToAdmin.getId())
+            .email(messageToAdmin.getUserEmail())
+            .subject(messageToAdmin.getSubject())
+            .content(messageToAdmin.getContent())
+            .build());
+  }
+
+  @GetMapping("/messages")
+  public ResponseEntity<List<ContactUsMessagesResponse>> getMessages() {
+    return ResponseEntity.ok(
+        userActionMapper.fromUserToAdminMessagesList(
+            chatManagementService.retrieveMessagesFromUsers()));
+  }
 }

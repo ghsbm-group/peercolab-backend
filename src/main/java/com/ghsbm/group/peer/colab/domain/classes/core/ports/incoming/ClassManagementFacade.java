@@ -302,7 +302,7 @@ public class ClassManagementFacade implements ClassManagementService {
 
   @Override
   public Long countAllMessagesByMessageBoardId(Long folderId) {
-    return classRepository.countMessages(folderId);
+    return classRepository.countAllMessagesByMessageBoardId(folderId);
   }
 
   @Override
