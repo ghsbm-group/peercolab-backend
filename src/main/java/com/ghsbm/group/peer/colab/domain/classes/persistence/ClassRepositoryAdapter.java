@@ -2,8 +2,6 @@ package com.ghsbm.group.peer.colab.domain.classes.persistence;
 
 import static com.ghsbm.group.peer.colab.infrastructure.AuthoritiesConstants.USER_MUST_BE_LOGGED_IN;
 
-import com.ghsbm.group.peer.colab.domain.chat.core.ports.incoming.ChatManagementService;
-import com.ghsbm.group.peer.colab.domain.chat.persistence.ChatRepositoryAdapter;
 import com.ghsbm.group.peer.colab.domain.classes.core.model.ClassConfiguration;
 import com.ghsbm.group.peer.colab.domain.classes.core.model.Folder;
 import com.ghsbm.group.peer.colab.domain.classes.core.model.UserMessageBoardAccess;
@@ -319,7 +317,19 @@ public class ClassRepositoryAdapter implements ClassRepository {
   }
 
   @Override
-  public Long countUnreadMessages(Long userId, Long folderId) {
+  public Long countUnreadMessages(Long folderId) {
+
+    String userLogin =
+        SecurityUtils.getCurrentUserLogin()
+            .orElseThrow(() -> new IllegalStateException(USER_MUST_BE_LOGGED_IN));
+    UserEntity userEntity =
+        userRepository
+            .findOneByLogin(userLogin)
+            .orElseThrow(
+                () ->
+                    new IllegalStateException(
+                        "User with username " + userLogin + " does not exist"));
+
     List<Long> messageBoardIds = new ArrayList<>();
     Folder folder =
         classEntitiesMapper.folderFromEntity(
@@ -338,6 +348,6 @@ public class ClassRepositoryAdapter implements ClassRepository {
       return 0L;
     }
     return folderPsqlDbRespository.countUnreadMessagesByUserAndMessageBoards(
-        userId, messageBoardIds);
+        userEntity.getId(), messageBoardIds);
   }
 }

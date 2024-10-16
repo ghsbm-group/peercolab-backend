@@ -183,5 +183,5 @@ public interface ClassRepository {
 
   ClassConfiguration getClassConfigurationByClassId(Long classId);
 
-  Long countUnreadMessages(Long userId, Long folderId);
+  Long countUnreadMessages(Long folderId);
 }

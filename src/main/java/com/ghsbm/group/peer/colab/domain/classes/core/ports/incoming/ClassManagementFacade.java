@@ -26,7 +26,6 @@ public class ClassManagementFacade implements ClassManagementService {
 
   private final ClassRepository classRepository;
   private final MessageSource messageSource;
-  private final UserManagementService userManagementService;
 
   public ClassManagementFacade(
       ClassRepository classRepository,
@@ -34,7 +33,6 @@ public class ClassManagementFacade implements ClassManagementService {
       UserManagementService userManagementService) {
     this.classRepository = classRepository;
     this.messageSource = messageSource;
-    this.userManagementService = userManagementService;
   }
 
   /**
@@ -223,15 +221,7 @@ public class ClassManagementFacade implements ClassManagementService {
 
   @Override
   public Long countAllUnreadMessages(Long messageBoardId) {
-    String username =
-        SecurityUtils.getCurrentUserLogin()
-            .orElseThrow(() -> new IllegalStateException(USER_MUST_BE_LOGGED_IN));
-    User user =
-        userManagementService
-            .getUserWithAuthoritiesByLogin(username)
-            .orElseThrow(() -> new IllegalStateException("User not found"));
-
-    return classRepository.countUnreadMessages(user.getId(), messageBoardId);
+    return classRepository.countUnreadMessages(messageBoardId);
   }
 
   /**
