@@ -41,8 +41,6 @@ public class ClassRepositoryAdapter implements ClassRepository {
   private EnrolmentPsqlDbRepository enrolmentPsqlDbRepository;
   private ClassEntitiesMapper classEntitiesMapper;
 
-  //  private ChatManagementService chatManagementService;
-
   @Autowired
   public ClassRepositoryAdapter(
       ClassPsqlDbRepository classPsqlDbRepository,
@@ -50,16 +48,13 @@ public class ClassRepositoryAdapter implements ClassRepository {
       UserMessageBoardAccessPsqlDbRepository userMessageBoardAccessPsqlDbRepository,
       ClassEntitiesMapper classEntitiesMapper,
       UserRepository userRepository,
-      EnrolmentPsqlDbRepository enrolmentPsqlDbRepository
-      //      ChatManagementService chatManagementService
-      ) {
+      EnrolmentPsqlDbRepository enrolmentPsqlDbRepository) {
     this.classPsqlDbRepository = classPsqlDbRepository;
     this.folderPsqlDbRespository = folderPsqlDbRespository;
     this.classEntitiesMapper = classEntitiesMapper;
     this.userMessageBoardAccessPsqlDbRepository = userMessageBoardAccessPsqlDbRepository;
     this.enrolmentPsqlDbRepository = enrolmentPsqlDbRepository;
     this.userRepository = userRepository;
-    //    this.chatManagementService = chatManagementService;
   }
 
   /**
