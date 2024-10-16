@@ -10,7 +10,6 @@ import com.ghsbm.group.peer.colab.domain.classes.core.ports.incoming.exception.F
 import com.ghsbm.group.peer.colab.domain.classes.core.ports.incoming.exception.UserIsNotEnrolledInClassConfigurationException;
 import com.ghsbm.group.peer.colab.domain.classes.core.ports.outgoing.ClassRepository;
 import com.ghsbm.group.peer.colab.domain.security.core.model.User;
-import com.ghsbm.group.peer.colab.domain.security.core.ports.incoming.UserManagementService;
 import com.ghsbm.group.peer.colab.infrastructure.AuthoritiesConstants;
 import com.ghsbm.group.peer.colab.infrastructure.RandomUtil;
 import com.ghsbm.group.peer.colab.infrastructure.SecurityUtils;
@@ -27,10 +26,7 @@ public class ClassManagementFacade implements ClassManagementService {
   private final ClassRepository classRepository;
   private final MessageSource messageSource;
 
-  public ClassManagementFacade(
-      ClassRepository classRepository,
-      MessageSource messageSource,
-      UserManagementService userManagementService) {
+  public ClassManagementFacade(ClassRepository classRepository, MessageSource messageSource) {
     this.classRepository = classRepository;
     this.messageSource = messageSource;
   }
