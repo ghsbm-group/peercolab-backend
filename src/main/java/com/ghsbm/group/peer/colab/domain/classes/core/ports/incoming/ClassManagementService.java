@@ -178,8 +178,6 @@ public interface ClassManagementService {
    * @param folderId the folder id for which the count is performed
    * @return The number of total messages within that folder.
    */
-  @Transactional
-  Long countAllMessagesByMessageBoardId(Long folderId);
 
   /**
    * Deletes a 'leaf' folder or message board if they are empty. Also checks whether the current is
@@ -210,4 +208,7 @@ public interface ClassManagementService {
   void enrolStudent(String enrolmentKey, User user);
 
   ClassConfiguration retrieveClassConfigurationByClassId(Long classId);
+
+  @Transactional
+  Long countAllUnreadMessages(Long messageBoardId);
 }

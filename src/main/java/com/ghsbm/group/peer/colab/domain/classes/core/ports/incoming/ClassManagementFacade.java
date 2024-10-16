@@ -10,6 +10,7 @@ import com.ghsbm.group.peer.colab.domain.classes.core.ports.incoming.exception.F
 import com.ghsbm.group.peer.colab.domain.classes.core.ports.incoming.exception.UserIsNotEnrolledInClassConfigurationException;
 import com.ghsbm.group.peer.colab.domain.classes.core.ports.outgoing.ClassRepository;
 import com.ghsbm.group.peer.colab.domain.security.core.model.User;
+import com.ghsbm.group.peer.colab.domain.security.core.ports.incoming.UserManagementService;
 import com.ghsbm.group.peer.colab.infrastructure.AuthoritiesConstants;
 import com.ghsbm.group.peer.colab.infrastructure.RandomUtil;
 import com.ghsbm.group.peer.colab.infrastructure.SecurityUtils;
@@ -25,10 +26,15 @@ public class ClassManagementFacade implements ClassManagementService {
 
   private final ClassRepository classRepository;
   private final MessageSource messageSource;
+  private final UserManagementService userManagementService;
 
-  public ClassManagementFacade(ClassRepository classRepository, MessageSource messageSource) {
+  public ClassManagementFacade(
+      ClassRepository classRepository,
+      MessageSource messageSource,
+      UserManagementService userManagementService) {
     this.classRepository = classRepository;
     this.messageSource = messageSource;
+    this.userManagementService = userManagementService;
   }
 
   /**
@@ -215,6 +221,19 @@ public class ClassManagementFacade implements ClassManagementService {
     return classRepository.getClassConfigurationByClassId(classId);
   }
 
+  @Override
+  public Long countAllUnreadMessages(Long messageBoardId) {
+    String username =
+        SecurityUtils.getCurrentUserLogin()
+            .orElseThrow(() -> new IllegalStateException(USER_MUST_BE_LOGGED_IN));
+    User user =
+        userManagementService
+            .getUserWithAuthoritiesByLogin(username)
+            .orElseThrow(() -> new IllegalStateException("User not found"));
+
+    return classRepository.countUnreadMessages(user.getId(), messageBoardId);
+  }
+
   /**
    * @inheritDoc
    */
@@ -298,11 +317,6 @@ public class ClassManagementFacade implements ClassManagementService {
   @Override
   public UserMessageBoardAccess findUserMessageBoardAccess(Long messageboardId) {
     return classRepository.findByUserAndMessageBoardAccess(messageboardId);
-  }
-
-  @Override
-  public Long countAllMessagesByMessageBoardId(Long folderId) {
-    return classRepository.countAllMessagesByMessageBoardId(folderId);
   }
 
   @Override

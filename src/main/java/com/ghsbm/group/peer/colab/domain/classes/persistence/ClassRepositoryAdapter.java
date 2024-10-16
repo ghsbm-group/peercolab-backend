@@ -18,6 +18,7 @@ import com.ghsbm.group.peer.colab.domain.security.infrastructure.persistence.rep
 import com.ghsbm.group.peer.colab.infrastructure.SecurityUtils;
 import com.ghsbm.group.peer.colab.infrastructure.exception.BadRequestAlertException;
 import java.time.ZonedDateTime;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -39,7 +40,8 @@ public class ClassRepositoryAdapter implements ClassRepository {
   private UserRepository userRepository;
   private EnrolmentPsqlDbRepository enrolmentPsqlDbRepository;
   private ClassEntitiesMapper classEntitiesMapper;
-  private ChatManagementService chatManagementService;
+
+  //  private ChatManagementService chatManagementService;
 
   @Autowired
   public ClassRepositoryAdapter(
@@ -48,15 +50,16 @@ public class ClassRepositoryAdapter implements ClassRepository {
       UserMessageBoardAccessPsqlDbRepository userMessageBoardAccessPsqlDbRepository,
       ClassEntitiesMapper classEntitiesMapper,
       UserRepository userRepository,
-      EnrolmentPsqlDbRepository enrolmentPsqlDbRepository,
-      ChatManagementService chatManagementService) {
+      EnrolmentPsqlDbRepository enrolmentPsqlDbRepository
+      //      ChatManagementService chatManagementService
+      ) {
     this.classPsqlDbRepository = classPsqlDbRepository;
     this.folderPsqlDbRespository = folderPsqlDbRespository;
     this.classEntitiesMapper = classEntitiesMapper;
     this.userMessageBoardAccessPsqlDbRepository = userMessageBoardAccessPsqlDbRepository;
     this.enrolmentPsqlDbRepository = enrolmentPsqlDbRepository;
     this.userRepository = userRepository;
-    this.chatManagementService = chatManagementService;
+    //    this.chatManagementService = chatManagementService;
   }
 
   /**
@@ -245,11 +248,6 @@ public class ClassRepositoryAdapter implements ClassRepository {
     return folderPsqlDbRespository.countMessages(folderId);
   }
 
-  @Override
-  public Long countAllMessagesByMessageBoardId(Long messageBoardId) {
-    return chatManagementService.numberOfTotalMessages(messageBoardId);
-  }
-
   /**
    * @inheritDoc
    */
@@ -323,5 +321,28 @@ public class ClassRepositoryAdapter implements ClassRepository {
   @Override
   public ClassConfiguration getClassConfigurationByClassId(Long classId) {
     return classEntitiesMapper.classFromEntity(classPsqlDbRepository.getReferenceById(classId));
+  }
+
+  @Override
+  public Long countUnreadMessages(Long userId, Long folderId) {
+    List<Long> messageBoardIds = new ArrayList<>();
+    Folder folder =
+        classEntitiesMapper.folderFromEntity(
+            folderPsqlDbRespository
+                .findById(folderId)
+                .orElseThrow(
+                    () ->
+                        new IllegalStateException(
+                            "Folder with id " + folderId + " does not exist.")));
+    if (folder.getIsMessageBoard()) {
+      messageBoardIds.add(folderId);
+    } else {
+      messageBoardIds.addAll(folderPsqlDbRespository.findMessageBoardsIds(folderId));
+    }
+    if (messageBoardIds.isEmpty()) {
+      return 0L;
+    }
+    return folderPsqlDbRespository.countUnreadMessagesByUserAndMessageBoards(
+        userId, messageBoardIds);
   }
 }
