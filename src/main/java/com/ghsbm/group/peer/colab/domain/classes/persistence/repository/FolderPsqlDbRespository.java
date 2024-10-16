@@ -132,6 +132,6 @@ public interface FolderPsqlDbRespository extends JpaRepository<FolderEntity, Lon
           "FROM MessageEntity m " +
           "LEFT JOIN UserMessageboardAccessEntity lam ON lam.messageboard.id = m.messageboardId AND lam.user.id = :userId " +
           "WHERE m.messageboardId IN :messageBoardIds " +
-          "AND (lam IS NULL OR lam.lastAccessDate IS NULL OR m.postDate > lam.lastAccessDate)")
+          "AND (lam IS NULL OR m.postDate > lam.lastAccessDate)")
   Long countUnreadMessagesByUserAndMessageBoards(@Param("userId") Long userId, @Param("messageBoardIds") List<Long> messageBoardIds);
 }
