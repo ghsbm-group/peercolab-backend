@@ -4,10 +4,7 @@ import static com.ghsbm.group.peer.colab.infrastructure.AuthoritiesConstants.ADM
 
 import com.ghsbm.group.peer.colab.domain.classes.core.ports.incoming.ClassManagementService;
 import com.ghsbm.group.peer.colab.domain.classes.core.ports.incoming.exception.UserIsNotEnrolledInClassConfigurationException;
-import com.ghsbm.group.peer.colab.domain.file.controller.model.FileDTO;
-import com.ghsbm.group.peer.colab.domain.file.controller.model.FileMapper;
-import com.ghsbm.group.peer.colab.domain.file.controller.model.FileDetailsResponse;
-import com.ghsbm.group.peer.colab.domain.file.controller.model.UploadFileResponse;
+import com.ghsbm.group.peer.colab.domain.file.controller.model.*;
 import com.ghsbm.group.peer.colab.domain.file.core.model.File;
 import com.ghsbm.group.peer.colab.domain.file.core.ports.incoming.FileManagementService;
 import com.ghsbm.group.peer.colab.infrastructure.SecurityUtils;
@@ -91,6 +88,6 @@ public class FileManagementController {
   @DeleteMapping("/delete")
   @ResponseStatus(HttpStatus.OK)
   public void deleteFolder(@NotNull final Long fileId) {
-    fileManagementService.deleetFile(fileId);
+    fileManagementService.deleteFile(fileId);
   }
 }
