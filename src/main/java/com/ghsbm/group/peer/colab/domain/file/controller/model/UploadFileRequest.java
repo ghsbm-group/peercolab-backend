@@ -7,7 +7,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 @Data
 @Builder
 public class UploadFileRequest {
-    private Long folderId;
-    private String path;
-
+  private Long folderId;
+  private String path;
+  private String description;
 }

@@ -52,6 +52,7 @@ public class FileRepositoryAdapter implements FileRepository {
             .user(userEntity.getId())
             .path(fileInfo.getPath())
             .fileDate(ZonedDateTime.now(ZoneId.of("Europe/Bucharest")))
+            .description(fileInfo.getDescription())
             .build();
     FileEntity savedFile = filePsqlDbRepository.save(fileEntity);
     return fileEntitiesMapper.fileFromEntity(savedFile);

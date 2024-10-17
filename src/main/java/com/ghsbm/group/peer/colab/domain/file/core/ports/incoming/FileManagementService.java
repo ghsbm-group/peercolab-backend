@@ -9,7 +9,7 @@ import org.springframework.web.multipart.MultipartFile;
 public interface FileManagementService {
 
   @Transactional
-  FileInfo saveFile(MultipartFile file, long folderId);
+  FileInfo saveFile(MultipartFile file, long folderId, String descritpion);
 
   List<FileInfo> listFiles(Long folderId);
 

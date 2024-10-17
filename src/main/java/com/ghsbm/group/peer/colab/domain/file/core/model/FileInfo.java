@@ -13,6 +13,7 @@ public class FileInfo {
   private String path;
   private Long folderId;
   private ZonedDateTime fileDate;
+  private String description;
   private Boolean isFileUploadedByLoggedInUser;
   private Long user;
 }

@@ -42,12 +42,14 @@ public class FileManagementController {
       method = RequestMethod.POST,
       consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
   public ResponseEntity<UploadFileResponse> handleFileUpload(
-      @PathVariable Long folderId, @RequestParam("file") MultipartFile file) {
+      @PathVariable Long folderId,
+      @RequestParam("file") MultipartFile file,
+      @RequestParam(value = "description", required = false) String description) {
     if (!SecurityUtils.hasCurrentUserAnyOfAuthorities(ADMIN)
         && !classManagementService.userIsEnrolled(folderId)) {
       throw new UserIsNotEnrolledInClassConfigurationException();
     }
-    final var fileInfo = fileManagementService.saveFile(file, folderId);
+    final var fileInfo = fileManagementService.saveFile(file, folderId, description);
 
     return ResponseEntity.ok(
         UploadFileResponse.builder()
@@ -57,6 +59,7 @@ public class FileManagementController {
                     .name(fileInfo.getName())
                     .fileDate(fileInfo.getFileDate())
                     .folderId(fileInfo.getFolderId())
+                    .description(fileInfo.getDescription())
                     .build())
             .build());
   }

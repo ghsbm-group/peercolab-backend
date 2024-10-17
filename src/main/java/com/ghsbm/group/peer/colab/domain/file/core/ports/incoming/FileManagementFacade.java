@@ -33,7 +33,7 @@ public class FileManagementFacade implements FileManagementService {
   }
 
   @Override
-  public FileInfo saveFile(MultipartFile file, long folderId) {
+  public FileInfo saveFile(MultipartFile file, long folderId, String description) {
     final var key = buildKey(folderId, file.getOriginalFilename());
     final var fileInformation =
         fileRepository.saveFile(
@@ -42,6 +42,7 @@ public class FileManagementFacade implements FileManagementService {
                 .folderId(folderId)
                 .path(key)
                 .fileDate(ZonedDateTime.now())
+                .description(description)
                 .build());
     storageService.store(file, key);
 

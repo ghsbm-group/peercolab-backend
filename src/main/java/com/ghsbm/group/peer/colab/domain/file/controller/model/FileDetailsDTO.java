@@ -13,4 +13,5 @@ public class FileDetailsDTO {
   private ZonedDateTime fileDate;
   private Long folderId;
   private Boolean isFileUploadedByLoggedInUser;
+  private String description;
 }
