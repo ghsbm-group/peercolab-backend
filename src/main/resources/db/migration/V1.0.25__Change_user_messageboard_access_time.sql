@@ -1,0 +1,2 @@
+ALTER TABLE user_messageboard_access
+ALTER COLUMN last_access_date TYPE TIMESTAMPTZ;

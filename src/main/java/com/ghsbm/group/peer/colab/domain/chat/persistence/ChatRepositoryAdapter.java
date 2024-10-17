@@ -198,4 +198,9 @@ public class ChatRepositoryAdapter implements ChatRepository {
   public List<ContactUsMessages> retrieveMessageFromUsers() {
     return chatEntitiesMapper.fromEntities(userToAdminMessagesRepository.findAll());
   }
+
+  @Override
+  public Long countAllMessagesByMessageBoardId(Long messageboardId) {
+    return messagePsqlDbRepository.countByMessageboardId(messageboardId);
+  }
 }

@@ -182,4 +182,6 @@ public interface ClassRepository {
   void changeClassName(Long classId, String name);
 
   ClassConfiguration getClassConfigurationByClassId(Long classId);
+
+  Long countUnreadMessages(Long folderId);
 }

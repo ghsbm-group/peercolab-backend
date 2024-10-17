@@ -106,6 +106,11 @@ public class ChatManagementFacade implements ChatManagementService {
     return chatRepository.retrieveMessageFromUsers();
   }
 
+  @Override
+  public Long numberOfTotalMessages(Long messageBoardId) {
+    return chatRepository.countAllMessagesByMessageBoardId(messageBoardId);
+  }
+
   protected PostedMessage messageToPostedMessage(Message message) {
     if (message == null) {
       return null;

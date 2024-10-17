@@ -16,6 +16,7 @@ import com.ghsbm.group.peer.colab.domain.security.infrastructure.persistence.rep
 import com.ghsbm.group.peer.colab.infrastructure.SecurityUtils;
 import com.ghsbm.group.peer.colab.infrastructure.exception.BadRequestAlertException;
 import java.time.ZonedDateTime;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -313,5 +314,40 @@ public class ClassRepositoryAdapter implements ClassRepository {
   @Override
   public ClassConfiguration getClassConfigurationByClassId(Long classId) {
     return classEntitiesMapper.classFromEntity(classPsqlDbRepository.getReferenceById(classId));
+  }
+
+  @Override
+  public Long countUnreadMessages(Long folderId) {
+
+    String userLogin =
+        SecurityUtils.getCurrentUserLogin()
+            .orElseThrow(() -> new IllegalStateException(USER_MUST_BE_LOGGED_IN));
+    UserEntity userEntity =
+        userRepository
+            .findOneByLogin(userLogin)
+            .orElseThrow(
+                () ->
+                    new IllegalStateException(
+                        "User with username " + userLogin + " does not exist"));
+
+    List<Long> messageBoardIds = new ArrayList<>();
+    Folder folder =
+        classEntitiesMapper.folderFromEntity(
+            folderPsqlDbRespository
+                .findById(folderId)
+                .orElseThrow(
+                    () ->
+                        new IllegalStateException(
+                            "Folder with id " + folderId + " does not exist.")));
+    if (folder.getIsMessageBoard()) {
+      messageBoardIds.add(folderId);
+    } else {
+      messageBoardIds.addAll(folderPsqlDbRespository.findMessageBoardsIds(folderId));
+    }
+    if (messageBoardIds.isEmpty()) {
+      return 0L;
+    }
+    return folderPsqlDbRespository.countUnreadMessagesByUserAndMessageBoards(
+        userEntity.getId(), messageBoardIds);
   }
 }

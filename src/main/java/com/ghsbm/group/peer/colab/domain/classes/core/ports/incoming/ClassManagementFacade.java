@@ -215,6 +215,11 @@ public class ClassManagementFacade implements ClassManagementService {
     return classRepository.getClassConfigurationByClassId(classId);
   }
 
+  @Override
+  public Long countAllUnreadMessages(Long messageBoardId) {
+    return classRepository.countUnreadMessages(messageBoardId);
+  }
+
   /**
    * @inheritDoc
    */
@@ -298,11 +303,6 @@ public class ClassManagementFacade implements ClassManagementService {
   @Override
   public UserMessageBoardAccess findUserMessageBoardAccess(Long messageboardId) {
     return classRepository.findByUserAndMessageBoardAccess(messageboardId);
-  }
-
-  @Override
-  public Long countAllMessagesByMessageBoardId(Long folderId) {
-    return classRepository.countMessages(folderId);
   }
 
   @Override
