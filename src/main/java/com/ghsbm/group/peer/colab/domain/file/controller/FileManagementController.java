@@ -4,10 +4,7 @@ import static com.ghsbm.group.peer.colab.infrastructure.AuthoritiesConstants.ADM
 
 import com.ghsbm.group.peer.colab.domain.classes.core.ports.incoming.ClassManagementService;
 import com.ghsbm.group.peer.colab.domain.classes.core.ports.incoming.exception.UserIsNotEnrolledInClassConfigurationException;
-import com.ghsbm.group.peer.colab.domain.file.controller.model.FileDTO;
-import com.ghsbm.group.peer.colab.domain.file.controller.model.FileMapper;
-import com.ghsbm.group.peer.colab.domain.file.controller.model.FileDetailsResponse;
-import com.ghsbm.group.peer.colab.domain.file.controller.model.UploadFileResponse;
+import com.ghsbm.group.peer.colab.domain.file.controller.model.*;
 import com.ghsbm.group.peer.colab.domain.file.core.model.File;
 import com.ghsbm.group.peer.colab.domain.file.core.ports.incoming.FileManagementService;
 import com.ghsbm.group.peer.colab.infrastructure.SecurityUtils;
@@ -42,12 +39,14 @@ public class FileManagementController {
       method = RequestMethod.POST,
       consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
   public ResponseEntity<UploadFileResponse> handleFileUpload(
-      @PathVariable Long folderId, @RequestParam("file") MultipartFile file) {
+      @PathVariable Long folderId,
+      @RequestParam("file") MultipartFile file,
+      @RequestParam(value = "description", required = false) String description) {
     if (!SecurityUtils.hasCurrentUserAnyOfAuthorities(ADMIN)
         && !classManagementService.userIsEnrolled(folderId)) {
       throw new UserIsNotEnrolledInClassConfigurationException();
     }
-    final var fileInfo = fileManagementService.saveFile(file, folderId);
+    final var fileInfo = fileManagementService.saveFile(file, folderId, description);
 
     return ResponseEntity.ok(
         UploadFileResponse.builder()
@@ -57,6 +56,7 @@ public class FileManagementController {
                     .name(fileInfo.getName())
                     .fileDate(fileInfo.getFileDate())
                     .folderId(fileInfo.getFolderId())
+                    .description(fileInfo.getDescription())
                     .build())
             .build());
   }
@@ -88,6 +88,6 @@ public class FileManagementController {
   @DeleteMapping("/delete")
   @ResponseStatus(HttpStatus.OK)
   public void deleteFolder(@NotNull final Long fileId) {
-    fileManagementService.deleetFile(fileId);
+    fileManagementService.deleteFile(fileId);
   }
 }

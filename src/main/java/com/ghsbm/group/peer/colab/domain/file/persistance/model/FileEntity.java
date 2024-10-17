@@ -30,4 +30,7 @@ public class FileEntity {
 
   @Column(name = "folder_id")
   private Long folderId;
+
+  @Column(name = "description")
+  private String description;
 }

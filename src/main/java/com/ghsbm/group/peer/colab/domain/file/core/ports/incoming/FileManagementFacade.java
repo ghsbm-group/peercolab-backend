@@ -1,7 +1,9 @@
 package com.ghsbm.group.peer.colab.domain.file.core.ports.incoming;
 
 import com.ghsbm.group.peer.colab.domain.file.core.model.File;
+import com.ghsbm.group.peer.colab.domain.file.core.model.FileUserDetails;
 import com.ghsbm.group.peer.colab.domain.file.core.model.FileInfo;
+import com.ghsbm.group.peer.colab.domain.file.core.model.UserDetails;
 import com.ghsbm.group.peer.colab.domain.file.core.ports.outgoing.FileRepository;
 import com.ghsbm.group.peer.colab.domain.file.core.ports.outgoing.StorageService;
 import java.time.ZonedDateTime;
@@ -33,7 +35,7 @@ public class FileManagementFacade implements FileManagementService {
   }
 
   @Override
-  public FileInfo saveFile(MultipartFile file, long folderId) {
+  public FileInfo saveFile(MultipartFile file, long folderId, String description) {
     final var key = buildKey(folderId, file.getOriginalFilename());
     final var fileInformation =
         fileRepository.saveFile(
@@ -42,6 +44,7 @@ public class FileManagementFacade implements FileManagementService {
                 .folderId(folderId)
                 .path(key)
                 .fileDate(ZonedDateTime.now())
+                .description(description)
                 .build());
     storageService.store(file, key);
 
@@ -49,9 +52,17 @@ public class FileManagementFacade implements FileManagementService {
   }
 
   @Override
-  public List<FileInfo> listFiles(Long folderId) {
+  public List<FileUserDetails> listFiles(Long folderId) {
+    List<FileInfo> files = isUploadByLoggedInUser(fileRepository.listFiles(folderId));
 
-    return isUploadByLoggedInUser(fileRepository.listFiles(folderId));
+    List<FileUserDetails> fileDetails = new ArrayList<>();
+
+    for (FileInfo file : files) {
+      UserDetails userDetails = retrieveUserDetails(file.getUser());
+      fileDetails.add(FileUserDetails.builder().fileInfo(file).userDetails(userDetails).build());
+    }
+
+    return fileDetails;
   }
 
   @Override
@@ -62,8 +73,21 @@ public class FileManagementFacade implements FileManagementService {
   }
 
   @Override
-  public void deleetFile(Long fileId) {
+  public void deleteFile(Long fileId) {
     fileRepository.deleteFile(fileId);
+  }
+
+  @Override
+  public UserDetails retrieveUserDetails(Long userId) {
+    User user =
+        userManagementService
+            .findOneById(userId)
+            .orElseThrow(() -> new IllegalStateException("User with id " + userId + " not found"));
+    return UserDetails.builder()
+        .login(user.getLogin())
+        .firstName(user.getFirstName())
+        .lastName(user.getLastName())
+        .build();
   }
 
   private String buildKey(long folderId, String originalFilename) {
