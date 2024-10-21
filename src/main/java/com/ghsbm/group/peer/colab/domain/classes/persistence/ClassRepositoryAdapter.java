@@ -350,4 +350,11 @@ public class ClassRepositoryAdapter implements ClassRepository {
     return folderPsqlDbRespository.countUnreadMessagesByUserAndMessageBoards(
         userEntity.getId(), messageBoardIds);
   }
+
+  @Override
+  public Folder updateDescription(Folder folder) {
+    folderPsqlDbRespository.updateFolderDescription(folder.getId(), folder.getDescription());
+    return classEntitiesMapper.folderFromEntity(
+        folderPsqlDbRespository.getReferenceById(folder.getId()));
+  }
 }

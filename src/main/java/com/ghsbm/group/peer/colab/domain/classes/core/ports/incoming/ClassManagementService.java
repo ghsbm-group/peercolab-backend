@@ -211,4 +211,7 @@ public interface ClassManagementService {
 
   @Transactional
   Long countAllUnreadMessages(Long messageBoardId);
+
+  @Transactional
+  Folder updateFolderDescription(Folder folder);
 }

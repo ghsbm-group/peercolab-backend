@@ -114,14 +114,7 @@ public class ClassManagementController {
         classManagementService.createFolder(
             classMapper.fromCreateFolderInfoDTORequest(createFolderRequest));
     return ResponseEntity.ok(
-        CreateFolderResponse.builder()
-            .folderDTO(
-                FolderDTO.builder()
-                    .id(folder.getId())
-                    .name(folder.getName())
-                    .isMessageBoard(folder.getIsMessageBoard())
-                    .build())
-            .build());
+        CreateFolderResponse.builder().folderDTO(classMapper.folderToFolderDTO(folder)).build());
   }
 
   /**
@@ -156,12 +149,7 @@ public class ClassManagementController {
     }
     return ResponseEntity.ok(
         CreateMessageBoardResponse.builder()
-            .folderDTO(
-                FolderDTO.builder()
-                    .id(folder.getId())
-                    .name(folder.getName())
-                    .isMessageBoard(folder.getIsMessageBoard())
-                    .build())
+            .folderDTO(classMapper.folderToFolderDTO(folder))
             .createMessageResponse(
                 CreateMessageResponse.builder()
                     .userId(message.getUserId())
@@ -266,13 +254,28 @@ public class ClassManagementController {
         classManagementService.renameFolder(
             classMapper.fromRenameFolderRequest(renameFolderRequest));
     return ResponseEntity.ok(
-        RenameFolderResponse.builder()
-            .folderDTO(
-                FolderDTO.builder()
-                    .id(folder.getId())
-                    .name(folder.getName())
-                    .isMessageBoard(folder.getIsMessageBoard())
-                    .build())
+        RenameFolderResponse.builder().folderDTO(classMapper.folderToFolderDTO(folder)).build());
+  }
+
+  /**
+   * Endpoint for updating the description of a folder.
+   *
+   * <p>Calling this api will update the description of a folder.
+   *
+   * @param updateFolderDescriptionRequest {@link UpdateFolderDescriptionRequest} encapsulates the
+   *     parameters needed to update the folder description
+   * @return a {@link UpdateFolderDescriptionResponse} containing the configuration identifiers for
+   *     the updated folder.
+   */
+  @PostMapping("/update-description")
+  public ResponseEntity<UpdateFolderDescriptionResponse> updateFolderDescription(
+      @Valid @RequestBody final UpdateFolderDescriptionRequest updateFolderDescriptionRequest) {
+    final var folder =
+        classManagementService.updateFolderDescription(
+            classMapper.fromUpdateFolderDescriptionRequest(updateFolderDescriptionRequest));
+    return ResponseEntity.ok(
+        UpdateFolderDescriptionResponse.builder()
+            .folderDTO(classMapper.folderToFolderDTO(folder))
             .build());
   }
 

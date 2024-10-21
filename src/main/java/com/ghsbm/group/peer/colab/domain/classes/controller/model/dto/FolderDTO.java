@@ -10,4 +10,5 @@ public class FolderDTO {
   private Long id;
   private String name;
   private Boolean isMessageBoard;
+  private String description;
 }

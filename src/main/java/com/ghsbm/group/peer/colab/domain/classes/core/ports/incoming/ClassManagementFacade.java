@@ -220,6 +220,17 @@ public class ClassManagementFacade implements ClassManagementService {
     return classRepository.countUnreadMessages(messageBoardId);
   }
 
+  @Override
+  public Folder updateFolderDescription(Folder folder) {
+    if (folder.getId() == null) {
+      throw new IllegalArgumentException("Folder ID cannot be null");
+    }
+    Folder folderWithNewNameSet = classRepository.findFolderById(folder.getId());
+    folderWithNewNameSet.setDescription(folder.getDescription());
+
+    return classRepository.updateDescription(folder);
+  }
+
   /**
    * @inheritDoc
    */

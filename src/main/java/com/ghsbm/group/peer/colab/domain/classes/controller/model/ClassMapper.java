@@ -81,4 +81,13 @@ public interface ClassMapper {
 
   ClassParentDetailsDTO classDetailsDTOFromClassParentDetails(
       ClassParentDetails classParentDetails);
+
+  @Mappings({
+    @Mapping(target = "id", source = "id"),
+    @Mapping(source = "newDescription", target = "description")
+  })
+  Folder fromUpdateFolderDescriptionRequest(
+      UpdateFolderDescriptionRequest updateFolderDescriptionRequest);
+
+  FolderDTO folderToFolderDTO(Folder folder);
 }
