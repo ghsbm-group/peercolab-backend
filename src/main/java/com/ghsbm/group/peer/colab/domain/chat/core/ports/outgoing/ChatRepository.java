@@ -95,4 +95,8 @@ public interface ChatRepository {
   public List<ContactUsMessages> retrieveMessageFromUsers();
 
   public Long countAllMessagesByMessageBoardId(Long messageboardId);
+
+  public Message retrieveMessageById(Long messageId);
+
+  public void deleteMessage(Long messageId);
 }

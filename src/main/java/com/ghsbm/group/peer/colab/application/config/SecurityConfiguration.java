@@ -104,6 +104,8 @@ public class SecurityConfiguration {
                     .hasAnyAuthority(STUDENT, STUDENT_ADMIN, ADMIN)
                     .requestMatchers(mvc.pattern(HttpMethod.GET, "chat/**"))
                     .hasAnyAuthority(STUDENT, STUDENT_ADMIN, ADMIN)
+                    .requestMatchers(mvc.pattern(HttpMethod.DELETE, "chat/**"))
+                    .hasAnyAuthority(STUDENT, STUDENT_ADMIN, ADMIN)
                     .requestMatchers(mvc.pattern(HttpMethod.POST, "classes/enrol"))
                     .authenticated()
                     .requestMatchers(mvc.pattern(HttpMethod.POST, "classes/**"))
