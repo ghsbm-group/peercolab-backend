@@ -203,4 +203,15 @@ public class ChatRepositoryAdapter implements ChatRepository {
   public Long countAllMessagesByMessageBoardId(Long messageboardId) {
     return messagePsqlDbRepository.countByMessageboardId(messageboardId);
   }
+
+  @Override
+  public Message retrieveMessageById(Long messageId) {
+    return chatEntitiesMapper.messageFromEntity(
+        messagePsqlDbRepository.getReferenceById(messageId));
+  }
+
+  @Override
+  public void deleteMessage(Long messageId) {
+    messagePsqlDbRepository.deleteById(messageId);
+  }
 }

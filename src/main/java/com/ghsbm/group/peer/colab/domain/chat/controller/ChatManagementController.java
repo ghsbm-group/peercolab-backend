@@ -4,6 +4,7 @@ import com.ghsbm.group.peer.colab.domain.chat.controller.model.*;
 import com.ghsbm.group.peer.colab.domain.chat.core.ports.incoming.ChatManagementService;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotNull;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -91,5 +92,11 @@ public class ChatManagementController {
     return ResponseEntity.ok(
         postedMessageDtoMapper.postedMessagesDTOFrom(
             chatManagementService.retrieveMessagesByMessageboardId(messageboardId)));
+  }
+
+  @DeleteMapping("/delete")
+  @ResponseStatus(HttpStatus.OK)
+  public void deleteMessage(@NotNull final Long messageId) {
+    chatManagementService.deleteMessage(messageId);
   }
 }

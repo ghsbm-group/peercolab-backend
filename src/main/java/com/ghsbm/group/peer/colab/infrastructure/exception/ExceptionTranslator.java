@@ -124,6 +124,12 @@ public class ExceptionTranslator extends ResponseEntityExceptionHandler {
       return (ProblemDetailWithCause) new ClassConfigurationDoesNotExistsException().getBody();
     if (ex
         instanceof
+        com.ghsbm.group.peer.colab.domain.chat.core.ports.incoming.exception
+            .UserNotAuthorizedForMessageActionException)
+      return (ProblemDetailWithCause)
+          new UserIsNotEnrolledInClassConfigurationException().getBody();
+    if (ex
+        instanceof
         com.ghsbm.group.peer.colab.domain.classes.core.ports.incoming.exception
             .UserIsNotEnrolledInClassConfigurationException)
       return (ProblemDetailWithCause)

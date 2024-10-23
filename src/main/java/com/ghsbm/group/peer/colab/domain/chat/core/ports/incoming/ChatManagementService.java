@@ -70,4 +70,6 @@ public interface ChatManagementService {
   @Transactional
   Long numberOfTotalMessages(Long messageBoardId);
 
+  @Transactional
+  void deleteMessage(Long messageId);
 }

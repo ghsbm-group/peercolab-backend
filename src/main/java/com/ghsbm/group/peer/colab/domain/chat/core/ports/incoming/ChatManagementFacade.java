@@ -3,6 +3,7 @@ package com.ghsbm.group.peer.colab.domain.chat.core.ports.incoming;
 import static com.ghsbm.group.peer.colab.infrastructure.AuthoritiesConstants.*;
 
 import com.ghsbm.group.peer.colab.domain.chat.core.model.*;
+import com.ghsbm.group.peer.colab.domain.chat.core.ports.incoming.exception.UserNotAuthorizedForMessageActionException;
 import com.ghsbm.group.peer.colab.domain.chat.core.ports.outgoing.ChatRepository;
 import com.ghsbm.group.peer.colab.domain.classes.core.ports.incoming.ClassManagementService;
 import com.ghsbm.group.peer.colab.domain.classes.core.ports.incoming.exception.UserIsNotEnrolledInClassConfigurationException;
@@ -109,6 +110,27 @@ public class ChatManagementFacade implements ChatManagementService {
   @Override
   public Long numberOfTotalMessages(Long messageBoardId) {
     return chatRepository.countAllMessagesByMessageBoardId(messageBoardId);
+  }
+
+  @Override
+  public void deleteMessage(Long messageId) {
+
+    String username =
+        SecurityUtils.getCurrentUserLogin()
+            .orElseThrow(() -> new IllegalStateException(USER_MUST_BE_LOGGED_IN));
+    Long userId =
+        userManagementService
+            .getUserWithAuthoritiesByLogin(username)
+            .orElseThrow(
+                () ->
+                    new IllegalStateException(
+                        "User with username " + username + " does not exists"))
+            .getId();
+    if (!SecurityUtils.hasCurrentUserAnyOfAuthorities(ADMIN)
+        && userId != chatRepository.retrieveMessageById(messageId).getUserId()) {
+      throw new UserNotAuthorizedForMessageActionException();
+    }
+    chatRepository.deleteMessage(messageId);
   }
 
   protected PostedMessage messageToPostedMessage(Message message) {
