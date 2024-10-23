@@ -1,0 +1,2 @@
+ALTER TABLE message
+    ADD COLUMN is_edited BOOLEAN DEFAULT FALSE;

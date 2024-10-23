@@ -30,4 +30,7 @@ public class MessageEntity {
 
   @Column(name = "messageboard_id")
   private Long messageboardId;
+
+  @Column(name = "is_edited")
+  private boolean isEdited;
 }

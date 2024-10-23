@@ -72,4 +72,7 @@ public interface ChatManagementService {
 
   @Transactional
   void deleteMessage(Long messageId);
+
+  @Transactional
+  Message editMessage(Long messageId, String content);
 }
