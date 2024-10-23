@@ -90,4 +90,11 @@ public interface ClassMapper {
       UpdateFolderDescriptionRequest updateFolderDescriptionRequest);
 
   FolderDTO folderToFolderDTO(Folder folder);
+
+  @Mappings({
+    @Mapping(target = "id", source = "id"),
+    @Mapping(source = "newDescription", target = "description"),
+    @Mapping(source = "newName", target = "name")
+  })
+  Folder fromUpdateFolderRequest(UpdateFolderRequest updateFolderRequest);
 }

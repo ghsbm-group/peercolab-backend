@@ -133,6 +133,14 @@ public class ClassRepositoryAdapter implements ClassRepository {
         folderPsqlDbRespository.getReferenceById(folder.getId()));
   }
 
+  @Override
+  public Folder updateFolder(Folder folder) {
+    folderPsqlDbRespository.updateFolderNameAndDescription(
+        folder.getId(), folder.getName(), folder.getDescription());
+    return classEntitiesMapper.folderFromEntity(
+        folderPsqlDbRespository.getReferenceById(folder.getId()));
+  }
+
   /**
    * @inheritDoc
    */

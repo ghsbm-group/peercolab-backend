@@ -90,6 +90,9 @@ public interface ClassManagementService {
   @Transactional
   Folder renameFolder(Folder folder);
 
+  @Transactional
+  Folder updateFolder(Folder folder);
+
   /**
    * Enrols the current logged-in user into the class defined by this enrolmentKey.
    *

@@ -63,6 +63,8 @@ public interface ClassRepository {
    */
   Folder renameFolder(Folder folder);
 
+  Folder updateFolder(Folder folder);
+
   /**
    * Checks if a class configuration already exists in a certain department.
    *

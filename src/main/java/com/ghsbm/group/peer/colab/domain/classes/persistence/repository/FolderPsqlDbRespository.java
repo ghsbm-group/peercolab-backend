@@ -39,6 +39,13 @@ public interface FolderPsqlDbRespository extends JpaRepository<FolderEntity, Lon
   void updateFolderName(@Param(value = "id") Long id, @Param(value = "name") String name);
 
   @Modifying
+  @Query("update FolderEntity f set f.name = :name, f.description = : description where f.id = :id")
+  void updateFolderNameAndDescription(
+      @Param(value = "id") Long id,
+      @Param(value = "name") String name,
+      @Param(value = "description") String description);
+
+  @Modifying
   @Query("update FolderEntity f set f.description = :description where f.id = :id")
   void updateFolderDescription(
       @Param(value = "id") Long id, @Param(value = "description") String description);
@@ -133,10 +140,12 @@ public interface FolderPsqlDbRespository extends JpaRepository<FolderEntity, Lon
 
   FolderEntity findFirstById(Long id);
 
-  @Query("SELECT COUNT(m) " +
-          "FROM MessageEntity m " +
-          "LEFT JOIN UserMessageboardAccessEntity lam ON lam.messageboard.id = m.messageboardId AND lam.user.id = :userId " +
-          "WHERE m.messageboardId IN :messageBoardIds " +
-          "AND (lam IS NULL OR m.postDate > lam.lastAccessDate)")
-  Long countUnreadMessagesByUserAndMessageBoards(@Param("userId") Long userId, @Param("messageBoardIds") List<Long> messageBoardIds);
+  @Query(
+      "SELECT COUNT(m) "
+          + "FROM MessageEntity m "
+          + "LEFT JOIN UserMessageboardAccessEntity lam ON lam.messageboard.id = m.messageboardId AND lam.user.id = :userId "
+          + "WHERE m.messageboardId IN :messageBoardIds "
+          + "AND (lam IS NULL OR m.postDate > lam.lastAccessDate)")
+  Long countUnreadMessagesByUserAndMessageBoards(
+      @Param("userId") Long userId, @Param("messageBoardIds") List<Long> messageBoardIds);
 }

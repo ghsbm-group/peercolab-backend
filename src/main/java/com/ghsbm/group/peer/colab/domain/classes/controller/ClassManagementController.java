@@ -237,6 +237,16 @@ public class ClassManagementController {
             .build());
   }
 
+  @PostMapping("/update-folder")
+  public ResponseEntity<UpdateFolderResponse> updateFolder(
+      @Valid @RequestBody final UpdateFolderRequest updateFolderRequest) {
+    final var folder =
+        classManagementService.updateFolder(
+            classMapper.fromUpdateFolderRequest(updateFolderRequest));
+    return ResponseEntity.ok(
+        UpdateFolderResponse.builder().folderDTO(classMapper.folderToFolderDTO(folder)).build());
+  }
+
   /**
    * Endpoint for renaming a folder.
    *

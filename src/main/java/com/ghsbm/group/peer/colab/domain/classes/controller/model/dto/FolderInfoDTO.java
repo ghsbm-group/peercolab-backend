@@ -9,7 +9,7 @@ import lombok.Data;
 @Builder
 public class FolderInfoDTO {
   @NotNull
-  @Size(min = 1, max = 50)
+  @Size(min = 1, max = 500)
   private String name;
 
   private Long parentId;
