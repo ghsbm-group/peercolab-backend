@@ -19,4 +19,5 @@ public class PostedMessage {
   private Long numberOfPostsUser;
   private String roleUser;
   private boolean isLikedByCurrentUser;
+  private boolean isEdited;
 }

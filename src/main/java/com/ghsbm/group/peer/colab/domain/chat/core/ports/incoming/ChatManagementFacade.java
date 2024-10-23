@@ -127,10 +127,30 @@ public class ChatManagementFacade implements ChatManagementService {
                         "User with username " + username + " does not exists"))
             .getId();
     if (!SecurityUtils.hasCurrentUserAnyOfAuthorities(ADMIN)
+        && !SecurityUtils.hasCurrentUserAnyOfAuthorities(STUDENT_ADMIN)
         && userId != chatRepository.retrieveMessageById(messageId).getUserId()) {
       throw new UserNotAuthorizedForMessageActionException();
     }
     chatRepository.deleteMessage(messageId);
+  }
+
+  @Override
+  public Message editMessage(Long messageId, String content) {
+    String username =
+        SecurityUtils.getCurrentUserLogin()
+            .orElseThrow(() -> new IllegalStateException(USER_MUST_BE_LOGGED_IN));
+    Long userId =
+        userManagementService
+            .getUserWithAuthoritiesByLogin(username)
+            .orElseThrow(
+                () ->
+                    new IllegalStateException(
+                        "User with username " + username + " does not exists"))
+            .getId();
+    if (userId != chatRepository.retrieveMessageById(messageId).getUserId()) {
+      throw new UserNotAuthorizedForMessageActionException();
+    }
+    return chatRepository.editMessage(messageId, content);
   }
 
   protected PostedMessage messageToPostedMessage(Message message) {
@@ -158,6 +178,7 @@ public class ChatManagementFacade implements ChatManagementService {
         .numberOfPostsUser(chatRepository.numberOfPostsByUser(message.getUserId()))
         .numberOfLikesUser(chatRepository.getTotalNumberOfLikesByUserId(message.getUserId()))
         .isLikedByCurrentUser(chatRepository.currentUserLikedThePost(message.getId(), currentLogin))
+        .isEdited(message.isEdited())
         .build();
   }
 

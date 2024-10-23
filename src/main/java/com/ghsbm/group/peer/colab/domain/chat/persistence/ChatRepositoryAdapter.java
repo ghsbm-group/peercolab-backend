@@ -214,4 +214,13 @@ public class ChatRepositoryAdapter implements ChatRepository {
   public void deleteMessage(Long messageId) {
     messagePsqlDbRepository.deleteById(messageId);
   }
+
+  @Override
+  public Message editMessage(Long messageId, String content) {
+    MessageEntity editedMessage = messagePsqlDbRepository.getReferenceById(messageId);
+    editedMessage.setContent(content);
+    editedMessage.setEdited(true);
+    messagePsqlDbRepository.save(editedMessage);
+    return chatEntitiesMapper.messageFromEntity(editedMessage);
+  }
 }

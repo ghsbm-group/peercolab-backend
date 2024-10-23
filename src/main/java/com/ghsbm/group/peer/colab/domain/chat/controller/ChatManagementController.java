@@ -99,4 +99,20 @@ public class ChatManagementController {
   public void deleteMessage(@NotNull final Long messageId) {
     chatManagementService.deleteMessage(messageId);
   }
+
+  @PostMapping("/edit")
+  public ResponseEntity<MessageDTO> editMessage(
+      @RequestBody final EditMessageRequest editMessageRequest) {
+
+    final var message =
+        chatManagementService.editMessage(
+            editMessageRequest.getMessageId(), editMessageRequest.getContent());
+    return ResponseEntity.ok(
+        MessageDTO.builder()
+            .id(message.getId())
+            .content(message.getContent())
+            .postDate(message.getPostDate())
+            .isEdited(message.isEdited())
+            .build());
+  }
 }

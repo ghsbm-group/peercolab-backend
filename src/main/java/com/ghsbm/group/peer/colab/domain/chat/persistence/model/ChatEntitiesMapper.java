@@ -3,6 +3,7 @@ package com.ghsbm.group.peer.colab.domain.chat.persistence.model;
 import com.ghsbm.group.peer.colab.domain.chat.core.model.Message;
 import com.ghsbm.group.peer.colab.domain.chat.core.model.ContactUsMessages;
 import org.mapstruct.Mapper;
+import org.mapstruct.Mapping;
 
 import java.util.List;
 
@@ -15,6 +16,7 @@ import java.util.List;
 public abstract class ChatEntitiesMapper {
   public abstract List<Message> fromMessageEntities(List<MessageEntity> messages);
 
+  @Mapping(source = "edited", target = "isEdited")
   public abstract Message messageFromEntity(MessageEntity savedMessage);
 
   public abstract ContactUsMessages fromEntity(

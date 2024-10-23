@@ -15,4 +15,5 @@ public class Message {
   private ZonedDateTime postDate;
   private Long userId;
   private Long messageboardId;
+  private boolean isEdited;
 }

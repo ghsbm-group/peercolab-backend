@@ -99,4 +99,6 @@ public interface ChatRepository {
   public Message retrieveMessageById(Long messageId);
 
   public void deleteMessage(Long messageId);
+
+  public Message editMessage(Long messageId, String content);
 }
