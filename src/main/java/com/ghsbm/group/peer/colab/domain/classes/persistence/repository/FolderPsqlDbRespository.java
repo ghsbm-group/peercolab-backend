@@ -39,7 +39,7 @@ public interface FolderPsqlDbRespository extends JpaRepository<FolderEntity, Lon
   void updateFolderName(@Param(value = "id") Long id, @Param(value = "name") String name);
 
   @Modifying
-  @Query("update FolderEntity f set f.name = :name, f.description = : description where f.id = :id")
+  @Query("update FolderEntity f set f.name = :name, f.description = :description where f.id = :id")
   void updateFolderNameAndDescription(
       @Param(value = "id") Long id,
       @Param(value = "name") String name,
