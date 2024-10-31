@@ -13,6 +13,6 @@ public class UpdateFolderRequest {
   private String newName;
 
   @NotNull
-  @Size(min = 1, max = 500)
+  @Size(min = 0, max = 500)
   private String newDescription;
 }
