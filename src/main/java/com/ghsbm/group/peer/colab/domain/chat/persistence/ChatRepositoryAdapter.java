@@ -1,17 +1,17 @@
 package com.ghsbm.group.peer.colab.domain.chat.persistence;
 
+import com.ghsbm.group.peer.colab.domain.chat.core.model.ContactUsMessages;
 import com.ghsbm.group.peer.colab.domain.chat.core.model.LatestPostedMessage;
 import com.ghsbm.group.peer.colab.domain.chat.core.model.Message;
 import com.ghsbm.group.peer.colab.domain.chat.core.model.PostLike;
-import com.ghsbm.group.peer.colab.domain.chat.core.model.ContactUsMessages;
 import com.ghsbm.group.peer.colab.domain.chat.core.ports.outgoing.ChatRepository;
 import com.ghsbm.group.peer.colab.domain.chat.persistence.model.ChatEntitiesMapper;
+import com.ghsbm.group.peer.colab.domain.chat.persistence.model.ContactUsMessagesEntity;
 import com.ghsbm.group.peer.colab.domain.chat.persistence.model.MessageEntity;
 import com.ghsbm.group.peer.colab.domain.chat.persistence.model.PostLikesEntity;
-import com.ghsbm.group.peer.colab.domain.chat.persistence.model.ContactUsMessagesEntity;
+import com.ghsbm.group.peer.colab.domain.chat.persistence.repository.ContactUsMessagesRepository;
 import com.ghsbm.group.peer.colab.domain.chat.persistence.repository.MessagePsqlDbRepository;
 import com.ghsbm.group.peer.colab.domain.chat.persistence.repository.PostLikesPsqlDbRepository;
-import com.ghsbm.group.peer.colab.domain.chat.persistence.repository.ContactUsMessagesRepository;
 import com.ghsbm.group.peer.colab.domain.classes.core.ports.outgoing.ClassRepository;
 import com.ghsbm.group.peer.colab.domain.security.infrastructure.persistence.model.UserEntity;
 import com.ghsbm.group.peer.colab.domain.security.infrastructure.persistence.repository.UserRepository;
@@ -212,6 +212,7 @@ public class ChatRepositoryAdapter implements ChatRepository {
 
   @Override
   public void deleteMessage(Long messageId) {
+    postLikesPsqlDbRepository.deleteByMessageId(messageId);
     messagePsqlDbRepository.deleteById(messageId);
   }
 

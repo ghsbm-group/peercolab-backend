@@ -36,4 +36,6 @@ public interface PostLikesPsqlDbRepository extends JpaRepository<PostLikesEntity
    * @return if the current user like the message
    */
   boolean existsByMessageIdAndUserLogin(Long messageId, String login);
+
+  void deleteByMessageId(Long messageId);
 }

@@ -188,12 +188,14 @@ public class ClassManagementFacade implements ClassManagementService {
       throw new IllegalArgumentException("Folder ID cannot be null");
     }
     Folder folderWithNewNameSet = classRepository.findFolderById(folder.getId());
-    folderWithNewNameSet.setName(folder.getName());
+    if (!folderWithNewNameSet.getName().equalsIgnoreCase(folder.getName())) {
+      folderWithNewNameSet.setName(folder.getName());
+      if (classRepository.folderAlreadyExists(folderWithNewNameSet)) {
+        throw new FolderAlreadyExistsException();
+      }
+    }
     folderWithNewNameSet.setDescription(folder.getDescription());
 
-    if (classRepository.folderAlreadyExists(folderWithNewNameSet)) {
-      throw new FolderAlreadyExistsException();
-    }
     return classRepository.updateFolder(folder);
   }
 
