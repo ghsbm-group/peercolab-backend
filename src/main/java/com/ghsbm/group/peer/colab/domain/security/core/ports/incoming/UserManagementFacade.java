@@ -447,6 +447,14 @@ public class UserManagementFacade implements UserManagementService {
     clearUserCaches(persistedUser);
   }
 
+  @Override
+  public void declineAuthority(Long userId) {
+    userManagementRepository
+        .findUserById(userId)
+        .orElseThrow(() -> new IllegalStateException("User with id" + userId + " does not exist"));
+    userManagementRepository.deleteByUserId(userId);
+  }
+
   /**
    * @inheritDoc
    */

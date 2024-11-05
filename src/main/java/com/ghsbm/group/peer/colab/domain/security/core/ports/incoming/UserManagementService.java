@@ -84,6 +84,9 @@ public interface UserManagementService {
   @Transactional
   void approveAuthorityRequest(Long userId);
 
+  @Transactional
+  void declineAuthority(Long userId);
+
   /** "Delete" an account by a logged-in user by changing the credentials */
   @Transactional
   void deleteAccount();

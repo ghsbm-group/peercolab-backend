@@ -19,6 +19,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.service.annotation.DeleteExchange;
 
 /** REST controller for managing the current user's account. */
 @RestController
@@ -209,7 +210,11 @@ public class AccountController {
   public void approveAuthority(@Valid final Long userId) {
     userManagementService.approveAuthorityRequest(userId);
   }
-
+  @DeleteMapping("/decline-authority")
+  public void declineAuthority(@Valid final Long userId)
+  {
+    userManagementService.declineAuthority(userId);
+  }
   @PostMapping("/delete-account")
   public void deleteAccount() {
     userManagementService.deleteAccount();
