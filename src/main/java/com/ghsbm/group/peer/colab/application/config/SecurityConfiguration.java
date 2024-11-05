@@ -84,6 +84,8 @@ public class SecurityConfiguration {
                     .hasAuthority(ADMIN)
                     .requestMatchers(mvc.pattern(HttpMethod.POST, "/api/approve-authority"))
                     .hasAuthority(ADMIN)
+                    .requestMatchers(mvc.pattern(HttpMethod.DELETE, "/api/decline-authority"))
+                    .hasAuthority(ADMIN)
                     .requestMatchers(mvc.pattern("/api/**"))
                     .authenticated()
                     .requestMatchers(mvc.pattern("/api-docs/**"))

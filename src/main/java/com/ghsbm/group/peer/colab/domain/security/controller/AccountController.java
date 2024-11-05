@@ -209,7 +209,11 @@ public class AccountController {
   public void approveAuthority(@Valid final Long userId) {
     userManagementService.approveAuthorityRequest(userId);
   }
-
+  @DeleteMapping("/decline-authority")
+  public void declineAuthority(@Valid final Long userId)
+  {
+    userManagementService.declineAuthority(userId);
+  }
   @PostMapping("/delete-account")
   public void deleteAccount() {
     userManagementService.deleteAccount();

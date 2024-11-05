@@ -443,8 +443,16 @@ public class UserManagementFacade implements UserManagementService {
     authorities.add(new Authority(AuthoritiesConstants.STUDENT_ADMIN));
     user.setAuthorities(authorities);
     User persistedUser = userManagementRepository.persist(user);
-    userManagementRepository.deleteByUserId(userId);
+    userManagementRepository.deleteRequestByUserId(userId);
     clearUserCaches(persistedUser);
+  }
+
+  @Override
+  public void declineAuthority(Long userId) {
+    userManagementRepository
+        .findUserById(userId)
+        .orElseThrow(() -> new IllegalStateException("User with id" + userId + " does not exist"));
+    userManagementRepository.deleteRequestByUserId(userId);
   }
 
   /**
