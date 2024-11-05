@@ -7,6 +7,7 @@ import lombok.Data;
 @Data
 public class UserAuthorityRequestResponse {
 
+  private Long userId;
   private String login;
   private String firstName;
   private String lastName;

@@ -135,7 +135,10 @@ public class UserManagementController {
   @PreAuthorize("hasAuthority(\"" + AuthoritiesConstants.ADMIN + "\")")
   public ResponseEntity<AdminUserDTO> updateUser(@Valid @RequestBody AdminUserDTO userDTO) {
     log.debug("REST request to update User : {}", userDTO);
-    Optional<AdminUserDTO> updatedUser = userManagementFacade.updateUser(userDtoMapper.userDTOToUser(userDTO)).map(AdminUserDTO::new);
+    Optional<AdminUserDTO> updatedUser =
+        userManagementFacade
+            .updateUser(userDtoMapper.userDTOToUser(userDTO))
+            .map(AdminUserDTO::new);
 
     return ResponseUtil.wrapOrNotFound(
         updatedUser,
