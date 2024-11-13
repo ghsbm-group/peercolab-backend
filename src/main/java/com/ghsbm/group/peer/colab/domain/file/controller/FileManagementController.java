@@ -75,10 +75,6 @@ public class FileManagementController {
   @GetMapping(value = "{fileId}")
   public byte[] download(@PathVariable("fileId") Long fileId, HttpServletResponse response) {
     File file = fileManagementService.download(fileId);
-    if (!SecurityUtils.hasCurrentUserAnyOfAuthorities(ADMIN)
-        && !classManagementService.userIsEnrolled(file.getFileInfo().getFolderId())) {
-      throw new UserIsNotEnrolledInClassConfigurationException();
-    }
     response.setHeader(
         "Content-Disposition", "attachment; filename=" + file.getFileInfo().getName());
     response.setHeader("Access-Control-Expose-Headers", "*");
