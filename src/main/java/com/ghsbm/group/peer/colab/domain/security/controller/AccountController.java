@@ -193,7 +193,7 @@ public class AccountController {
    * @return a list of {@link UserAuthorityRequestResponse} that encapsulates details about users
    *     that requested authority of STUDENT ADMIN
    */
-  @GetMapping
+  @GetMapping(("/all-authority-requests"))
   public ResponseEntity<List<UserAuthorityRequestResponse>> retrieveMessagesByMessageboardId() {
     return ResponseEntity.ok(
         userMapper.userAuthorityRequestResponsesFromUserAuthorityRequest(
